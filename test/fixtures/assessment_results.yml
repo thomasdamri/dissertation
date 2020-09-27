@@ -1,0 +1,22 @@
+# == Schema Information
+#
+# Table name: assessment_results
+#
+#  id           :bigint           not null, primary key
+#  author_id    :bigint
+#  target_id    :bigint
+#  criterium_id :bigint
+#  value        :string(255)
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#
+
+# This model initially had no columns defined. If you add columns to the
+# model remove the '{}' from the fixture names and add the columns immediately
+# below each fixture, per the syntax in the comments below
+#
+one: {}
+# column: value
+#
+two: {}
+# column: value
