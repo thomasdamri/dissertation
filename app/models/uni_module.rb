@@ -9,4 +9,8 @@
 #  updated_at :datetime         not null
 #
 class UniModule < ApplicationRecord
+
+  has_many :teams
+  has_many :assessments
+
 end

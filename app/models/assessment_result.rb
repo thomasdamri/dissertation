@@ -11,4 +11,9 @@
 #  updated_at   :datetime         not null
 #
 class AssessmentResult < ApplicationRecord
+
+  belongs_to :criterium
+  belongs_to :author, class_name: 'User', foreign_key: 'author_id'
+  belongs_to :target, class_name: 'User', foreign_key: 'target_id'
+
 end

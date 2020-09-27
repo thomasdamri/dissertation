@@ -26,4 +26,13 @@
 class User < ApplicationRecord
   include EpiCas::DeviseHelper
 
+  # Can be part of multiple teams, teams have multiple students
+  has_and_belongs_to_many :teams
+  # Has many AssessmentResults written by the user
+  has_many :author_results, class_name: 'AssessmentResult', foreign_key: 'author_id'
+  # Has many AssessmentResults written about the user
+  has_many :target_results, class_name: 'AssessmentResult', foreign_key: 'target_id'
+
+
+
   end

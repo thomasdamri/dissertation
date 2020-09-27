@@ -11,4 +11,8 @@
 #  updated_at    :datetime         not null
 #
 class Assessment < ApplicationRecord
+
+  has_many :criteriums
+  belongs_to :uni_module
+
 end

@@ -13,4 +13,8 @@
 #  updated_at    :datetime         not null
 #
 class Criterium < ApplicationRecord
+
+  belongs_to :assessment
+  has_many :assessment_results
+
 end
