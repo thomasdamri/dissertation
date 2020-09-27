@@ -3,6 +3,15 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.6'
 
+source "https://gems.shefcompsci.org.uk" do
+  gem 'airbrake'
+  gem 'rubycas-client'
+  gem 'epi_deploy', group: :development
+  gem 'capybara-select2', group: :test
+  gem 'epi_js'
+  gem 'epi_cas'
+end
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.3'
 # Use mysql as the database for Active Record
@@ -27,6 +36,12 @@ gem 'jbuilder', '~> 2.7'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
+
+gem 'devise'
+gem 'cancancan'
+gem 'haml-rails', '~> 2.0'
+
+gem 'simple_form'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

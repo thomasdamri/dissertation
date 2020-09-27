@@ -6,6 +6,11 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+# Require gems used by epi_cas
+require 'devise'
+require 'devise_cas_authenticatable'
+require "devise_ldap_authenticatable"
+require 'sheffield_ldap_lookup'
 module Teamassess
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
