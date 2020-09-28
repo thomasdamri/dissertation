@@ -1,0 +1,23 @@
+%nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+  %a.navbar-brand{:href => "#"} NotWebPA
+  %button.navbar-toggler{"aria-controls" => "navbarText", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarText", "data-toggle" => "collapse", :type => "button"}
+    %span.navbar-toggler-icon
+  #navbarText.collapse.navbar-collapse
+    %ul.navbar-nav.mr-auto
+      %li.nav-item.active
+        %a.nav-link{:href => "#"}
+          Home
+      %li.nav-item.active
+        %a.nav-link{:href => home_student_home_url} Student Dashboard
+      %li.nav-item.active
+        %a.nav-link{:href => home_staff_home_url} Staff Dashboard
+    %span.nav-item.active
+      - if current_user.nil?
+        = link_to 'Sign in', new_user_session_path, class: 'btn', style: 'color: white;'
+      - else
+        .nav-item.dropdown
+          %a#navbarDropdownMenuLink.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#"}
+            .navbar-text= current_user.username
+          .dropdown-menu{"aria-labelledby" => "navbarDropdownMenuLink"}
+            %a.dropdown-item{:href => "#"} My Account
+            = link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'dropdown-item'

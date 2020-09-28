@@ -1,0 +1,7 @@
+%table.table.table-striped.table-bordered.table-hover
+  %tr
+    %th Module
+
+  - current_user.uni_modules.each do |mod|
+    %tr
+      %td= mod.title
