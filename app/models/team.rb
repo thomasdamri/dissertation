@@ -13,4 +13,6 @@ class Team < ApplicationRecord
   has_many :users
   belongs_to :uni_module
 
+  validates :number, presence: true, uniqueness: {scope: :uni_module}
+
 end

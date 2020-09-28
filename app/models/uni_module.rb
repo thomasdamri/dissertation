@@ -13,4 +13,7 @@ class UniModule < ApplicationRecord
   has_many :teams
   has_many :assessments
 
+  validates :name, presence: true, uniqueness: true
+  validates :code, presence: true, uniqueness: true
+
 end

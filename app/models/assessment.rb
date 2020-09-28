@@ -12,7 +12,14 @@
 #
 class Assessment < ApplicationRecord
 
-  has_many :criteriums
+  has_many :criteria
   belongs_to :uni_module
+
+  # Name of the assessment must not be the same as another assessment for the same module
+  validates :name, uniqueness: {scope: :uni_module}, presence: true
+  validates :date_opened, presence: true
+  validates :date_closed, presence: true
+
+  validates_with AssessmentValidator
 
 end

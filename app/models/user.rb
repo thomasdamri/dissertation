@@ -33,6 +33,9 @@ class User < ApplicationRecord
   # Has many AssessmentResults written about the user
   has_many :target_results, class_name: 'AssessmentResult', foreign_key: 'target_id'
 
+  validates :staff, inclusion: {in: [true, false]}
+  validates :admin, inclusion: {in: [true, false]}
 
+  validates_with UserValidator
 
   end
