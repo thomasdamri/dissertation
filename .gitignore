@@ -37,3 +37,6 @@ log/
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Ignore simplecov coverage files
+coverage
