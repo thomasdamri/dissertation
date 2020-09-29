@@ -13,13 +13,13 @@ class UniModule < ApplicationRecord
   has_many :teams
   has_many :assessments
   # Many staff can manage the module
-  has_and_belongs_to_many :users
+  has_many :staff_modules
 
   validates :name, presence: true, uniqueness: true
   validates :code, presence: true, uniqueness: true
 
   def title
-    code + name
+    code + " " + name
   end
 
 end

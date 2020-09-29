@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_28_150040) do
+ActiveRecord::Schema.define(version: 2020_09_29_150345) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "author_id"
@@ -46,6 +46,13 @@ ActiveRecord::Schema.define(version: 2020_09_28_150040) do
     t.index ["assessment_id"], name: "index_criteria_on_assessment_id"
   end
 
+  create_table "staff_modules", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "uni_module_id"
+    t.index ["uni_module_id"], name: "index_staff_modules_on_uni_module_id"
+    t.index ["user_id"], name: "index_staff_modules_on_user_id"
+  end
+
   create_table "student_teams", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "team_id"
@@ -66,11 +73,6 @@ ActiveRecord::Schema.define(version: 2020_09_28_150040) do
     t.string "code"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
-  end
-
-  create_table "uni_modules_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "uni_module_id", null: false
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
