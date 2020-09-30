@@ -7,5 +7,10 @@
     = f.input :code, label: 'Module Code'
     = f.input :name, label: 'Module Name'
 
+    = f.simple_fields_for :staff_modules do |sm|
+      = render 'staff_fields', f: sm
+
+    = link_to_add_fields 'Add Staff Member', f, :staff_modules, 'staff_fields'
+
   .form-actions
     = f.button :submit, 'Create Module', class: 'btn btn-lg btn-primary'

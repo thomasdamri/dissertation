@@ -7,6 +7,7 @@ class HomeController < ApplicationController
   end
 
   def staff_home
-
+    # Only render modules the user is associated with
+    @uni_modules = current_user.uni_modules
   end
 end

@@ -26,9 +26,10 @@ class UniModulesController < ApplicationController
   def create
     @uni_module = UniModule.new(uni_module_params)
 
+    # Link the current user to the module so they have permission to edit it
     @uni_module.staff_modules.build(user: current_user)
 
-    puts "-----"
+    puts "----"
     puts @uni_module.valid?
     puts @uni_module.errors.full_messages
 
@@ -46,6 +47,16 @@ class UniModulesController < ApplicationController
   # PATCH/PUT /uni_modules/1
   # PATCH/PUT /uni_modules/1.json
   def update
+
+    # Can only validate this in edit mode, as in create mode the user link is not saved until after validation
+    if @uni_module.staff_modules.length < 1
+      @uni_module.errors[:staff_modules] << " must have at least one member of staff"
+    end
+
+    puts "----"
+    puts @uni_module.valid?
+    puts @uni_module.errors.full_messages
+
     respond_to do |format|
       if @uni_module.update(uni_module_params)
         format.html { redirect_to @uni_module, notice: 'Uni module was successfully updated.' }
@@ -75,6 +86,6 @@ class UniModulesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def uni_module_params
-      params.require(:uni_module).permit(:name, :code)
+      params.require(:uni_module).permit(:name, :code, staff_modules_attributes: [:id, :user_id, :_destroy])
     end
 end

@@ -1,0 +1,5 @@
+.nested-fields
+  - user_collection = User.where(staff: true).order(:email)
+  = f.association :user, as: :select, collection: user_collection, label_method: :email, value_method: :id,  label: 'Staff Member Email', include_blank: false
+  = f.hidden_field :_destroy
+  = link_to 'Remove Staff Member', '#', class: 'remove_fields'

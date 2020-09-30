@@ -30,6 +30,7 @@ class User < ApplicationRecord
   has_and_belongs_to_many :teams
   # Can manage many modules
   has_many :staff_modules
+  has_many :uni_modules, through: :staff_modules
   # Has many AssessmentResults written by the user
   has_many :author_results, class_name: 'AssessmentResult', foreign_key: 'author_id'
   # Has many AssessmentResults written about the user
