@@ -41,4 +41,13 @@ class User < ApplicationRecord
 
   validates_with UserValidator
 
+  # Either displays the name for the student, or the one they set
+  def real_display_name
+    if display_name.nil?
+      givenname + " " + sn
+    else
+      display_name
+    end
+  end
+
   end

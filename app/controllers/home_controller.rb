@@ -10,4 +10,9 @@ class HomeController < ApplicationController
     # Only render modules the user is associated with
     @uni_modules = current_user.uni_modules
   end
+
+  def account
+
+  end
+
 end

@@ -5,6 +5,7 @@ Rails.application.routes.draw do
   get 'home/index'
   get 'home/student_home'
   get 'home/staff_home'
+  get 'home/account'
 
   resources :uni_modules
 

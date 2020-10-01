@@ -19,5 +19,5 @@
           %a#navbarDropdownMenuLink.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#"}
             .navbar-text= current_user.username
           .dropdown-menu{"aria-labelledby" => "navbarDropdownMenuLink"}
-            %a.dropdown-item{:href => "#"} My Account
+            = link_to 'My Account', home_account_path, class: 'dropdown-item'
             = link_to 'Sign out', destroy_user_session_path, method: :delete, class: 'dropdown-item'
