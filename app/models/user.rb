@@ -37,6 +37,7 @@ class User < ApplicationRecord
   # Has many AssessmentResults written about the user
   has_many :target_results, class_name: 'AssessmentResult', foreign_key: 'target_id'
 
+  # Must have a username and email. Staff and admin booleans cannot be nil
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true
   validates :staff, inclusion: {in: [true, false]}
@@ -58,4 +59,4 @@ class User < ApplicationRecord
     "mailto:" + email
   end
 
-  end
+end
