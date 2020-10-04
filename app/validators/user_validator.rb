@@ -10,7 +10,7 @@ class UserValidator < ActiveModel::Validator
     # get_info_from_ldap always returns nil in test mode
     if !Rails.env.test?
       if user.get_info_from_ldap.nil?
-        user.errors[:email] << " does not belong to the university or does not exist"
+        #user.errors[:email] << " does not belong to the university or does not exist"
       end
     end
   end

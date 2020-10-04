@@ -27,7 +27,8 @@ class User < ApplicationRecord
   include EpiCas::DeviseHelper
 
   # Can be part of multiple teams, teams have multiple students
-  has_and_belongs_to_many :teams
+  has_many :student_teams
+  has_many :teams, through: :student_teams
   # Can manage many modules
   has_many :staff_modules
   has_many :uni_modules, through: :staff_modules
@@ -36,6 +37,8 @@ class User < ApplicationRecord
   # Has many AssessmentResults written about the user
   has_many :target_results, class_name: 'AssessmentResult', foreign_key: 'target_id'
 
+  validates :username, presence: true, uniqueness: true
+  validates :email, presence: true, uniqueness: true
   validates :staff, inclusion: {in: [true, false]}
   validates :admin, inclusion: {in: [true, false]}
 

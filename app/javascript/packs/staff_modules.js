@@ -1,7 +1,7 @@
-$(document).ready(function(){
+$(document).on('turbolinks:load', function(){
 
     $('form').on('click', '.remove_fields', function(event){
-        console.log("yes")
+        console.log("yes");
         $(this).prev('input[type=hidden]').val('1');
         $(this).closest('.nested-fields').hide();
         event.preventDefault();

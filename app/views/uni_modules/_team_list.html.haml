@@ -1,0 +1,13 @@
+- if @uni_module.teams.length > 0
+  %table.table.table-hover.table-bordered.table-striped
+    %tr
+      %th Team
+      %th
+
+    %tbody
+      - @uni_module.teams.each do |team|
+        %tr
+          %td= "Team " + team.number
+          %td= link_to "View", '#'
+- else
+  No teams

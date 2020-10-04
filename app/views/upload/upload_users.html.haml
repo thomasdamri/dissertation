@@ -1,0 +1,4 @@
+CSV file order: firstname,surname,username,registration_number,email
+= form_tag({:action => :user_process}, multipart: true) do
+  = file_field_tag :file
+  = submit_tag( "Import" )

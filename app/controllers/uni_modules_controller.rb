@@ -29,10 +29,6 @@ class UniModulesController < ApplicationController
     # Link the current user to the module so they have permission to edit it
     @uni_module.staff_modules.build(user: current_user)
 
-    puts "----"
-    puts @uni_module.valid?
-    puts @uni_module.errors.full_messages
-
     respond_to do |format|
       if @uni_module.save
         format.html { redirect_to @uni_module, notice: 'Module was successfully created.' }
@@ -52,10 +48,6 @@ class UniModulesController < ApplicationController
     if @uni_module.staff_modules.length < 1
       @uni_module.errors[:staff_modules] << " must have at least one member of staff"
     end
-
-    puts "----"
-    puts @uni_module.valid?
-    puts @uni_module.errors.full_messages
 
     respond_to do |format|
       if @uni_module.update(uni_module_params)
