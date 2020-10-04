@@ -1,4 +1,7 @@
 %h1 Student Dashboard
 %h3 Current Teams
+%ul
+  - User.where(username: 'acc18es').first.teams.each do |team|
+    = link_to team.uni_module.name + " - Team " + team.number.to_s, team_path(team)
 %h3 Current Assessments
 %h3 Completed Assessments

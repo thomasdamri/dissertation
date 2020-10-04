@@ -1,4 +1,8 @@
 %p#notice= notice
+%h2= "Team " + @team.number.to_s
+
+%h3 Members
+= render 'admin/small_user_list'
 
 
 = link_to 'Edit', edit_team_path(@team)

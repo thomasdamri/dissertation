@@ -53,4 +53,9 @@ class User < ApplicationRecord
     end
   end
 
+  # Mailto link for the email address
+  def email_link
+    "mailto:" + email
+  end
+
   end

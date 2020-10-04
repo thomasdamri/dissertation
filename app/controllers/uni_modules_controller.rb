@@ -10,6 +10,7 @@ class UniModulesController < ApplicationController
   # GET /uni_modules/1
   # GET /uni_modules/1.json
   def show
+    @teams = @uni_module.teams
   end
 
   # GET /uni_modules/new

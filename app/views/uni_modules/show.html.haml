@@ -1,7 +1,12 @@
 %h2= @uni_module.title
 
+%h3 Module Staff
+%ul
+  - @uni_module.users.each do |u|
+    %li= link_to u.real_display_name, u.email_link
+
 %h3 List of Teams
-= render 'team_list'
+= render 'admin/team_list'
 
 = link_to 'Edit', edit_uni_module_path(@uni_module)
 \|
