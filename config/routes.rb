@@ -12,7 +12,13 @@ Rails.application.routes.draw do
   get 'upload/teams/:id', to: 'upload#upload_teams'
   post 'upload/process_teams/:id', to: 'upload#team_process'
 
+  get 'admin/staff'
+  get 'admin/students'
+  get 'admin/modules'
+  get 'admin/teams'
+
   resources :uni_modules
+  resources :teams
 
   # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
 end

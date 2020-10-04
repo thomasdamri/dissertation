@@ -1,0 +1,17 @@
+%table.table.table-bordered.table-striped.table-hover
+  %thead
+    %tr
+      %th Username
+      %th First Name
+      %th Surname
+      %th Display Name
+      %th Email
+
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= user.username
+        %td= user.givenname
+        %td= user.sn
+        %td= user.display_name
+        %td= user.email
