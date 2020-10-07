@@ -10,7 +10,7 @@
 #
 class Team < ApplicationRecord
 
-  has_many :student_teams
+  has_many :student_teams, dependent: :destroy
   has_many :users, through: :student_teams
   belongs_to :uni_module
 

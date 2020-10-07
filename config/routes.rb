@@ -9,8 +9,9 @@ Rails.application.routes.draw do
 
   get 'upload/users', to: 'upload#upload_users'
   post 'upload/process_users', to: 'upload#user_process'
-  get 'upload/teams/:id', to: 'upload#upload_teams'
-  post 'upload/process_teams/:id', to: 'upload#team_process'
+  get 'upload/teams/:id', to: 'upload#upload_teams', as: 'upload_teams'
+  post 'upload/process_teams/:id', to: 'upload#team_process', as: 'process_teams'
+  delete 'upload/delete_teams/:id', to: 'upload#delete_teams', as: 'delete_teams'
 
   get 'admin/staff'
   get 'admin/students'

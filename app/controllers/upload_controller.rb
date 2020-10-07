@@ -44,11 +44,13 @@ class UploadController < ApplicationController
     # Check module id is valid
     if params[:mod_id].nil?
       redirect_to upload_teams_path, notice: 'There was an error, please try again'
+      return
     end
 
     # Check file was selected
     if params['file'].nil?
       redirect_to upload_teams_path, notice: 'No file was selected'
+      return
     end
 
     # Check module exists
@@ -72,6 +74,19 @@ class UploadController < ApplicationController
     end
 
     redirect_to uni_module_path mod
+
+  end
+
+  # Deletes all teams that are part of that module
+  def delete_teams
+    mod_id = params[:id]
+    mod = UniModule.find(mod_id)
+
+    mod.teams.each do |team|
+      team.delete
+    end
+
+    redirect_to mod, notice: 'Teams were successfully deleted'
 
   end
 

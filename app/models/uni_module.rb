@@ -10,10 +10,10 @@
 #
 class UniModule < ApplicationRecord
 
-  has_many :teams
-  has_many :assessments
+  has_many :teams, dependent: :destroy
+  has_many :assessments, dependent: :destroy
   # Many staff can manage the module
-  has_many :staff_modules, inverse_of: :user
+  has_many :staff_modules, inverse_of: :user, dependent: :destroy
   has_many :users, through: :staff_modules
   # Allows modules to add as many staff members as possible, and remove them as needed
   accepts_nested_attributes_for :staff_modules, reject_if: :all_blank, allow_destroy: true
