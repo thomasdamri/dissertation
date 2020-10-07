@@ -12,6 +12,8 @@
 #
 class Assessment < ApplicationRecord
 
+  attr_accessor :mod
+
   has_many :criteria
   belongs_to :uni_module
 

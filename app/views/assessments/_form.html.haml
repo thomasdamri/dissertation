@@ -1,0 +1,13 @@
+-# frozen_string_literal: true
+= simple_form_for(@assessment) do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  .form-inputs
+    = f.input :name, as: :string, label: 'Name'
+    = f.input :date_opened, start_year: Date.today.year
+    = f.input :date_closed, start_year: Date.today.year
+    = f.input :mod, as: :hidden, input_html: {value: @unimod.id}
+
+  .form-actions
+    = f.button :submit

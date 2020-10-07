@@ -1,0 +1,8 @@
+%h2= @assessment.name
+
+%p= "Date opened: " + @assessment.date_opened.to_s
+%p= "Date closed: " + @assessment.date_closed.to_s
+
+= #link_to 'Edit', edit_assessment_path(@assessment)
+\|
+= link_to 'Back', assessments_path

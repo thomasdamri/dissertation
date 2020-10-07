@@ -5,7 +5,9 @@
   - @uni_module.users.each do |u|
     %li= link_to u.real_display_name, u.email_link
 
-= link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-primary"
+= link_to 'Add new peer assessment', new_assessment_path, class: 'btn btn-primary'
+%hr
+= link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info"
 = link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
 %h3 List of Teams
 = render 'admin/team_list'
