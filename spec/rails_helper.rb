@@ -1,7 +1,7 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 # Coverage checker must be run first
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start 'rails'
 
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
@@ -66,4 +66,8 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  config.include Devise::TestHelpers, type: :controller
+  # Include this for login_as method
+  config.include Warden::Test::Helpers
 end

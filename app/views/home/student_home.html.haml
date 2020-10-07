@@ -1,6 +1,6 @@
 %h1 Student Dashboard
 %h3 Current Teams
-%ul
+%ul#teams
   - current_user.teams.each do |team|
     = link_to team.uni_module.name + " - Team " + team.number.to_s, team_path(team)
 %h3 Current Assessments

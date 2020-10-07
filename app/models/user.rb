@@ -27,10 +27,10 @@ class User < ApplicationRecord
   include EpiCas::DeviseHelper
 
   # Can be part of multiple teams, teams have multiple students
-  has_many :student_teams
+  has_many :student_teams, dependent: :destroy
   has_many :teams, through: :student_teams
   # Can manage many modules
-  has_many :staff_modules
+  has_many :staff_modules, dependent: :destroy
   has_many :uni_modules, through: :staff_modules
   # Has many AssessmentResults written by the user
   has_many :author_results, class_name: 'AssessmentResult', foreign_key: 'author_id'
@@ -47,6 +47,9 @@ class User < ApplicationRecord
 
   # Either displays the name for the student, or the one they set
   def real_display_name
+    if display_name.nil? and givenname.nil? and sn.nil?
+      return "Name not found"
+    end
     if display_name.nil?
       givenname + " " + sn
     else

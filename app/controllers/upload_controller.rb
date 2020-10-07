@@ -30,8 +30,8 @@ class UploadController < ApplicationController
         # Validations in the model file prevent the same user being added twice
         u = User.create(givenname: user_attr[0], sn: user_attr[1], username: user_attr[2], reg_no: user_attr[3],
                         email: user_attr[4], staff: false, admin: false)
-
       end
+      redirect_to home_staff_home_path
     end
   end
 
@@ -70,6 +70,8 @@ class UploadController < ApplicationController
       # Attach student to the team
       u.student_teams.create(user: u, team: t)
     end
+
+    redirect_to uni_module_path mod
 
   end
 
