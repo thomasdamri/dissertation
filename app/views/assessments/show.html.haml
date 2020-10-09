@@ -3,6 +3,12 @@
 %p= "Date opened: " + @assessment.date_opened.to_s
 %p= "Date closed: " + @assessment.date_closed.to_s
 
+- @assessment.criteria.order(:order).each do |crit|
+  .card.card-body.bg-light
+    %ul
+      %li= crit.title
+      %li= Criterium.type_dict.key(crit.response_type.to_i)
+
 = #link_to 'Edit', edit_assessment_path(@assessment)
 \|
-= link_to 'Back', assessments_path
+= link_to 'Back', @assessment.uni_module

@@ -1,0 +1,17 @@
+%table.table.table-striped.table-bordered.table-hover
+  %tr
+    %th Title
+    %th Date Opened
+    %th Date Closed
+    %th
+    %th
+    %th
+
+  - @uni_module.assessments.each do |assess|
+    %tr
+      %td= assess.name
+      %td= assess.date_opened
+      %td= assess.date_closed
+      %td= link_to 'View', assess, class: 'btn btn-primary'
+      %td
+      %td

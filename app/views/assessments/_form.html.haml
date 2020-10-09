@@ -9,5 +9,10 @@
     = f.input :date_closed, start_year: Date.today.year
     = f.input :mod, as: :hidden, input_html: {value: @unimod.id}
 
+    = f.simple_fields_for :criteria do |af|
+      = render 'criterium_fields', f: af
+
+    = link_to_add_fields 'Add Question Field', f, :criteria, 'criterium_fields'
+
   .form-actions
-    = f.button :submit
+    = f.button :submit, class: 'btn btn-lg btn-primary'

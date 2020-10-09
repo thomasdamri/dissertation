@@ -5,7 +5,7 @@
 #  id            :bigint           not null, primary key
 #  title         :string(255)
 #  order         :integer
-#  type          :string(255)
+#  response_type :string(255)
 #  min_value     :float(24)
 #  max_value     :float(24)
 #  assessment_id :bigint
@@ -37,21 +37,21 @@ class Criterium < ApplicationRecord
     return @@bool
   end
 
-  # Dictionary of displayable text values for each data type
-  @@data_types = {
-      @@string => "Text",
-      @@int => "Whole Number",
-      @@float => "Decimal Number",
-      @@bool => "Boolean"
-  }
+  # Convert from the display string to a storable enum value
+  def self.type_dict
+    {"Text" => @@string,
+     "Whole Number" => @@int,
+     "Decimal Number" => @@float,
+     "Boolean" => @@bool}
+  end
 
   belongs_to :assessment
   has_many :assessment_results
 
-  validates title, presence: true
+  validates :title, presence: true
   # Order must be unique within the assessment
-  validates order, presence: true, uniqueness: {scope: :assessment_id}
-  validates type, presence: true
+  validates :order, presence: true, uniqueness: {scope: :assessment_id}
+  validates :response_type, presence: true
 
   validates_with CriteriumValidator
 

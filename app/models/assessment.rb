@@ -17,6 +17,8 @@ class Assessment < ApplicationRecord
   has_many :criteria
   belongs_to :uni_module
 
+  accepts_nested_attributes_for :criteria, reject_if: :all_blank, allow_destroy: true
+
   # Name of the assessment must not be the same as another assessment for the same module
   validates :name, uniqueness: {scope: :uni_module}, presence: true
   validates :date_opened, presence: true

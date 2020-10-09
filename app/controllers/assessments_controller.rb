@@ -26,9 +26,9 @@ class AssessmentsController < ApplicationController
   # POST /assessments.json
   def create
     @assessment = Assessment.new(assessment_params)
-    mod = UniModule.find(params[:assessment][:mod])
+    @unimod = UniModule.find(params[:assessment][:mod])
 
-    @assessment.uni_module = mod
+    @assessment.uni_module = @unimod
 
     respond_to do |format|
       if @assessment.save
@@ -73,6 +73,7 @@ class AssessmentsController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def assessment_params
-      params.require(:assessment).permit(:name, :date_opened, :date_closed, :mod)
+      params.require(:assessment).permit(:name, :date_opened, :date_closed, :mod,
+                                         criteria_attributes: [:title, :order, :response_type, :min_value, :max_value])
     end
 end
