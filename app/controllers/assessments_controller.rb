@@ -28,7 +28,16 @@ class AssessmentsController < ApplicationController
     @assessment = Assessment.new(assessment_params)
     @unimod = UniModule.find(params[:assessment][:mod])
 
+    # Set parent module
     @assessment.uni_module = @unimod
+
+    # Blank the criteria min/max values if a string
+    @assessment.criteria.each do |crit|
+      if crit.response_type == Criterium.string_type
+        crit.max_value = nil
+        crit.min_value = nil
+      end
+    end
 
     respond_to do |format|
       if @assessment.save

@@ -2,7 +2,7 @@
   - types_collection = Criterium.type_dict
   = f.input :title, as: :string, label: 'Field Title'
   = f.input :order, as: :string, label: 'Field Order'
-  = f.input :response_type, as: :select, collection: types_collection, label: 'Field Type', include_blank: false
-  = f.input :min_value, as: :string, disabled: true
-  = f.input :max_value, as: :string, disabled: true
+  = f.input :response_type, as: :select, collection: types_collection, label: 'Field Type', include_blank: false, input_html: { class: 'response-type' }
+  = f.input :min_value, as: :string, input_html: { class: 'min-value' }, disabled: true
+  = f.input :max_value, as: :string, input_html: { class: 'max-value' }, disabled: true
   = link_to 'Remove Criteria', '#', class: 'remove_fields'
