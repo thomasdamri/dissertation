@@ -26,4 +26,14 @@ class Assessment < ApplicationRecord
 
   validates_with AssessmentValidator
 
+  # Returns true if the given user has completed the assessment
+  def completed_by?(user)
+    # Check if the user has any authored results for this assessment
+    if user.author_results.where(criterium: :criteria).count > 0
+      true
+    else
+      false
+    end
+  end
+
 end

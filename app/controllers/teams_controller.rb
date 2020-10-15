@@ -11,6 +11,7 @@ class TeamsController < ApplicationController
   # GET /teams/1.json
   def show
     @users = @team.users
+    @assessments = @team.uni_module.assessments
   end
 
   # GET /teams/new

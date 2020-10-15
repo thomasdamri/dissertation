@@ -21,8 +21,11 @@ Rails.application.routes.draw do
   # I have to give the same url 2 names because Rails
   get 'assessment/:id', to: 'assessments#show', as: 'assessments'
   get 'assessment/:id', to: 'assessments#show', as: 'assessment'
+
   get 'assessment/new/:id', to: 'assessments#new', as: 'new_assessment'
   post 'assessment/:id', to: 'assessments#create', as: 'create_assessment'
+  get 'assessment/:id/fill_in', to: 'assessments#fill_in', as: 'fillin_assessment'
+  post 'assessment/:id/process', to: 'assessments#process_assess', as: 'process_assessment'
 
   resources :uni_modules
   resources :teams

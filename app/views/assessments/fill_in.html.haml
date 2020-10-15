@@ -1,0 +1,5 @@
+%h2= @assessment.name
+
+= form_for :assessment do |f|
+  - @assessment.criteria.order(:order).each do |crit|
+    = render 'criteria/answer_fields', crit: crit, f: f

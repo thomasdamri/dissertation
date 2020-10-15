@@ -37,6 +37,11 @@ class AssessmentsController < ApplicationController
         crit.max_value = nil
         crit.min_value = nil
       end
+      # Manually set criteria min/max values if a boolean
+      if crit.response_type == Criterium.bool_type
+        crit.max_value = 1
+        crit.max_value = 0
+      end
     end
 
     respond_to do |format|
@@ -72,6 +77,16 @@ class AssessmentsController < ApplicationController
       format.html { redirect_to assessments_url, notice: 'Assessment was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  # Shows form for user to fill in the assessment
+  def fill_in
+    @assessment = Assessment.find(params[:id])
+
+  end
+
+  def process_assess
+
   end
 
   private
