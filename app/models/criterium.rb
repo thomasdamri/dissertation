@@ -45,6 +45,21 @@ class Criterium < ApplicationRecord
      "Boolean" => @@bool}
   end
 
+  # If integer or float, this text displays the min/max values to the user
+  def subtitle
+    if response_type.to_i == @@int or response_type.to_i == @@float
+      whole = ""
+      min = min_value
+      max = max_value
+      if response_type.to_i == @@int
+        whole = "whole"
+        min = min.to_i
+        max = max.to_i
+      end
+      "Enter a whole number between #{min} and #{max}"
+    end
+  end
+
   belongs_to :assessment
   has_many :assessment_results
 

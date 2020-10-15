@@ -1,4 +1,13 @@
-.card.card-body.bg-light
-  = crit.title
-  - if crit.response_type == Criterium.string_type
-    = render 'string_field', f: f
+.card.bg-light
+  .card-header
+    %h5.card-title= crit.title
+    - if not crit.subtitle.nil?
+      %h5.card-subtitle= crit.subtitle
+  - if crit.response_type.to_i == Criterium.string_type
+    = render 'criteria/string_field', crit: crit
+  - elsif crit.response_type.to_i == Criterium.int_type
+    = render 'criteria/integer_field', crit: crit
+  - elsif crit.response_type.to_i == Criterium.float_type
+    = render 'criteria/float_field', crit: crit
+  - elsif crit.response_type.to_i == Criterium.bool_type
+    = render 'criteria/boolean_field', crit: crit
