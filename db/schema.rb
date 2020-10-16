@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_08_092406) do
+ActiveRecord::Schema.define(version: 2020_10_16_145621) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "author_id"
@@ -53,7 +53,7 @@ ActiveRecord::Schema.define(version: 2020_10_08_092406) do
     t.index ["user_id"], name: "index_staff_modules_on_user_id"
   end
 
-  create_table "student_teams", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+  create_table "student_teams", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "team_id"
     t.index ["team_id"], name: "index_student_teams_on_team_id"

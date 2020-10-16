@@ -1,6 +1,8 @@
 class AssessmentsController < ApplicationController
   before_action :set_assessment, only: [:show, :edit, :update, :destroy]
 
+  include ERB::Util
+
   # GET /assessments
   # GET /assessments.json
   def index
@@ -85,7 +87,19 @@ class AssessmentsController < ApplicationController
 
   end
 
+  # Processes the form for students filling in the assessment
   def process_assess
+    # Find the assessment being filled in
+    assessment = Assessment.find(params[:id])
+    team = current_user.teams.where(uni_module_id: assessment.uni_module.id).first
+    # Loop through each criteria and create a new response
+    assessment.criteria.order(:order).each do |crit|
+      # Escape the response before storing in database
+      response = h params["response_#{crit.order}"]
+      AssessmentResult.create(author: current_user, target: User.first, criterium: crit, value: response)
+    end
+
+    redirect_to team
 
   end
 
