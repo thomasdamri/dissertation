@@ -1,3 +1,11 @@
+# == Schema Information
+#
+# Table name: student_teams
+#
+#  id      :bigint           not null, primary key
+#  user_id :bigint
+#  team_id :bigint
+#
 class StudentTeam < ApplicationRecord
 
   belongs_to :user

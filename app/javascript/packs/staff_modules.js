@@ -8,6 +8,27 @@ function disableInputs(formElement){
     }
 }
 
+// Given a single checkbox, disables the nearest assessed checkbox if not single
+function disableAssessedBox(formElement){
+    let targetElement = $(formElement).closest('div.nested-fields').find('.assessed');
+    if(formElement.value !== "1"){
+        targetElement.prop('disabled', true);
+    }else{
+        targetElement.prop('disabled', false);
+    }
+}
+
+// Given an assessed checkbox, disables the nearest weighting input box if not assessed
+function disableWeightBox(formElement){
+    let targetElement = $(formElement).closest('div.nested-fields').find('.relative-weight');
+    if(formElement.value === "0"){
+        targetElement.val('')
+        targetElement.prop('disabled', true);
+    }else{
+        targetElement.prop('disabled', false);
+    }
+}
+
 $(document).on('turbolinks:load', function(){
 
     $('form').on('click', '.remove_fields', function(event){
@@ -27,6 +48,22 @@ $(document).on('turbolinks:load', function(){
             disableInputs(response_type_el[0]);
         });
 
+        $('.single:last').each(function (){
+            // Manually disable the assessed and weighting boxes when fields are first added
+            // This does not affect pre-made fields from the edit form, only new ones
+            $(this).closest('div.nested-fields').find('.assessed').prop('disabled', true);
+            $(this).closest('div.nested-fields').find('.relative-weight').prop('disabled', true);
+        });
+
         event.preventDefault();
     });
+
+    $('form').on('change', '.single', function() {
+        disableAssessedBox(this);
+    });
+
+    $('form').on('change', '.assessed', function() {
+        disableWeightBox(this);
+    });
+
 });

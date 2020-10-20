@@ -11,6 +11,9 @@
 #  assessment_id :bigint
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  assessed      :boolean
+#  weighting     :integer
+#  single        :boolean
 #
 class Criterium < ApplicationRecord
 
@@ -67,6 +70,9 @@ class Criterium < ApplicationRecord
   # Order must be unique within the assessment
   validates :order, presence: true, uniqueness: {scope: :assessment_id}
   validates :response_type, presence: true
+
+  validates :single, inclusion: {in: [true, false]}
+  validates :assessed, inclusion: {in: [true, false]}
 
   validates_with CriteriumValidator
 

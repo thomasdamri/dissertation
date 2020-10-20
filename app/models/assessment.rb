@@ -12,9 +12,11 @@
 #
 class Assessment < ApplicationRecord
 
+  # Module id, needed when submitting form
   attr_accessor :mod
 
-  has_many :criteria
+  # Destroy all dependent criteria when removing object
+  has_many :criteria, dependent: :destroy
   belongs_to :uni_module
 
   accepts_nested_attributes_for :criteria, reject_if: :all_blank, allow_destroy: true

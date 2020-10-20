@@ -8,6 +8,8 @@
     %ul
       %li= crit.title
       %li= Criterium.type_dict.key(crit.response_type.to_i)
+      %li= crit.single ? "Answered once" : "Answered once per team member"
+      %li= crit.assessed ? "Relative weight in weighting calculation: " + crit.weighting.to_s : "Not included in weighting calculation"
 
 = #link_to 'Edit', edit_assessment_path(@assessment)
 \|

@@ -44,6 +44,12 @@ class AssessmentsController < ApplicationController
         crit.max_value = 1
         crit.max_value = 0
       end
+
+      # Prevents validation error when assessed is not filled in due to being disabled by the single answer button
+      if crit.assessed.nil?
+        crit.assessed = false
+      end
+
     end
 
     respond_to do |format|
@@ -112,6 +118,7 @@ class AssessmentsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def assessment_params
       params.require(:assessment).permit(:name, :date_opened, :date_closed, :mod,
-                                         criteria_attributes: [:title, :order, :response_type, :min_value, :max_value])
+                                         criteria_attributes: [:title, :order, :response_type, :min_value, :max_value,
+                                                               :single, :assessed, :weighting])
     end
 end
