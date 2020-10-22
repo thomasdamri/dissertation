@@ -1,5 +1,6 @@
 class AssessmentsController < ApplicationController
   before_action :set_assessment, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
 
   include ERB::Util
 
@@ -89,8 +90,10 @@ class AssessmentsController < ApplicationController
 
   # Shows form for user to fill in the assessment
   def fill_in
+    # Get current assessment, so the server knows which assessment is being filled in
     @assessment = Assessment.find(params[:id])
-
+    # Get the team this assessment is being filled in for
+    @team = current_user.teams.where(uni_module_id: @assessment.uni_module.id).first
   end
 
   # Processes the form for students filling in the assessment
@@ -100,9 +103,18 @@ class AssessmentsController < ApplicationController
     team = current_user.teams.where(uni_module_id: assessment.uni_module.id).first
     # Loop through each criteria and create a new response
     assessment.criteria.order(:order).each do |crit|
-      # Escape the response before storing in database
-      response = h params["response_#{crit.order}"]
-      AssessmentResult.create(author: current_user, target: User.first, criterium: crit, value: response)
+      # For single response criteria, just save one new result
+      if crit.single
+        # Escape the response before storing in database
+        response = h params["response_#{crit.order}"]
+        AssessmentResult.create(author: current_user, criterium: crit, value: response)
+      else
+        # For multi-response criteria, store each one for each user
+        team.users.each do |user|
+          response = h params["response_#{crit.order}_#{user.id}"]
+          AssessmentResult.create(author: current_user, target: user, criterium: crit, value: response)
+        end
+      end
     end
 
     redirect_to team

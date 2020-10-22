@@ -1,6 +1,6 @@
 .nested-fields.card.card-body.bg-light
   - types_collection = Criterium.type_dict
-  - single_collection = {"Single Answer" => 0, "Team Answer" => 1}
+  - single_collection = {"Single Answer" => 1, "Team Answer" => 0}
   - boolean_collection = {"Yes" => "1", "No" => "0"}
   = f.input :title, as: :string, label: 'Field Title'
   = f.input :order, as: :string, label: 'Field Order'

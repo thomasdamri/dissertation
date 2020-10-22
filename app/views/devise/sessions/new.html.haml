@@ -1,11 +1,14 @@
-%h2 Log in
-= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
-  .form-inputs
-    = f.input :username, required: false, autofocus: true
-    = f.input :password,                               |
-      required: false,                                 |
-      input_html: { autocomplete: "current-password" } |
-    = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
-  .form-actions
-    = f.button :submit, "Log in"
-= render "devise/shared/links"
+.card
+  .card-header
+    %h2.card-title Log in with CiCS
+  .card-body
+    = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+      .form-inputs
+        = f.input :username, required: false, autofocus: true, label: 'CiCS Username'
+        = f.input :password,                               |
+          required: false,                                 |
+          input_html: { autocomplete: "current-password" } |
+        = f.input :remember_me, as: :boolean if devise_mapping.rememberable?
+      .form-actions
+        = f.button :submit, "Log in", class: 'btn btn-primary btn-lg'
+    = render "devise/shared/links"

@@ -17,6 +17,7 @@ class Assessment < ApplicationRecord
 
   # Destroy all dependent criteria when removing object
   has_many :criteria, dependent: :destroy
+  has_many :assessment_results, through: :criteria
   belongs_to :uni_module
 
   accepts_nested_attributes_for :criteria, reject_if: :all_blank, allow_destroy: true

@@ -10,7 +10,7 @@ function disableInputs(formElement){
 // Given a single checkbox, disables the nearest assessed checkbox if not single
 function disableAssessedBox(formElement){
     let targetElement = $(formElement).closest('div.nested-fields').find('.assessed');
-    if(formElement.value === "1"){
+    if(formElement.value === "0"){
         targetElement.prop('disabled', true);
     }else{
         targetElement.prop('disabled', false);
