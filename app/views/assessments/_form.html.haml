@@ -12,10 +12,7 @@
 
     %h2 Assessment Questions
     = f.simple_fields_for :criteria do |af|
-      - puts "Rendering a criteria"
-      - puts "Response type: #{af.object.response_type}"
       - if af.object.response_type == Criterium.string_type
-        - puts "I should be rendering string"
         = render 'string_criterium', f: af
       - elsif af.object.response_type == Criterium.int_type
         = render 'integer_criterium', f: af

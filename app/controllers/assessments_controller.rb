@@ -45,15 +45,8 @@ class AssessmentsController < ApplicationController
       if crit.assessed.nil?
         crit.assessed = false
       end
-
-      puts "---------"
-      puts "Processing #{crit.title}"
-      puts crit.errors.full_messages
-      puts crit.response_type
-
     end
 
-    puts "DONEDONEDONE"
     respond_to do |format|
       if @assessment.save
         format.html { redirect_to @assessment, notice: 'Assessment was successfully created.' }

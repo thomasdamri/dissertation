@@ -64,7 +64,7 @@ class Criterium < ApplicationRecord
   end
 
   belongs_to :assessment
-  has_many :assessment_results
+  has_many :assessment_results, dependent: :destroy
 
   validates :title, presence: true
   # Order must be unique within the assessment
