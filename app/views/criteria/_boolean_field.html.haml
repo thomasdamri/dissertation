@@ -1,1 +1,4 @@
-= check_box_tag name
+= label_tag "#{name}_1", 'Yes'
+= radio_button_tag name, '1', false, required: 'required'
+= label_tag "#{name}_0", "No"
+= radio_button_tag name, '0', false, required: 'required'
