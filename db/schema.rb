@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_22_141730) do
+ActiveRecord::Schema.define(version: 2020_10_22_173106) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "author_id"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2020_10_22_141730) do
   create_table "criteria", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.string "title"
     t.integer "order"
-    t.string "response_type"
+    t.integer "response_type"
     t.string "min_value"
     t.string "max_value"
     t.bigint "assessment_id"

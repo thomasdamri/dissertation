@@ -4,15 +4,31 @@
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
   .form-inputs
+    %h2 Assessment Information
     = f.input :name, as: :string, label: 'Name'
     = f.input :date_opened, start_year: Date.today.year
     = f.input :date_closed, start_year: Date.today.year
     = f.input :mod, as: :hidden, input_html: {value: @unimod.id}
 
+    %h2 Assessment Questions
     = f.simple_fields_for :criteria do |af|
-      = render 'criterium_fields', f: af
+      - puts "Rendering a criteria"
+      - puts "Response type: #{af.object.response_type}"
+      - if af.object.response_type == Criterium.string_type
+        - puts "I should be rendering string"
+        = render 'string_criterium', f: af
+      - elsif af.object.response_type == Criterium.int_type
+        = render 'integer_criterium', f: af
+      - elsif af.object.response_type == Criterium.float_type
+        = render 'float_criterium', f: af
+      - elsif af.object.response_type == Criterium.bool_type
+        = render 'boolean_criterium', f: af
 
-    = link_to_add_fields 'Add Question Field', f, :criteria, 'criterium_fields'
+    .buttons
+      = link_to_add_fields 'Add Question - Text Response', f, :criteria, 'string_criterium'
+      = link_to_add_fields 'Add Question - Whole Number Response', f, :criteria, 'integer_criterium'
+      = link_to_add_fields 'Add Question - Decimal Number Response', f, :criteria, 'float_criterium'
+      = link_to_add_fields 'Add Question - Boolean Response', f, :criteria, 'boolean_criterium'
 
   .form-actions
     = f.button :submit, class: 'btn btn-lg btn-primary'

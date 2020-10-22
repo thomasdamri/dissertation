@@ -13,6 +13,7 @@
 class AssessmentResult < ApplicationRecord
 
   belongs_to :criterium
+  has_one :assessment, through: :criterium
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
   belongs_to :target, class_name: 'User', foreign_key: 'target_id', optional: true
 
