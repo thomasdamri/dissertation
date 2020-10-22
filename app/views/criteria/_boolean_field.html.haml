@@ -1,4 +1,4 @@
-= label_tag "#{name}_1", 'Yes'
+= label_tag "#{name}_1", crit.max_value
 = radio_button_tag name, '1', false, required: 'required'
-= label_tag "#{name}_0", "No"
+= label_tag "#{name}_0", crit.min_value
 = radio_button_tag name, '0', false, required: 'required'

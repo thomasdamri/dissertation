@@ -1,5 +1,5 @@
 function disableInputs(formElement){
-    if(formElement.value === "0" || formElement.value === "3"){
+    if(formElement.value === "0"){
         $(formElement).closest('div.nested-fields').find('.min-value').prop("disabled", true);
         $(formElement).closest('div.nested-fields').find('.max-value').prop("disabled", true);
     }else{

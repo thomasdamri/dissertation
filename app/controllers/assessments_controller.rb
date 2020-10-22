@@ -40,11 +40,6 @@ class AssessmentsController < ApplicationController
         crit.max_value = nil
         crit.min_value = nil
       end
-      # Manually set criteria min/max values if a boolean
-      if crit.response_type == Criterium.bool_type
-        crit.max_value = 1
-        crit.max_value = 0
-      end
 
       # Prevents validation error when assessed is not filled in due to being disabled by the single answer button
       if crit.assessed.nil?
