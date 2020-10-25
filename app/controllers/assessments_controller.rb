@@ -88,13 +88,29 @@ class AssessmentsController < ApplicationController
     @assessment = Assessment.find(params[:id])
     # Get the team this assessment is being filled in for
     @team = current_user.teams.where(uni_module_id: @assessment.uni_module.id).first
+
+    # Check user has not already filled in the form
+    if @assessment.completed_by? current_user
+      redirect_to @team
+    end
+
   end
 
   # Processes the form for students filling in the assessment
   def process_assess
     # Find the assessment being filled in
     assessment = Assessment.find(params[:id])
+    # Find the user's team
     team = current_user.teams.where(uni_module_id: assessment.uni_module.id).first
+
+    # Check user has not already filled in the form
+    if assessment.completed_by? current_user
+      redirect_to team
+    end
+
+    # Find the assessment being filled in
+
+
     # Create a transaction. The responses should only save if they are all valid
     ActiveRecord::Base.transaction do
       # Loop through each criteria and create a new response

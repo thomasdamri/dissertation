@@ -4,12 +4,14 @@
     %th
     %th Date Opened
     %th Date Closed
-    %th Completed?
 
   - @assessments.each do |assess|
     %tr
       %td= assess.name
-      %td= link_to 'Fill In', fillin_assessment_path(assess), class: 'btn btn-primary'
+      - # Only allow user to fill in form if not already done so
+      - if assess.completed_by?(current_user)
+        %td= button_to 'Filled In', '#', class: 'btn btn-secondary', disabled: true
+      - else
+        %td= link_to 'Fill In', fillin_assessment_path(assess), class: 'btn btn-primary'
       %td= assess.date_opened
       %td= assess.date_closed
-      %td= assess.completed_by?(current_user) ? "Yes" : "No"
