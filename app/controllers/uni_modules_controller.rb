@@ -10,16 +10,19 @@ class UniModulesController < ApplicationController
   # GET /uni_modules/1
   # GET /uni_modules/1.json
   def show
+    @title = @uni_module.name
     @teams = @uni_module.teams
   end
 
   # GET /uni_modules/new
   def new
+    @title = "Creating Module"
     @uni_module = UniModule.new
   end
 
   # GET /uni_modules/1/edit
   def edit
+    @title = "Editing Module"
   end
 
   # POST /uni_modules

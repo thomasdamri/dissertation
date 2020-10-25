@@ -10,6 +10,7 @@ class TeamsController < ApplicationController
   # GET /teams/1
   # GET /teams/1.json
   def show
+    @title = "Team #{@team.number}"
     @users = @team.users
     @assessments = @team.uni_module.assessments
   end

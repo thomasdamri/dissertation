@@ -13,16 +13,19 @@ class AssessmentsController < ApplicationController
   # GET /assessments/1
   # GET /assessments/1.json
   def show
+    @title = "Viewing Assessment"
   end
 
   # GET /assessments/new
   def new
+    @title = "Create Assessment"
     @assessment = Assessment.new
     @unimod = UniModule.find(params[:id].to_i)
   end
 
   # GET /assessments/1/edit
   def edit
+    @title = "Edit Assessment"
   end
 
   # POST /assessments
@@ -93,6 +96,7 @@ class AssessmentsController < ApplicationController
 
   # Shows form for user to fill in the assessment
   def fill_in
+    @title = "Completing Assessment"
     # Get current assessment, so the server knows which assessment is being filled in
     @assessment = Assessment.find(params[:id])
     # Get the team this assessment is being filled in for

@@ -4,7 +4,7 @@ class UploadController < ApplicationController
 
   # Path for uploading a CSV file of user info
   def upload_users
-
+    @title = "Upload User CSV"
   end
 
   # POST upload/process
@@ -36,8 +36,8 @@ class UploadController < ApplicationController
   end
 
   def upload_teams
+    @title = "Team Assignment Upload"
     @mod_id = params[:id]
-
   end
 
   def team_process
