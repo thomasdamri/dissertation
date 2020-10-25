@@ -21,4 +21,6 @@ class AssessmentResult < ApplicationRecord
   validates :author_id, presence: true
   validates :value, presence: true
 
+  validates_with AssessmentResultValidator
+
 end

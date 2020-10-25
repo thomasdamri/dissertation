@@ -54,12 +54,27 @@ class Criterium < ApplicationRecord
       whole = ""
       min = min_value
       max = max_value
+      # Include 'whole' in first part, if needs a whole number
       if response_type.to_i == @@int
         whole = "whole"
         min = min.to_i
         max = max.to_i
       end
-      "Enter a whole number between #{min} and #{max}"
+      first_part = "Enter a #{whole} number"
+
+      # Second part deals with minimum and maximum values
+
+      # If neither a min or max, just return the first part now
+      if min_value.nil? and max_value.nil?
+        first_part
+      elsif max_value.nil?
+        "#{first_part} which is #{min} or more"
+      elsif min_value.nil?
+        "#{first_part} below #{max}"
+      else
+        "#{first_part} between #{min} and #{max}"
+      end
+
     end
   end
 
@@ -73,7 +88,5 @@ class Criterium < ApplicationRecord
 
   validates :single, inclusion: {in: [true, false]}
   validates :assessed, inclusion: {in: [true, false]}
-
-  validates_with CriteriumValidator
 
 end

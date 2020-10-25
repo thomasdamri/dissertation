@@ -41,6 +41,15 @@ class AssessmentsController < ApplicationController
         crit.min_value = nil
       end
 
+      # Check for empty string in min/max value and make nil
+      if crit.min_value == ""
+        crit.min_value = nil
+      end
+
+      if crit.max_value == ""
+        crit.max_value = nil
+      end
+
       # Prevents validation error when assessed is not filled in due to being disabled by the single answer button
       if crit.assessed.nil?
         crit.assessed = false
