@@ -95,24 +95,31 @@ class AssessmentsController < ApplicationController
     # Find the assessment being filled in
     assessment = Assessment.find(params[:id])
     team = current_user.teams.where(uni_module_id: assessment.uni_module.id).first
-    # Loop through each criteria and create a new response
-    assessment.criteria.order(:order).each do |crit|
-      # For single response criteria, just save one new result
-      if crit.single
-        # Escape the response before storing in database
-        response = h params["response_#{crit.order}"]
-        AssessmentResult.create(author: current_user, criterium: crit, value: response)
-      else
-        # For multi-response criteria, store each one for each user
-        team.users.each do |user|
-          response = h params["response_#{crit.order}_#{user.id}"]
-          AssessmentResult.create(author: current_user, target: user, criterium: crit, value: response)
+    # Create a transaction. The responses should only save if they are all valid
+    ActiveRecord::Base.transaction do
+      # Loop through each criteria and create a new response
+      assessment.criteria.order(:order).each do |crit|
+        # For single response criteria, just save one new result
+        if crit.single
+          # Escape the response before storing in database
+          response = h params["response_#{crit.order}"]
+          AssessmentResult.create!(author: current_user, criterium: crit, value: response)
+        else
+          # For multi-response criteria, store each one for each user
+          team.users.each do |user|
+            response = h params["response_#{crit.order}_#{user.id}"]
+            AssessmentResult.create!(author: current_user, target: user, criterium: crit, value: response)
+          end
         end
       end
     end
 
+    # Return user to the team overview page after completion
     redirect_to team
 
+  # Prevent an error page being shown to the user, send back to fill in page
+  rescue ActiveRecord::RecordInvalid
+    render 'assessments/fill_in'
   end
 
   private
