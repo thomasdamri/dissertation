@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_26_201039) do
+ActiveRecord::Schema.define(version: 2020_10_27_164253) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "author_id"
@@ -72,6 +72,16 @@ ActiveRecord::Schema.define(version: 2020_10_26_201039) do
     t.datetime "updated_at", precision: 6, null: false
     t.index ["assessment_id"], name: "index_student_weightings_on_assessment_id"
     t.index ["user_id"], name: "index_student_weightings_on_user_id"
+  end
+
+  create_table "team_grades", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "team_id"
+    t.bigint "assessment_id"
+    t.float "grade"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["assessment_id"], name: "index_team_grades_on_assessment_id"
+    t.index ["team_id"], name: "index_team_grades_on_team_id"
   end
 
   create_table "teams", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|

@@ -12,6 +12,7 @@ class Team < ApplicationRecord
 
   has_many :student_teams, dependent: :destroy
   has_many :users, through: :student_teams
+  has_many :team_grades, dependent: :destroy
   belongs_to :uni_module
 
   validates :number, presence: true, uniqueness: {scope: :uni_module}

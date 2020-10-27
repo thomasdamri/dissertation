@@ -157,9 +157,12 @@ class AssessmentsController < ApplicationController
     @stud_weight = StudentWeighting.where(user: current_user, assessment: @assessment).first
 
     # If the assessment is not closed yet, or the student has no mark, do not show it
-    if @stud_weight.nil? or (not @assessment.date_closed.past?)
+    if (@stud_weight.nil? or (not @assessment.date_closed.past?)) and false
       redirect_to @assessment
     end
+
+    team = current_user.teams.where(uni_module: @assessment.uni_module).first
+    @team_grade = team.grade.nil? ? "Grade not given yet" : team.grade
     
   end
 

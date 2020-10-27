@@ -14,6 +14,7 @@ class TeamsController < ApplicationController
     @title = "Team #{@team.number}"
     @users = @team.users
     @assessments = @team.uni_module.assessments
+    @team_grades = TeamGrade.where(team: @team)
   end
 
   # GET /teams/new
@@ -63,6 +64,26 @@ class TeamsController < ApplicationController
       format.html { redirect_to teams_url, notice: 'Team was successfully destroyed.' }
       format.json { head :no_content }
     end
+  end
+
+  def grade_form
+    @title = "Set Team Grade"
+    @team = Team.find(params[:id])
+    @assessment = Assessment.find(params[:assess])
+    render 'teams/grade_form'
+  end
+
+  # Sets the team's grade for an assignment
+  def set_grade
+    @team = Team.find(params[:team_id])
+    @assessment = Assessment.find(params[:assessment_id])
+
+    tg = TeamGrade.find_or_initialize_by(team: @team, assessment: @assessment)
+    tg.grade = params[:new_grade]
+    tg.save!
+
+    redirect_to @team, notice: "Team grade set successfully"
+
   end
 
   private

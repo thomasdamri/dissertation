@@ -13,6 +13,9 @@ Rails.application.routes.draw do
   post 'upload/process_teams/:id', to: 'upload#team_process', as: 'process_teams'
   delete 'upload/delete_teams/:id', to: 'upload#delete_teams', as: 'delete_teams'
 
+  get 'teams/grade_form/:id/:assess', to: 'teams#grade_form', as: 'teams_grade_form'
+  post 'teams/set_grade', to: 'teams#set_grade', as: 'teams_set_grade'
+
   get 'admin/staff'
   get 'admin/students'
   get 'admin/modules'

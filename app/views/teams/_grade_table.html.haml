@@ -1,0 +1,11 @@
+%table.table.table-hover.table-bordered.table-striped
+  %tr
+    %th Assessment Title
+    %th Team Grade
+    %th
+  - @assessments.each do |assess|
+    - tg = TeamGrade.where(team: @team, assessment: assess).first
+    %tr
+      %td= assess.name
+      %td= tg.nil? ? "No grade assigned yet" : tg.grade
+      %td= link_to "Set Grade", teams_grade_form_path(@team, assess), class: 'btn btn-primary'
