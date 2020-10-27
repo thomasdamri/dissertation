@@ -1,9 +1,9 @@
-%h2= @assessment.name
 .card
   .card-header
-    %h3.card-title Your Grade
+    %h3.card-title= "Your Grade for #{@assessment.name}"
   .card-body
     = "Team grade: #{@team_grade}"
-    Your weighting:
+    %br
+    = "Your weighting: #{@weighting}"
   .card-footer
-    %h4= "Your grade: #{@stud_weight.weighting}"
+    %h4= "Your grade: #{@personal_grade}"

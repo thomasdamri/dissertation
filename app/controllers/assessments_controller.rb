@@ -162,7 +162,16 @@ class AssessmentsController < ApplicationController
     end
 
     team = current_user.teams.where(uni_module: @assessment.uni_module).first
-    @team_grade = team.grade.nil? ? "Grade not given yet" : team.grade
+    tg = TeamGrade.where(team: team, assessment: @assessment).first
+    @team_grade = tg.nil? ? "Grade not given yet" : tg.grade
+    @weighting = @stud_weight.nil? ? "Weighting not given yet" : @stud_weight.weighting
+
+    @personal_grade = ""
+    if tg.nil? or @stud_weight.nil?
+      @personal_grade = "Grade not given yet"
+    else
+      @personal_grade = (@weighting.to_f * @team_grade.to_f).round(2)
+    end
     
   end
 

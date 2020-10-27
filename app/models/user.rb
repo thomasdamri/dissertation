@@ -33,11 +33,11 @@ class User < ApplicationRecord
   has_many :staff_modules, dependent: :destroy
   has_many :uni_modules, through: :staff_modules
   # Has many AssessmentResults written by the user
-  has_many :author_results, class_name: 'AssessmentResult', foreign_key: 'author_id'
+  has_many :author_results, foreign_key: 'author_id', class_name: 'AssessmentResult'
   # Has many AssessmentResults written about the user
-  has_many :target_results, class_name: 'AssessmentResult', foreign_key: 'target_id'
+  has_many :target_results, foreign_key: 'target_id', class_name: 'AssessmentResult'
   # Has many weighting results (one per completed assessment)
-  has_many :assessment_results, dependent: :destroy
+  has_many :student_weightings, dependent: :destroy
 
   # Must have a username and email. Staff and admin booleans cannot be nil
   validates :username, presence: true, uniqueness: true

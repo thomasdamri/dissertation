@@ -4,8 +4,10 @@
     %th
     %th Date Opened
     %th Date Closed
+    %th
 
   - @assessments.each do |assess|
+    - disabled_results = not(assess.date_closed.past?)
     %tr
       %td= assess.name
       - # Only allow user to fill in form if not already done so
@@ -15,3 +17,7 @@
         %td= link_to 'Fill In', fillin_assessment_path(assess), class: 'btn btn-primary'
       %td= assess.date_opened
       %td= assess.date_closed
+      - if disabled_results
+        %td= button_to "Results", '#', class: 'btn btn-secondary', disabled: true
+      - else
+        %td= button_to "Results", assessment_results_path(assess), class: 'btn btn-info', method: :get
