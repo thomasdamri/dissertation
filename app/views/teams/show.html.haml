@@ -5,7 +5,10 @@
 = render 'admin/small_user_list'
 
 %h3 Peer Assessments
-= render 'admin/assessment_list'
+- if current_user.staff
+  = render 'admin/assessment_list_staff'
+- else
+  = render 'admin/assessment_list'
 
 
 = link_to 'Edit', edit_team_path(@team)

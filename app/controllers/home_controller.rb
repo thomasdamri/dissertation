@@ -4,6 +4,19 @@ class HomeController < ApplicationController
 
   def student_home
     @title = "Dashboard"
+
+    @current_assess = []
+    @completed_assess = []
+    my_assess = Assessment.where(uni_module: UniModule.where(teams: current_user.teams))
+
+    my_assess.each do |assess|
+      if assess.date_closed.past?
+        @completed_assess << assess
+      else
+        @current_assess << assess
+      end
+    end
+
   end
 
   def staff_home

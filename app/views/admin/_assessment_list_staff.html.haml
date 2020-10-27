@@ -1,0 +1,14 @@
+- # This partial needs a reference to a team, so should only be used where staff are observing a team
+%table.table.table-striped.table-hover.table-bordered
+  %tr
+    %th Title
+    %th Students Completed So Far
+    %th Date Opened
+    %th Date Closed
+
+  - @assessments.each do |assess|
+    %tr
+      %td= assess.name
+      %td= "#{assess.num_completed @team} / #{@team.users.count}"
+      %td= assess.date_opened
+      %td= assess.date_closed

@@ -5,9 +5,9 @@
 #  id            :bigint           not null, primary key
 #  title         :string(255)
 #  order         :integer
-#  response_type :string(255)
-#  min_value     :float(24)
-#  max_value     :float(24)
+#  response_type :integer
+#  min_value     :string(255)
+#  max_value     :string(255)
 #  assessment_id :bigint
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null

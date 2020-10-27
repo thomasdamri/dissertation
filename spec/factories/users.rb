@@ -31,6 +31,13 @@ FactoryBot.define do
     admin {false}
   end
 
+  factory :student, class: 'User' do
+    username {'zzz12dp'}
+    email {"dperry1@sheffield.ac.uk"}
+    staff {false}
+    admin {false}
+  end
+
   factory :blank_user, class: 'User' do
 
   end

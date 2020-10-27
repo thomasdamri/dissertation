@@ -151,6 +151,19 @@ class AssessmentsController < ApplicationController
     render 'assessments/fill_in'
   end
 
+  # Shows the student their final weighting
+  def results
+    @assessment = Assessment.find(params[:id])
+    @stud_weight = StudentWeighting.where(user: current_user, assessment: @assessment).first
+
+    # If the assessment is not closed yet, or the student has no mark, do not show it
+    if @stud_weight.nil? or (not @assessment.date_closed.past?)
+      redirect_to @assessment
+    end
+    
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_assessment

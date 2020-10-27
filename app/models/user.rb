@@ -36,6 +36,8 @@ class User < ApplicationRecord
   has_many :author_results, class_name: 'AssessmentResult', foreign_key: 'author_id'
   # Has many AssessmentResults written about the user
   has_many :target_results, class_name: 'AssessmentResult', foreign_key: 'target_id'
+  # Has many weighting results (one per completed assessment)
+  has_many :assessment_results, dependent: :destroy
 
   # Must have a username and email. Staff and admin booleans cannot be nil
   validates :username, presence: true, uniqueness: true

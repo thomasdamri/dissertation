@@ -27,6 +27,8 @@ Rails.application.routes.draw do
   get 'assessment/:id/fill_in', to: 'assessments#fill_in', as: 'fillin_assessment'
   post 'assessment/:id/process', to: 'assessments#process_assess', as: 'process_assessment'
 
+  get 'assessment/:id/results', to: 'assessments#results', as: 'assessment_results'
+
   resources :uni_modules
   resources :teams
 

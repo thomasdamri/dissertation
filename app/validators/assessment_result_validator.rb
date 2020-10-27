@@ -5,20 +5,21 @@ class AssessmentResultValidator < ActiveModel::Validator
     crit = ar.criterium
     response_type = crit.response_type
     if response_type.to_i == Criterium.int_type or response_type.to_i == Criterium.float_type
-      min_val = crit.min_value
-      max_val = crit.max_value
+      min_val = crit.min_value.to_f
+      max_val = crit.max_value.to_f
+      val = ar.value.to_f
       # No point checking if min and max value dont exist
       if min_val.nil? and max_val.nil?
         return
       else
-        if not min_val.nil?
-          if ar.value < min_val
+        unless min_val.nil?
+          if val < min_val
             ar.errors[:value] << "has exceeded the minimum value"
           end
         end
 
-        if not max_val.nil?
-          if ar.value > max_val
+        unless max_val.nil?
+          if val > max_val
             ar.errors[:value] << "has exceeded the maximum value"
           end
         end
