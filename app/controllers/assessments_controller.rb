@@ -164,7 +164,7 @@ class AssessmentsController < ApplicationController
     team = current_user.teams.where(uni_module: @assessment.uni_module).first
     tg = TeamGrade.where(team: team, assessment: @assessment).first
     @team_grade = tg.nil? ? "Grade not given yet" : tg.grade
-    @weighting = @stud_weight.nil? ? "Weighting not given yet" : @stud_weight.weighting
+    @weighting = @stud_weight.nil? ? "Weighting not given yet" : @stud_weight.weighting.round(2)
 
     @personal_grade = ""
     if tg.nil? or @stud_weight.nil?

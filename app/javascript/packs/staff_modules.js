@@ -31,7 +31,7 @@ $(document).on('turbolinks:load', function(){
         let time = new Date().getTime();
         let regexp = new RegExp($(this).data('id'), 'g');
         // Place immediately before the button if doing staff-module creation
-        if($(this).closest('.buttons') === null) {
+        if($(this).closest('.buttons').length === 0) {
             $(this).before($(this).data('fields').replace(regexp, time));
         }else{
             // Place above all the buttons if doing criteria creation

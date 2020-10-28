@@ -21,4 +21,16 @@ class AdminController < ApplicationController
     @teams = Team.order(:uni_module_id, :number)
   end
 
+  def make_staff
+    current_user.staff = true
+    current_user.save
+    redirect_to '/'
+  end
+
+  def make_student
+    current_user.staff = false
+    current_user.save
+    redirect_to '/'
+  end
+
 end

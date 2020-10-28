@@ -20,6 +20,8 @@ Rails.application.routes.draw do
   get 'admin/students'
   get 'admin/modules'
   get 'admin/teams'
+  post 'admin/make_student'
+  post 'admin/make_staff'
 
   # I have to give the same url 2 names because Rails
   get 'assessment/:id', to: 'assessments#show', as: 'assessments'
