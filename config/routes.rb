@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   get 'upload/teams/:id', to: 'upload#upload_teams', as: 'upload_teams'
   post 'upload/process_teams/:id', to: 'upload#team_process', as: 'process_teams'
   delete 'upload/delete_teams/:id', to: 'upload#delete_teams', as: 'delete_teams'
+  get 'upload/grades/:id', to: 'upload#upload_grades', as: 'upload_grades'
+  post 'upload/process_grades/:id', to: 'upload#process_grades', as: 'process_grades'
+  delete 'upload/delete_grades/:id', to: 'upload#delete_grades', as: 'delete_grades'
 
   get 'teams/grade_form/:id/:assess', to: 'teams#grade_form', as: 'teams_grade_form'
   post 'teams/set_grade', to: 'teams#set_grade', as: 'teams_set_grade'

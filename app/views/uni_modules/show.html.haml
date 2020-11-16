@@ -5,14 +5,16 @@
   - @uni_module.staff_modules.each do |sm|
     %li= link_to sm.user.real_display_name, sm.user.email_link
 
-= link_to 'Add new peer assessment', new_assessment_path, class: 'btn btn-primary'
 %h3 List of Assessments
+= link_to 'Add new peer assessment', new_assessment_path, class: 'btn btn-primary'
 = render 'assessment_list'
 
 %hr
-= link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info"
-= link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
 %h3 List of Teams
+.card.card-body
+  = link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info"
+  = link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
+
 = render 'admin/team_list'
 
 = link_to 'Edit', edit_uni_module_path(@uni_module)
