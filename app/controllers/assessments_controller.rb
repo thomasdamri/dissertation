@@ -114,16 +114,16 @@ class AssessmentsController < ApplicationController
     # Create a transaction. The responses should only save if they are all valid
     ActiveRecord::Base.transaction do
       # Loop through each criteria and create a new response
-      assessment.criteria.order(:order).each do |crit|
+      assessment.criteria.each do |crit|
         # For single response criteria, just save one new result
         if crit.single
           # Escape the response before storing in database
-          response = h params["response_#{crit.order}"]
+          response = h params["response_#{crit.id}"]
           AssessmentResult.create!(author: current_user, criterium: crit, value: response)
         else
           # For multi-response criteria, store each one for each user
           team.users.each do |user|
-            response = h params["response_#{crit.order}_#{user.id}"]
+            response = h params["response_#{crit.id}_#{user.id}"]
             AssessmentResult.create!(author: current_user, target: user, criterium: crit, value: response)
           end
         end

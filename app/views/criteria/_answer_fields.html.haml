@@ -16,11 +16,11 @@
     - # Rendering the field and setting the name of the form element, which is used to find the element's value
     - # in the controller
     - if crit.single
-      - name = "response_#{crit.order}"
+      - name = "response_#{crit.id}"
       = render field_render, crit: crit, name: name
     - else
       - @team.users.each do |user|
-        - name = "response_#{crit.order}_#{user.id}"
+        - name = "response_#{crit.id}_#{user.id}"
         = user.real_display_name
         = render field_render, crit: crit, name: name
         %hr

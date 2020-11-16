@@ -4,6 +4,5 @@
   - boolean_collection = {"Yes" => "1", "No" => "0"}
   = f.input :response_type, as: :hidden, input_html: { value: Criterium.string_type }
   = f.input :title, as: :string, label: 'Field Title'
-  = f.input :order, as: :string, label: 'Field Order'
   = f.input :single, as: :radio_buttons, collection: single_collection, label: 'Single or Team answer?', input_html: { class: 'single'}
   = link_to 'Remove Criteria', '#', class: 'remove_fields'

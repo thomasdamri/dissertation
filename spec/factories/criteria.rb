@@ -19,7 +19,6 @@ FactoryBot.define do
 
   factory :criterium, class: Criterium do
     title { 'Test Criterium' }
-    order { 1 }
     response_type { 0 }
     single { true }
     assessed { false }
@@ -27,7 +26,6 @@ FactoryBot.define do
 
   factory :weighted_criterium, class: Criterium do
     title { 'Test Criterium' }
-    order { 1 }
     response_type { 1 }
     single { false }
     assessed { true }
@@ -38,7 +36,6 @@ FactoryBot.define do
 
   factory :blank_criterium, class: Criterium do
     title {  }
-    order {  }
     response_type {  }
     single {  }
     assessed {  }

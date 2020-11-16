@@ -53,7 +53,7 @@ RSpec.describe Assessment, type: :model do
     a = create :assessment, uni_module: u
 
     c1 = create :criterium, assessment: a
-    c2 = create :criterium, assessment: a, title: 'Something else', order: 2
+    c2 = create :criterium, assessment: a, title: 'Something else'
 
     expect(Criterium.count).to eq(2)
 
@@ -69,9 +69,9 @@ RSpec.describe Assessment, type: :model do
       a = create :assessment, uni_module: u
       t = create :team, uni_module: u
 
-      c1 = create :weighted_criterium, assessment: a, title: 'A', order: 1
-      c2 = create :weighted_criterium, assessment: a, title: 'B', order: 2
-      c3 = create :weighted_criterium, assessment: a, title: 'C', order: 3
+      c1 = create :weighted_criterium, assessment: a, title: 'A'
+      c2 = create :weighted_criterium, assessment: a, title: 'B'
+      c3 = create :weighted_criterium, assessment: a, title: 'C'
 
       u1 = create :student
       u2 = create(:student, username: 'zzy12dp', email: 'dperry2@sheffield.ac.uk')
@@ -108,9 +108,10 @@ RSpec.describe Assessment, type: :model do
         end
       end
 
-      c1 = a.criteria.where(order: 1).first
-      c2 = a.criteria.where(order: 2).first
-      c3 = a.criteria.where(order: 3).first
+      crits = a.criteria.all
+      c1 = crits[0]
+      c2 = crits[1]
+      c3 = crits[2]
 
       u1 = User.where(username: 'zzz12dp').first
       u2 = User.where(username: 'zzy12dp').first

@@ -4,7 +4,6 @@
 #
 #  id            :bigint           not null, primary key
 #  title         :string(255)
-#  order         :integer
 #  response_type :integer
 #  min_value     :string(255)
 #  max_value     :string(255)
@@ -82,8 +81,6 @@ class Criterium < ApplicationRecord
   has_many :assessment_results, dependent: :destroy
 
   validates :title, presence: true
-  # Order must be unique within the assessment
-  validates :order, presence: true, uniqueness: {scope: :assessment_id}
   validates :response_type, presence: true
 
   validates :single, inclusion: {in: [true, false]}

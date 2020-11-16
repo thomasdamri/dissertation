@@ -1,6 +1,6 @@
 %h2= @assessment.name
 
 = form_tag({action: 'process_assess'}) do |f|
-  - @assessment.criteria.order(:order).each do |crit|
+  - @assessment.criteria.each do |crit|
     = render 'criteria/answer_fields', crit: crit
   = submit_tag 'Submit', class: 'btn btn-primary'
