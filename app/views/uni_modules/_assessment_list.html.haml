@@ -5,7 +5,6 @@
     %th Date Closed
     %th
     %th
-    %th
 
   - @uni_module.assessments.each do |assess|
     %tr
@@ -13,5 +12,4 @@
       %td= assess.date_opened
       %td= assess.date_closed
       %td= link_to 'View', assess, class: 'btn btn-primary'
-      %td
-      %td
+      %td= link_to 'Delete', assess, method: :delete, data: { confirm: 'Are you sure? This is a permanent action that will remove all assessment data?' }, class: 'btn btn-danger'

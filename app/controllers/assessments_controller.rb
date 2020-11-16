@@ -70,26 +70,13 @@ class AssessmentsController < ApplicationController
     end
   end
 
-  # PATCH/PUT /assessments/1
-  # PATCH/PUT /assessments/1.json
-  def update
-    respond_to do |format|
-      if @assessment.update(assessment_params)
-        format.html { redirect_to @assessment, notice: 'Assessment was successfully updated.' }
-        format.json { render :show, status: :ok, location: @assessment }
-      else
-        format.html { render :edit }
-        format.json { render json: @assessment.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
   # DELETE /assessments/1
   # DELETE /assessments/1.json
   def destroy
+    unimod = @assessment.uni_module
     @assessment.destroy
     respond_to do |format|
-      format.html { redirect_to assessments_url, notice: 'Assessment was successfully destroyed.' }
+      format.html { redirect_to unimod, notice: 'Assessment was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
