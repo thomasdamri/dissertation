@@ -72,6 +72,7 @@ class Assessment < ApplicationRecord
 
     # Iterate over each user and sum their scores over the assessed criteria
     team.users.each do |user|
+      # Hold each user's score in the dict, accessible by their id
       user_total_dict[user.id] = 0
       # Get all responses for each crit where the user is the target
       assessed_crits.each do |crit|

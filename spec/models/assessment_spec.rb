@@ -16,8 +16,8 @@ RSpec.describe Assessment, type: :model do
 
   it 'is valid with valid attributes' do
     u = create :uni_module
-    a = build :assessment
-    a.uni_module = u
+    a = create(:assessment, uni_module: u)
+
     expect(a).to be_valid
   end
 
@@ -31,6 +31,7 @@ RSpec.describe Assessment, type: :model do
     a = create :assessment, uni_module: u
     a2 = build :assessment, uni_module: u
 
+
     expect(a).to be_valid
     expect(a2).to_not be_valid
 
@@ -42,10 +43,12 @@ RSpec.describe Assessment, type: :model do
 
   it 'is invalid with a close date before its opening date' do
     u = create :uni_module
-    a = build :assessment
-    a.uni_module = u
+    a = create(:assessment, uni_module: u)
+    c = build(:criterium, assessment: a)
     a.date_closed = Date.new 2020, 9, 12
     expect(a).to_not be_valid
+    a.date_closed = Date.new 2020, 12, 12
+    expect(a).to be_valid
   end
 
   it 'deletes all dependent criteria on deletion' do

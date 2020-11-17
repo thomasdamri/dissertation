@@ -37,7 +37,7 @@ class AssessmentsController < ApplicationController
     # Set parent module
     @assessment.uni_module = @unimod
 
-    # Blank the criteria min/max values if a string
+    # Set the criteria min/max values to nil if response type is a string
     @assessment.criteria.each do |crit|
       if crit.response_type == Criterium.string_type
         crit.max_value = nil
@@ -108,9 +108,6 @@ class AssessmentsController < ApplicationController
       redirect_to team
     end
 
-    # Find the assessment being filled in
-
-
     # Create a transaction. The responses should only save if they are all valid
     ActiveRecord::Base.transaction do
       # Loop through each criteria and create a new response
@@ -128,6 +125,9 @@ class AssessmentsController < ApplicationController
           end
         end
       end
+
+      assessment.generate_weightings(team)
+
     end
 
     # Return user to the team overview page after completion
@@ -148,8 +148,8 @@ class AssessmentsController < ApplicationController
       redirect_to @assessment
     end
 
-    team = current_user.teams.where(uni_module: @assessment.uni_module).first
-    tg = TeamGrade.where(team: team, assessment: @assessment).first
+    @team = current_user.teams.where(uni_module: @assessment.uni_module).first
+    tg = TeamGrade.where(team: @team, assessment: @assessment).first
     @team_grade = tg.nil? ? "Grade not given yet" : tg.grade
     @weighting = @stud_weight.nil? ? "Weighting not given yet" : @stud_weight.weighting.round(2)
 

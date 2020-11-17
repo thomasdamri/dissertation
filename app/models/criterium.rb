@@ -86,4 +86,6 @@ class Criterium < ApplicationRecord
   validates :single, inclusion: {in: [true, false]}
   validates :assessed, inclusion: {in: [true, false]}
 
+  validates_with CriteriumValidator
+
 end
