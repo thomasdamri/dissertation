@@ -84,7 +84,6 @@ GEM
       capybara
       rspec
     childprocess (3.0.0)
-    cocoon (1.2.15)
     coffee-rails (5.0.0)
       coffee-script (>= 2.2.0)
       railties (>= 5.2.0)
@@ -323,7 +322,6 @@ DEPENDENCIES
   cancancan
   capybara (>= 2.15)
   capybara-select2!
-  cocoon
   devise
   epi_cas!
   epi_deploy!
