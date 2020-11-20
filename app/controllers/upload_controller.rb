@@ -1,3 +1,4 @@
+require 'tsv'
 class UploadController < ApplicationController
 
   include ERB::Util
@@ -8,30 +9,31 @@ class UploadController < ApplicationController
   end
 
   # POST upload/process
-  # Processes the CSV file of new users
+  # Processes the TSV file of new users
   def user_process
-
     # Check file exists first
     if params['file'].nil?
-      redirect_to upload_teams_path, notice: 'No file was selected'
+      redirect_to upload_teams_path, notice: 'Error: No file was selected'
     else
-      # Read file
-      csv_content = params['file'].read
+      count_before = User.count
+      # Read the file into a TSV object
+      tsv_file = TSV.parse(params['file'].read)
 
-      # Split by line
-      csv_content.split("\n").each do |line|
-        # Escape html on line
-        line = h line
+      # Extract the user info from each row of the tsv file
+      tsv_file.each do |row|
+        reg_no = row["Reg No."]
+        username = row["Student Username"]
+        surname = row["Surname"]
+        firstname = row["Forename"]
+        email = row["Email"]
 
-        # Split each line by comma to get each user attribute
-        user_attr = line.split(',')
-
-        # Attempt to create a user given the attributes
-        # Validations in the model file prevent the same user being added twice
-        u = User.create(givenname: user_attr[0], sn: user_attr[1], username: user_attr[2], reg_no: user_attr[3],
-                        email: user_attr[4], staff: false, admin: false)
+        User.create(reg_no: reg_no, username: username, sn: surname, givenname: firstname, email: email,
+                    staff: false, admin: false)
       end
-      redirect_to home_staff_home_path
+
+      count = User.count - count_before
+      redirect_to home_staff_home_path, notice: "Successfully added #{count} students"
+
     end
   end
 
@@ -134,7 +136,17 @@ class UploadController < ApplicationController
   end
 
   def delete_grades
+    # Find the assessment from the parameters
+    assess_id = params[:id]
+    assess = Assessment.find(assess_id)
 
+    # Delete all team grades associated with this assessment
+    assess.team_grades.each do |tg|
+      tg.destroy
+    end
+
+    # Send user back to the module page
+    redirect_to assess.uni_module, notice: 'Team grades were successfully deleted'
   end
 
 end
