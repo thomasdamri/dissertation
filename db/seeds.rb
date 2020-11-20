@@ -6,6 +6,9 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
+User.create(username: 'acc17dp', email: 'dperry1@sheffield.ac.uk', staff: true, admin: true)
+
+=begin
 u1 = User.first
 u2 = User.where(username: 'zzz18as').first
 u3 = User.where(username: 'zzz18bs').first
@@ -65,3 +68,4 @@ AssessmentResult.create(criterium: c3, author: u3, target: u4, value: 6)
 AssessmentResult.create(criterium: c3, author: u4, target: u1, value: 10)
 AssessmentResult.create(criterium: c3, author: u4, target: u2, value: 8)
 AssessmentResult.create(criterium: c3, author: u4, target: u3, value: 5)
+=end
