@@ -18,6 +18,7 @@ These instructions were written for Ubuntu 20.04, but any recent version of Ubun
 - You will also need an epiGenesys gem server logon.
 - Clone the repo to a new folder
 - Open a terminal in this new folder
+- Ensure you are on the `demo` branch by doing `git checkout origin/demo`
 - Run `bundler install` while on the university VPN
 - Run `yarn install` to get Javascript dependencies
 - Open `db/seeds.rb` and create yourself a user to log in with by copying the line with username `acc17dp` and changing the details as appropriate
