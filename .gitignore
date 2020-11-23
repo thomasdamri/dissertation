@@ -43,3 +43,5 @@ coverage
 
 # RubyMine stuff
 .idea/
+.generators
+.rakeTasks
