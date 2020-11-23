@@ -3,6 +3,7 @@ class AssessmentsController < ApplicationController
   before_action :authenticate_user!
 
   include ERB::Util
+  require 'csv'
 
   # GET /assessments
   # GET /assessments.json
@@ -160,6 +161,43 @@ class AssessmentsController < ApplicationController
       @personal_grade = (@weighting.to_f * @team_grade.to_f).round(2)
     end
     
+  end
+
+
+  # Exports each student's grades to a CSV file
+  def csv_export
+    # Find the assessment to export data from
+    assessment = Assessment.find(params['id'])
+    # Generate the CSV file as a string first
+    csv_str = CSV.generate headers: true do |csv|
+      csv << ["Student Username", "Team Number", "Team Grade", "Individual Weighting", "Individual Grade"]
+      assessment.uni_module.teams.each do |team|
+        team.users.each do |user|
+          # Try to find the team's grade
+          t_grade = team.team_grades.where(assessment_id: assessment.id).first
+          team_grade = t_grade.nil? ? "NULL" : t_grade.grade
+
+          # Try to find user's individual weighting
+          weight = user.student_weightings.where(assessment_id: assessment).first
+          ind_weight = weight.nil? ? "NULL" : weight.weighting
+
+          # Only calculate an individual grade if both team grade and indiv. weighting exist
+          ind_grade = "NULL"
+          unless t_grade.nil? or weight.nil?
+            ind_grade = team_grade * ind_grade
+          end
+
+          csv << [user.username, team.number, team_grade, ind_weight, ind_grade]
+        end
+      end
+    end
+
+    # Return the CSV file to the user as a download
+    respond_to do |format|
+      format.csv {send_data csv_str, filename: "Export-Assessment-#{Date.today}.csv", disposition: 'attachment',
+                            type: 'text/csv'}
+    end
+
   end
 
 

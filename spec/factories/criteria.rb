@@ -4,7 +4,6 @@
 #
 #  id            :bigint           not null, primary key
 #  title         :string(255)
-#  order         :integer
 #  response_type :integer
 #  min_value     :string(255)
 #  max_value     :string(255)

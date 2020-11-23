@@ -39,6 +39,8 @@ Rails.application.routes.draw do
 
   get 'assessment/:id/results', to: 'assessments#results', as: 'assessment_results'
 
+  get 'assessment/:id/export', to: 'assessments#csv_export', as: 'assessment_export'
+
   resources :uni_modules
   resources :teams
 
