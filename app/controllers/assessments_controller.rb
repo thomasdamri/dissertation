@@ -201,6 +201,29 @@ class AssessmentsController < ApplicationController
   end
 
 
+  def send_score_email
+    assessment = Assessment.find(params['id'])
+    teams = assessment.uni_module.teams.pluck(:id)
+    stud_teams = StudentTeam.where(team_id: teams).pluck(:user_id)
+    users = User.where(id: stud_teams).all
+
+    users.each do |u|
+      team = u.teams.where(uni_module: assessment.uni_module).first
+      team_grade = team.team_grades.where(assessment: assessment).first
+      ind_weight = StudentWeighting.where(user: u, assessment: assessment).first
+
+      puts "#{u.email} - #{team_grade.nil?}, #{ind_weight.nil?}"
+
+      unless team_grade.nil? or ind_weight.nil?
+        StudentMailer.score_email(u, assessment, team_grade, ind_weight).deliver
+      end
+    end
+
+    redirect_to assessment.uni_module, notice: "Emails sent successfully"
+
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_assessment

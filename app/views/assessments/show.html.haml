@@ -11,4 +11,9 @@
       %li= crit.single ? "Answered once" : "Answered once per team member"
       %li= crit.assessed ? "Relative weight in weighting calculation: " + crit.weighting.to_s : "Not included in weighting calculation"
 
+= button_to 'Send grades via email', assessment_score_email_path, method: :post, class: 'btn btn-info'
+%p Note: In a development environment this button will not send emails, but will instead open them as browser tabs.
+Students will only have an email sent if they have a team grade AND an individual weighting for this assessment.
+Depending on how many students have grades and weightings, this might open A LOT of tabs.
+
 = link_to 'Back to module', @assessment.uni_module

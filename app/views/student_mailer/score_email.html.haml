@@ -1,0 +1,8 @@
+%h1 Your Grade
+%h5 Dear #{@user.real_display_name},
+%p Your grade for the assessment #{@assessment.name} has been returned to you:
+
+%ul
+  %li Your team grade: #{@team_grade.grade.round(2)}
+  %li Your peer-assessment weighting: #{@ind_weight.weighting.round(2)}
+  %li Your individual grade: #{@ind_grade.round(2)}

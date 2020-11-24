@@ -41,6 +41,8 @@ Rails.application.routes.draw do
 
   get 'assessment/:id/export', to: 'assessments#csv_export', as: 'assessment_export'
 
+  post 'assessment/:id/send_email', to: 'assessments#send_score_email', as: 'assessment_score_email'
+
   resources :uni_modules
   resources :teams
 

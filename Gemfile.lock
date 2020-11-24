@@ -93,6 +93,11 @@ GEM
     coffee-script-source (1.12.2)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
+    delayed_job (4.1.8)
+      activesupport (>= 3.0, < 6.1)
+    delayed_job_active_record (4.1.4)
+      activerecord (>= 3.0, < 6.1)
+      delayed_job (>= 3.0, < 5)
     devise (4.7.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -152,6 +157,10 @@ GEM
       concurrent-ruby (~> 1.0)
     jbuilder (2.10.1)
       activesupport (>= 5.0.0)
+    launchy (2.5.0)
+      addressable (~> 2.7)
+    letter_opener (1.7.0)
+      launchy (~> 2.2)
     listen (3.2.1)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -323,6 +332,7 @@ DEPENDENCIES
   cancancan
   capybara (>= 2.15)
   capybara-select2!
+  delayed_job_active_record
   devise
   epi_cas!
   epi_deploy!
@@ -330,6 +340,7 @@ DEPENDENCIES
   factory_bot_rails
   haml-rails (~> 2.0)
   jbuilder (~> 2.7)
+  letter_opener
   listen (~> 3.2)
   mysql2 (>= 0.4.4)
   puma (~> 4.1)
