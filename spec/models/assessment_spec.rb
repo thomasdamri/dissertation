@@ -85,41 +85,15 @@ RSpec.describe Assessment, type: :model do
       create :student_team, user: u2, team: t
       create :student_team, user: u3, team: t
       create :student_team, user: u4, team: t
-    end
 
-    it 'gives all students a weighting of 1 if no assessment results exist' do
-      a = Assessment.first
-      t = Team.first
+      # Create the assessment results
 
-      a.generate_weightings(t)
-
-      t.users.each do |user|
-        sw = StudentWeighting.where(user: user, assessment: a).first
-        expect(sw.weighting).to eq 1
-      end
-
-
-    end
-
-    it 'generates weightings based on assessment results' do
-      a = Assessment.first
-      t = Team.first
-
+      # Each user rates themselves 10/10
       t.users.each do |user|
         a.criteria.each do |crit|
           create :assessment_result, criterium: crit, author: user, target: user, value: 10
         end
       end
-
-      crits = a.criteria.all
-      c1 = crits[0]
-      c2 = crits[1]
-      c3 = crits[2]
-
-      u1 = User.where(username: 'zzz12dp').first
-      u2 = User.where(username: 'zzy12dp').first
-      u3 = User.where(username: 'zzx12dp').first
-      u4 = User.where(username: 'zzw12dp').first
 
       # C1
       create :assessment_result, criterium: c1, author: u1, target: u2, value: 8
@@ -154,7 +128,7 @@ RSpec.describe Assessment, type: :model do
       create :assessment_result, criterium: c2, author: u4, target: u1, value: 7
       create :assessment_result, criterium: c2, author: u4, target: u2, value: 8
       create :assessment_result, criterium: c2, author: u4, target: u3, value: 4
-      
+
       # C3
       create :assessment_result, criterium: c3, author: u1, target: u2, value: 7
       create :assessment_result, criterium: c3, author: u1, target: u3, value: 4
@@ -172,20 +146,119 @@ RSpec.describe Assessment, type: :model do
       create :assessment_result, criterium: c3, author: u4, target: u2, value: 8
       create :assessment_result, criterium: c3, author: u4, target: u3, value: 5
 
+    end
+
+    it 'gives all students a weighting of 1 if no assessment results exist' do
+      a = Assessment.first
+      t = Team.first
+
+      # It's better to delete all assessment results here, in order to preserve the before :each section above
+      a.assessment_results.each do |res|
+        res.destroy
+      end
+
       a.generate_weightings(t)
 
+      t.users.each do |user|
+        sw = StudentWeighting.where(user: user, assessment: a).first
+        expect(sw.weighting).to eq 1
+      end
+
+
+    end
+
+    it 'generates weightings based on assessment results' do
+      a = Assessment.first
+      t = Team.first
+
+      a.generate_weightings(t)
+
+      u1 = User.where(username: 'zzz12dp').first
+      u2 = User.where(username: 'zzy12dp').first
+      u3 = User.where(username: 'zzx12dp').first
+      u4 = User.where(username: 'zzw12dp').first
+
+      # I got these expected weightings by doing the algorithm by hand
       sw = StudentWeighting.where(user: u1, assessment: a).first
-      expect(sw.weighting.round(2)).to eq 1.26
+      expect(sw.weighting.round(2)).to eq 1.27
+
+      sw = StudentWeighting.where(user: u2, assessment: a).first
+      expect(sw.weighting.round(2)).to eq 1.17
+
+      sw = StudentWeighting.where(user: u3, assessment: a).first
+      expect(sw.weighting.round(2)).to eq 0.61
+
+      sw = StudentWeighting.where(user: u4, assessment: a).first
+      expect(sw.weighting.round(2)).to eq 0.95
+
+    end
+
+    it 'generates weightings correctly when criteria have different weightings' do
+      a = Assessment.first
+      t = Team.first
+
+      # Load in all criteria and users from the database
+      crits = a.criteria.all
+      c1 = crits[0]
+
+      # Give the first criteria twice the weight of the others
+      c1.weighting = 2
+      c1.save
+
+      u1 = User.where(username: 'zzz12dp').first
+      u2 = User.where(username: 'zzy12dp').first
+      u3 = User.where(username: 'zzx12dp').first
+      u4 = User.where(username: 'zzw12dp').first
+
+      a.generate_weightings(t)
+
+      # I got these expected weightings by doing the algorithm by hand
+      sw = StudentWeighting.where(user: u1, assessment: a).first
+      expect(sw.weighting.round(2)).to eq 1.30
 
       sw = StudentWeighting.where(user: u2, assessment: a).first
       expect(sw.weighting.round(2)).to eq 1.16
 
       sw = StudentWeighting.where(user: u3, assessment: a).first
-      expect(sw.weighting.round(2)).to eq 0.64
+      expect(sw.weighting.round(2)).to eq 0.59
 
       sw = StudentWeighting.where(user: u4, assessment: a).first
-      expect(sw.weighting.round(2)).to eq 0.95
+      expect(sw.weighting.round(2)).to eq 0.94
 
+    end
+
+    it 'generates weightings correctly if some team members have not yet filled in the assessment' do
+      a = Assessment.first
+      t = Team.first
+
+      # Load in all criteria and users from the database
+      crits = a.criteria.all
+      c1 = crits[0]
+
+      u1 = User.where(username: 'zzz12dp').first
+      u2 = User.where(username: 'zzy12dp').first
+      u3 = User.where(username: 'zzx12dp').first
+      u4 = User.where(username: 'zzw12dp').first
+
+      # Destroy all of user 3's authored results - they did not fill the form in
+      a.assessment_results.where(author_id: u3.id).each do |res|
+        res.destroy
+      end
+
+      a.generate_weightings(t)
+
+      # I got these expected weightings by doing the algorithm by hand
+      sw = StudentWeighting.where(user: u1, assessment: a).first
+      expect(sw.weighting.round(2)).to eq 1.33
+
+      sw = StudentWeighting.where(user: u2, assessment: a).first
+      expect(sw.weighting.round(2)).to eq 1.19
+
+      sw = StudentWeighting.where(user: u3, assessment: a).first
+      expect(sw.weighting.round(2)).to eq 0.42
+
+      sw = StudentWeighting.where(user: u4, assessment: a).first
+      expect(sw.weighting.round(2)).to eq 1.06
     end
 
   end

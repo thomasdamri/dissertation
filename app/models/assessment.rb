@@ -52,46 +52,71 @@ class Assessment < ApplicationRecord
     comp
   end
 
-  # Given a team, generates the weightings for each student in it
+
+  # Generates the individual weightings for all students in a given team according to the WebPA system
   def generate_weightings(team)
-    # First generate the total score for each user across all assessed criteria
+
+    # Find all criteria in this assessment that are assessed
     assessed_crits = criteria.where(assessed: true)
 
-    # If no-one has filled in the assessment, then set all weightings to 1
+    # If there are no results for assessed criteria, give everyone the same weighting of 1 and return
     if AssessmentResult.where(criterium: assessed_crits).count == 0
       team.users.each do |user|
-        sw = StudentWeighting.find_or_initialize_by(user: user, assessment_id: id)
+        sw = StudentWeighting.find_or_initialize_by(user_id: user.id, assessment_id: id)
         sw.update_weighting 1, 0
       end
-      # Do not continue to rest of calculations
       return
     end
 
-    # Holds the total scores for each user
-    user_total_dict = {}
+    # This hash will hold the weighting factor for each student
+    student_weights = {}
 
-    # Iterate over each user and sum their scores over the assessed criteria
     team.users.each do |user|
-      # Hold each user's score in the dict, accessible by their id
-      user_total_dict[user.id] = 0
-      # Get all responses for each crit where the user is the target
-      assessed_crits.each do |crit|
-        results = crit.assessment_results.where(target: user)
-        results.each do |result|
-          user_total_dict[user.id] += result.value.to_f
+      # Initialise the hash with each student's id number
+      student_weights[user.id] = 0
+    end
+
+
+    team.users.each do |marker|
+      # Sum up the marks the student gave out
+      author_results = assessment_results.where(author_id: marker.id)
+      marks_given = 0
+      author_results.each do |res|
+        marks_given += res.criterium.weighting * res.value.to_f
+      end
+
+      # Avoid division by 0 if the user has not filled in the form
+      unless marks_given == 0
+
+        # For each markee, work out the proportion of marks given out by the marker to them
+        team.users.each do |markee|
+          # Sum the total number of marks across each criteria given to each user
+          given_to_markee = 0
+          author_results.where(target_id: markee.id).each do |res|
+            given_to_markee += res.criterium.weighting * res.value.to_f
+          end
+          student_weights[markee.id] += given_to_markee / marks_given
         end
+      end
+
+    end
+
+    # Check for how many students filled in the assessment so far
+    num_complete = num_completed(team)
+    unless num_complete == team.users.count
+      # If some students have not filled out the assessment, increase everyone's marks to accommodate this
+      mult_factor = team.users.count.to_f / num_complete.to_f
+      team.users.each do |user|
+        student_weights[user.id] = student_weights[user.id] * mult_factor
       end
     end
 
-    average_score = user_total_dict.values.sum() / team.users.count
-
+    # Add the weightings to the database
     team.users.each do |user|
-      sw = StudentWeighting.find_or_initialize_by(user: user, assessment: self)
-      # Calculate the weighting
-      weighting = user_total_dict[user.id] / average_score
+      sw = StudentWeighting.find_or_initialize_by(user: user, assessment_id: id)
       num_results = assessment_results.count
       # Update this in the database
-      sw.update_weighting(weighting, num_results)
+      sw.update_weighting(student_weights[user.id], num_results)
     end
 
   end
