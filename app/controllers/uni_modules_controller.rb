@@ -12,6 +12,7 @@ class UniModulesController < ApplicationController
   def show
     @title = @uni_module.name
     @teams = @uni_module.teams
+    @students = User.where(id: StudentTeam.where(team_id: @teams.pluck(:id)).pluck(:user_id)).count
   end
 
   # GET /uni_modules/new
