@@ -31,6 +31,15 @@ class Assessment < ApplicationRecord
 
   validates_with AssessmentValidator
 
+  # Returns true if this assessment has had student grades uploaded for it
+  def has_team_grades?
+    if team_grades.count == 0
+      false
+    else
+      true
+    end
+  end
+
   # Returns true if the given user has completed the assessment
   def completed_by?(user)
     # Check if the user has any authored results for this assessment's criteria

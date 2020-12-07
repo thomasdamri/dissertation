@@ -1,20 +1,42 @@
 %h2= @assessment.name
 
+.modal.fade#teamGradeModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "teamGradeModalLabel", "aria-hidden": "true"}
+  .modal-dialog{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#teamGradeModalLabel Team Grades
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body#teamGradeModalBody
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close
+
 %p= "Date opened: " + @assessment.date_opened.to_s
 %p= "Date closed: " + @assessment.date_closed.to_s
 
+%h3 Assessment Criteria
+%p= "Total criteria: " + @num_crits.to_s
+%p= "Assessed criteria: " + @assessed_crits.to_s
 %button.btn.btn-primary{"type" => "button", "data-toggle" => "collapse", "data-target" => "#crits", "aria-expanded" => "false", "aria-controls" => "crits"}
   Show Criteria
 
 #crits.collapse
   - @assessment.criteria.each do |crit|
     .card.card-body.bg-light
-      %ul
-        %li= crit.title
-        %li= Criterium.type_dict.key(crit.response_type.to_i)
-        %li= crit.single ? "Answered once" : "Answered once per team member"
-        %li= crit.assessed ? "Relative weight in weighting calculation: " + crit.weighting.to_s : "Not included in weighting calculation"
-
+      %ul.list-group
+        %li.list-group-item.list-group-item-primary= "Question: " + crit.title
+        %li.list-group-item= "Response Type: " + Criterium.type_dict.key(crit.response_type.to_i)
+        %li.list-group-item= "Answer Type: " + (crit.single ? "Answered once" : "Answered once per team member").to_s
+        %li.list-group-item= "Assessment: " + (crit.assessed ? "Relative weight in weighting calculation: " + crit.weighting.to_s : "Not included in weighting calculation").to_s
+%hr
+%h3 Team Grades
+- if @assessment.has_team_grades?
+  = link_to 'View Team Grades', show_team_grades_path(@assessment), remote: true, class: 'btn btn-info'
+  = button_to 'Delete Existing Team Grades', delete_grades_path(@assessment), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure? This is a permanent action that will remove group grades for all teams" }
+-else
+  = link_to 'Upload Team Grades', upload_grades_path(@assessment), class: 'btn btn-info'
+%hr
 = button_to 'Send grades via email', assessment_score_email_path, method: :post, class: 'btn btn-info'
 %p Note: In a development environment this button will not send emails, but will instead open them as browser tabs.
 Students will only have an email sent if they have a team grade AND an individual weighting for this assessment.

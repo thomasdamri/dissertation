@@ -15,6 +15,8 @@ class AssessmentsController < ApplicationController
   # GET /assessments/1.json
   def show
     @title = "Viewing Assessment"
+    @num_crits = @assessment.criteria.count
+    @assessed_crits = @assessment.criteria.where(assessed: true).count
   end
 
   # GET /assessments/new
@@ -221,6 +223,18 @@ class AssessmentsController < ApplicationController
 
     redirect_to assessment.uni_module, notice: "Emails sent successfully"
 
+  end
+
+
+  # Sends an ajax response with the team grades for the given assignment
+  def show_team_grades
+    assessment = Assessment.find(params['id'])
+    @team_grades = assessment.team_grades
+
+    # Respond with javascript, as it is an AJAX request
+    respond_to do |format|
+      format.js {render layout: false}
+    end
   end
 
 

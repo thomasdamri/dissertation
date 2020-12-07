@@ -34,14 +34,11 @@ Rails.application.routes.draw do
   post 'assessment/:id', to: 'assessments#create', as: 'create_assessment'
   get 'assessment/:id/fill_in', to: 'assessments#fill_in', as: 'fillin_assessment'
   post 'assessment/:id/process', to: 'assessments#process_assess', as: 'process_assessment'
-
   delete 'assessment/:id', to: 'assessments#destroy', as: 'delete_assessment'
-
   get 'assessment/:id/results', to: 'assessments#results', as: 'assessment_results'
-
   get 'assessment/:id/export', to: 'assessments#csv_export', as: 'assessment_export'
-
   post 'assessment/:id/send_email', to: 'assessments#send_score_email', as: 'assessment_score_email'
+  get 'assessment/:id/show_team_grades', to: 'assessments#show_team_grades', as: 'show_team_grades'
 
   resources :uni_modules
   resources :teams

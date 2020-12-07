@@ -1,0 +1,8 @@
+%table.table.table-striped.table-hover.table-bordered
+  %tr
+    %th Team Number
+    %th Team Grade
+  - @team_grades.each do |tg|
+    %tr
+      %td= tg.team.number
+      %td= tg.grade
