@@ -130,7 +130,7 @@ class UploadController < ApplicationController
       t.team_grades.create(team_id: t.id, assessment_id: assessment.id, grade: grade_attr[1])
     end
 
-    redirect_to uni_module_path mod
+    redirect_to assessment
 
 
   end
@@ -146,7 +146,7 @@ class UploadController < ApplicationController
     end
 
     # Send user back to the module page
-    redirect_to assess.uni_module, notice: 'Team grades were successfully deleted'
+    redirect_to assess, notice: 'Team grades were successfully deleted'
   end
 
 end

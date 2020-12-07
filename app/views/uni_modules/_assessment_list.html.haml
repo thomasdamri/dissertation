@@ -5,8 +5,6 @@
     %th Date Closed
     - if current_user.staff?
       %th
-      %th
-      %th
     %th
     %th
 
@@ -17,8 +15,5 @@
       %td= assess.date_closed
       %td= link_to 'View', assess, class: 'btn btn-primary'
       - if current_user.staff?
-        %td= link_to 'Upload Team Grades', upload_grades_path(assess), class: 'btn btn-info'
-        %td
-          = button_to 'Delete Existing Team Grades', delete_grades_path(assess), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure? This is a permanent action that will remove group grades for all teams" }
         %td= link_to 'Download all grades', assessment_export_path(assess, format: 'csv'), class: 'btn btn-info'
       %td= link_to 'Delete', assess, method: :delete, data: { confirm: 'Are you sure? This is a permanent action that will remove all assessment data?' }, class: 'btn btn-danger'
