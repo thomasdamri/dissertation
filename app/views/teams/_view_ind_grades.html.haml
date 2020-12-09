@@ -2,17 +2,22 @@
   %p Team grade not given yet
 - else
   %p= "Team grade: #{@team_grade.grade}"
-%table.table.table-bordered.table-hover.table-striped
-  %tr
-    %th Student Name
-    %th Peer Assessment Weighting
-    %th Individual Mark
-  - if @ind_weights.length == 0
+= form_tag({action: :update_ind_grades}) do
+  %table.table.table-bordered.table-hover.table-striped
     %tr
-      %td{"colspan": 3}= "No students have completed this assessment yet"
-  - @ind_weights.each do |iw|
-    %tr
-      %td= iw.user.real_display_name
-      %td= iw.weighting
-      - unless @team_grade.nil?
-        %td= (@team_grade.grade * iw.weighting).round(2)
+      %th Student Name
+      %th Peer Assessment Weighting
+      %th Individual Mark
+      %th New Mark
+    - if @ind_weights.length == 0
+      %tr
+        %td{"colspan": 4}= "No students have completed this assessment yet"
+    - @ind_weights.each do |iw|
+      %tr
+        %td= iw.user.real_display_name
+        %td= iw.weighting
+        - unless @team_grade.nil?
+          %td= (@team_grade.grade * iw.weighting).round(2)
+          %td
+            = number_field_tag "new_weight_#{iw.id}", nil, step: 0.01, min: 0
+  = submit_tag 'Update Grades', class: 'btn btn-primary'

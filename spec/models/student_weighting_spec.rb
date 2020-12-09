@@ -47,4 +47,17 @@ RSpec.describe StudentWeighting, type: :model do
     end
   end
 
+  describe '#manual_update' do
+    it 'updates the weighting to a set value' do
+      u1 = create :user
+      u = create :uni_module
+      a = create :assessment, uni_module: u
+      sw = create(:student_weighting, user: u1, assessment: a)
+
+      sw.manual_update(1.5)
+      expect(sw.weighting).to eq 1.5
+      expect(sw.manual_set).to eq true
+    end
+  end
+
 end

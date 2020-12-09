@@ -104,7 +104,20 @@ class TeamsController < ApplicationController
   # POST /teams/:id/:assess/update_ind_grades
   # Updates all the individual grades for the team and assessment
   def update_ind_grades
+    team = Team.find(params['id'])
+    assessment = Assessment.find(params['assess'])
 
+    # Find all the ids of student weightings for this team and assessment
+    stud_weights = StudentWeighting.where(assessment: assessment, user: team.users)
+
+    stud_weights.each do |sw|
+      new_weight = params["new_weight_#{sw.id}"]
+      unless new_weight.nil? or new_weight == ""
+        sw.manual_update new_weight
+      end
+    end
+
+    redirect_to team
   end
 
   private

@@ -32,4 +32,11 @@ class StudentWeighting < ApplicationRecord
     end
   end
 
+  # Manually sets the weighting of the object
+  def manual_update(new_weighting)
+    self.manual_set = true
+    self.weighting = new_weighting
+    save
+  end
+
 end
