@@ -30,12 +30,14 @@
         %li.list-group-item= "Answer Type: " + (crit.single ? "Answered once" : "Answered once per team member").to_s
         %li.list-group-item= "Assessment: " + (crit.assessed ? "Relative weight in weighting calculation: " + crit.weighting.to_s : "Not included in weighting calculation").to_s
 %hr
+
 %h3 Team Grades
 - if @assessment.has_team_grades?
   = link_to 'View Team Grades', show_team_grades_path(@assessment), remote: true, class: 'btn btn-info'
   = button_to 'Delete Existing Team Grades', delete_grades_path(@assessment), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure? This is a permanent action that will remove group grades for all teams" }
 -else
   = link_to 'Upload Team Grades', upload_grades_path(@assessment), class: 'btn btn-info'
+
 %hr
 = button_to 'Send grades via email', assessment_score_email_path, method: :post, class: 'btn btn-info'
 %p Note: In a development environment this button will not send emails, but will instead open them as browser tabs.

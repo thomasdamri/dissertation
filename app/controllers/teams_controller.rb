@@ -86,6 +86,27 @@ class TeamsController < ApplicationController
 
   end
 
+  # GET '/teams/:id/:assess/view_ind_grades' (AJAX)
+  # Sends all the individual grades for the team and assessment given as AJAX data
+  def view_ind_grades
+    team = Team.find(params['id'])
+    assessment = Assessment.find(params['assess'])
+    @team_grade = TeamGrade.where(team_id: team.id, assessment_id: assessment.id).first
+
+    @ind_weights = StudentWeighting.where(user: team.users, assessment: assessment)
+
+    respond_to do |format|
+      format.js { render layout: false }
+    end
+
+  end
+
+  # POST /teams/:id/:assess/update_ind_grades
+  # Updates all the individual grades for the team and assessment
+  def update_ind_grades
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_team

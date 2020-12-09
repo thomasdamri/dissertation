@@ -18,6 +18,8 @@ Rails.application.routes.draw do
 
   get 'teams/grade_form/:id/:assess', to: 'teams#grade_form', as: 'teams_grade_form'
   post 'teams/set_grade', to: 'teams#set_grade', as: 'teams_set_grade'
+  get 'teams/:id/:assess/view_ind_grades', to: 'teams#view_ind_grades', as: 'view_ind_grades'
+  post 'teams/:id/:assess/update_ind_grades', to: 'teams#update_ind_grades', as: 'update_ind_grades'
 
   get 'admin/staff'
   get 'admin/students'

@@ -31,7 +31,7 @@ class Assessment < ApplicationRecord
 
   validates_with AssessmentValidator
 
-  # Returns true if this assessment has had student grades uploaded for it
+  # Returns true if this assessment has had team grades uploaded for it
   def has_team_grades?
     if team_grades.count == 0
       false

@@ -1,3 +1,15 @@
+.modal.fade#indGradeModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "indGradeModalLabel", "aria-hidden": "true"}
+  .modal-dialog{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#indGradeModalLabel Individual Grades
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body#indGradeModalBody
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close
+
 %p#notice= notice
 %h2= "Team " + @team.number.to_s
 

@@ -3,9 +3,11 @@
     %th Assessment Title
     %th Team Grade
     %th
+    %th
   - @assessments.each do |assess|
     - tg = TeamGrade.where(team: @team, assessment: assess).first
     %tr
       %td= assess.name
       %td= tg.nil? ? "No grade assigned yet" : tg.grade
-      %td= link_to "Set Grade", teams_grade_form_path(@team, assess), class: 'btn btn-primary'
+      %td= link_to "Set Grade", teams_grade_form_path(@team, assess), class: 'btn btn-info'
+      %td= link_to "View Individual Grades", view_ind_grades_path(@team, assess), class: 'btn btn-info', remote: true
