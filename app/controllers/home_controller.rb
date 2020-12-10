@@ -29,4 +29,8 @@ class HomeController < ApplicationController
     @title = "My Account"
   end
 
+  def about
+    @title = "About"
+  end
+
 end

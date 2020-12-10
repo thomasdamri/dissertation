@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   get 'home/student_home'
   get 'home/staff_home'
   get 'home/account'
+  get 'about', to: 'home#about', as: 'about'
 
   get 'upload/users', to: 'upload#upload_users'
   post 'upload/process_users', to: 'upload#user_process'

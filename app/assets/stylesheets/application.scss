@@ -1,1 +1,11 @@
 @import "bootstrap/scss/bootstrap";
+
+/* Used to keep material design icons on same line as the text next to it */
+.glyphRow > * {
+  display: inline;
+}
+
+/* Makes material design icons at same vertical level as text */
+.material-icons {
+  vertical-align: text-bottom;
+}

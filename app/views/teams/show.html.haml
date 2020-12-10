@@ -15,9 +15,15 @@
 
 %h3 Members
 = render 'admin/small_user_list'
-%h5 Group Email Info
-.card.card-body
-  %a{href: @team.group_email_link}= @team.group_email_link
+.glyphRow
+  %h5 Group Email Info
+  %span.material-icons email
+%button.btn.btn-primary{"data-toggle":"collapse", "data-target":"#groupEmail", "role": "button", "aria-expanded": "false", "aria-controls": "collapseExample"} Show
+.collapse#groupEmail
+  .card.card-body
+    %a{href: @team.group_email_link}= @team.group_email_link
+
+%hr
 
 %h3 Peer Assessments
 - if current_user.staff

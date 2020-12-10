@@ -1,8 +1,9 @@
 .jumbotron
-  %h1.display-4 NotWebPA
-  %p.lead A team assessment application
+  %h1.display-4 TeamPlayer
+  %p.lead Peer Assessment for Group Projects
   %hr.my-4/
-  %p Some other informative text
+  %p TeamPlayer is a tool for University of Sheffield students to rate their team members on group projects so that everyone gets the grade they deserve.
   %p.lead
     - if current_user.nil?
+      Get started by logging in
       %a.btn.btn-primary.btn-lg{:href => new_user_session_url, :role => "button"} Sign in
