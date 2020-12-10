@@ -110,14 +110,43 @@ class TeamsController < ApplicationController
     # Find all the ids of student weightings for this team and assessment
     stud_weights = StudentWeighting.where(assessment: assessment, user: team.users)
 
+    # Checks if there was at least one grade reset when checking all student weightings
+    did_reset = false
+
     stud_weights.each do |sw|
+      # Check if this weighting needs manually setting
       new_weight = params["new_weight_#{sw.id}"]
       unless new_weight.nil? or new_weight == ""
         sw.manual_update new_weight
       end
+
+      # Check if this weighting needs resetting
+      should_reset = params["reset_check_#{sw.id}"]
+      if should_reset == "on"
+        did_reset = true
+        sw.manual_set = false
+        sw.save
+      end
+
+    end
+
+    # Re-generate the peer assessment scores if there was a reset
+    if did_reset
+      assessment.generate_weightings team
     end
 
     redirect_to team
+  end
+
+  def reset_ind_grade
+    stud_weight = StudentWeighting.find(params['sw_id'])
+    team = Team.find(params['id'])
+
+    stud_weight.manual_set = false
+    stud_weight.save
+
+    stud_weight.assessment
+
   end
 
   private

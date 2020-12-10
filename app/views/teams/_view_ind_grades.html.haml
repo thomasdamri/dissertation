@@ -8,7 +8,9 @@
       %th Student Name
       %th Peer Assessment Weighting
       %th Individual Mark
+      %th Manually Set?
       %th New Mark
+      %th Reset Manual Mark
     - if @ind_weights.length == 0
       %tr
         %td{"colspan": 4}= "No students have completed this assessment yet"
@@ -18,6 +20,9 @@
         %td= iw.weighting
         - unless @team_grade.nil?
           %td= (@team_grade.grade * iw.weighting).round(2)
+          %td= iw.manual_set ? "Yes" : "No"
           %td
             = number_field_tag "new_weight_#{iw.id}", nil, step: 0.01, min: 0
+          %td
+            = check_box_tag "reset_check_#{iw.id}", nil, false, disabled: !iw.manual_set
   = submit_tag 'Update Grades', class: 'btn btn-primary'

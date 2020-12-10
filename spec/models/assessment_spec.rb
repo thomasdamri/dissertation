@@ -167,7 +167,7 @@ RSpec.describe Assessment, type: :model do
 
     end
 
-    it 'generates weightings based on assessment results' do
+    it 'generates weightings based on assessment results and does not reset manual weightings' do
       a = Assessment.first
       t = Team.first
 
@@ -190,6 +190,15 @@ RSpec.describe Assessment, type: :model do
 
       sw = StudentWeighting.where(user: u4, assessment: a).first
       expect(sw.weighting.round(2)).to eq 0.95
+
+      # Set last sw to be manually set
+      sw.manual_update(1.2)
+
+      expect(sw.weighting).to eq 1.2
+
+      a.generate_weightings(t)
+
+      expect(sw.weighting).to eq 1.2
 
     end
 

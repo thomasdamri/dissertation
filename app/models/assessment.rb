@@ -122,10 +122,14 @@ class Assessment < ApplicationRecord
 
     # Add the weightings to the database
     team.users.each do |user|
+      # Find existing student weighting for this assessment, or create a new one
       sw = StudentWeighting.find_or_initialize_by(user: user, assessment_id: id)
-      num_results = assessment_results.count
-      # Update this in the database
-      sw.update_weighting(student_weights[user.id], num_results)
+      # Do not update the weighting if it has been manually set
+      unless sw.manual_set
+        num_results = assessment_results.count
+        # Update this in the database
+        sw.update_weighting(student_weights[user.id], num_results)
+      end
     end
 
   end
