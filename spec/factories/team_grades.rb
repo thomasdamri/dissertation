@@ -11,6 +11,6 @@
 #
 FactoryBot.define do
   factory :team_grade do
-    
+    grade {70}
   end
 end

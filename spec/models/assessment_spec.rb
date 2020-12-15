@@ -66,6 +66,98 @@ RSpec.describe Assessment, type: :model do
 
   end
 
+  describe '#has_team_grades?' do
+    before(:each) do
+      u = create :uni_module
+      a = create :assessment, uni_module: u
+      t = create :team, uni_module: u
+    end
+
+    it 'returns false if no team grades have been uploaded' do
+      a = Assessment.first
+
+      expect(a.has_team_grades?).to eq false
+
+    end
+
+    it 'returns true if team grades have been uploaded' do
+      a = Assessment.first
+      create :team_grade, assessment: a, team: Team.first
+
+      expect(a.has_team_grades?).to eq true
+
+    end
+
+  end
+
+  describe '#completed_by?' do
+    before(:each) do
+      u = create :uni_module
+      a = create :assessment, uni_module: u
+      t = create :team, uni_module: u
+    end
+
+    it 'only returns true if a student has completed the assessment' do
+      u1 = create :user
+      u2 = create :user, username: 'zzz12ab', email: 'somethingelse@gmail.com'
+      t = Team.first
+      create :student_team, user: u1, team: t
+      create :student_team, user: u2, team: t
+
+      a = Assessment.first
+
+      c = create :criterium, assessment: a
+
+      create :assessment_result, author: u1, target: u2, criterium: c, value: 'Text'
+
+      expect(a.completed_by?(u1)).to eq true
+      expect(a.completed_by?(u2)).to eq false
+
+    end
+
+  end
+
+  describe '#num_completed' do
+    before(:each) do
+      u = create :uni_module
+      a = create :assessment, uni_module: u
+      t = create :team, uni_module: u
+    end
+
+    it 'successfully counts the number of students who have completed the assessment' do
+      a = Assessment.first
+      t = Team.first
+
+      c = create :criterium, assessment: a
+
+      u1 = create :user
+      u2 = create :user, username: 'zzz12ab', email: 'somethingelse@gmail.com'
+      u3 = create :user, username: 'zzz12ac', email: 'somethingagain@gmail.com'
+
+      create :student_team, user: u1, team: t
+      create :student_team, user: u2, team: t
+      create :student_team, user: u3, team: t
+
+      expect(a.num_completed(t)).to eq 0
+
+      create :assessment_result, author: u1, target: u2, criterium: c, value: 'Text'
+
+      expect(a.num_completed(t)).to eq 1
+
+      # Creating another result with the same author to check it counts users, not just results
+      create :assessment_result, author: u1, target: u3, criterium: c, value: 'Text'
+
+      expect(a.num_completed(t)).to eq 1
+
+      create :assessment_result, author: u2, target: u2, criterium: c, value: 'Text'
+      expect(a.num_completed(t)).to eq 2
+
+      create :assessment_result, author: u3, target: u2, criterium: c, value: 'Text'
+      expect(a.num_completed(t)).to eq 3
+    end
+
+  end
+
   describe '#generate_weightings' do
     before(:each) do
       u = create :uni_module

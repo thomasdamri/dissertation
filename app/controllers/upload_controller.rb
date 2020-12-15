@@ -1,5 +1,8 @@
 require 'tsv'
 class UploadController < ApplicationController
+  before_action :authenticate_user!
+  # No model associated with this controller - no cancancan check
+  skip_authorization_check
 
   include ERB::Util
 

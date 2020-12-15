@@ -31,6 +31,7 @@
 
 = render 'admin/team_list'
 
-= link_to 'Edit', edit_uni_module_path(@uni_module)
+- if can? :edit, @uni_module
+  = link_to 'Edit', edit_uni_module_path(@uni_module)
 \|
 = link_to 'Back', uni_modules_path

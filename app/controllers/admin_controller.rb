@@ -1,4 +1,7 @@
 class AdminController < ApplicationController
+  before_action :authenticate_user!
+  # No resource associated with this controller, cancancan shouldnt authorize
+  skip_authorization_check
 
   def students
     @title = "Admin Students List"

@@ -1,5 +1,7 @@
 class UniModulesController < ApplicationController
   before_action :set_uni_module, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user!
+  load_and_authorize_resource
 
   # GET /uni_modules
   # GET /uni_modules.json
