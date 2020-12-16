@@ -25,6 +25,10 @@ class AssessmentsController < ApplicationController
     @title = "Create Assessment"
     @assessment = Assessment.new
     @unimod = UniModule.find(params[:id].to_i)
+    # Check the user is a member of this module
+    unless @unimod.staff_modules.pluck(:user_id).include? current_user.id
+      raise ActionController::RoutingError.new('Not Found')
+    end
   end
 
   # GET /assessments/1/edit
