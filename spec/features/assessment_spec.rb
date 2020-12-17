@@ -175,7 +175,8 @@ describe 'Filling in an assessment' do
 
   end
 
-  specify 'I can fill in an assessment if I am a student who is on the module, but only once, and all fields must be filled' do
+  # This test needs to have js: true, even though it doesn't have any remote component
+  specify 'I can fill in an assessment if I am a student who is on the module, but only once, and all fields must be filled', js: true do
     student = User.where(username: 'zzz12ac').first
     login_as student, scope: :user
 
@@ -216,6 +217,7 @@ describe 'Filling in an assessment' do
     click_button 'Submit'
 
     # I can't find the button that now says 'Filled in' because it's disabled
+    expect(page).to have_content "Team #{t.number}"
     expect(a.completed_by?(student)).to eq true
 
     # Try to fill it in again
@@ -258,7 +260,7 @@ describe 'Filling in an assessment' do
 
   specify 'I cannot fill in an assessment as a student on a different module' do
     # This student is not on this module
-    student = create :user, staff: false
+    student = create :user, staff: false, username: 'zzz12ab', email: 'something@gmail.com'
 
     a = Assessment.first
 
