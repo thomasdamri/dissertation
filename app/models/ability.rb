@@ -14,6 +14,7 @@ class Ability
 
       # Staff can edit their own modules
       if user.staff
+        can :read, UniModule
         can :manage, UniModule, staff_modules: {user_id: user.id}
 
         # Staff can edit their modules' teams
@@ -35,6 +36,10 @@ class Ability
       else
         # Students can view their own team
         can :read, Team, student_teams: {user_id: user.id}
+        # Students can fill in their team's peer assessments
+        can [:fill_in, :process_assess], Assessment do |assess|
+          user.teams.pluck(:uni_module_id).include? assess.uni_module.id
+        end
       end
     end
   end

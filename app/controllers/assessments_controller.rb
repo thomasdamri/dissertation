@@ -143,8 +143,10 @@ class AssessmentsController < ApplicationController
 
   # Prevent an error page being shown to the user, send back to fill in page
   rescue ActiveRecord::RecordInvalid
+    @team = team
     render 'assessments/fill_in'
   end
+
 
   # Shows the student their final weighting
   def results
