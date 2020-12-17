@@ -244,6 +244,16 @@ class AssessmentsController < ApplicationController
     end
   end
 
+  def get_ind_responses
+    @assessment = Assessment.find(params['id'])
+    @team = Team.find(params['team_id'])
+
+    respond_to do |format|
+      format.js {render layout: false}
+    end
+
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -1,0 +1,25 @@
+.modal.fade#responseModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "responseModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#responseModalLabel= "Responses for #{@assessment.name}"
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        %table.table.table-bordered.table-striped.table-hover
+          %tr
+            %th{rowspan: @team.users.count + 2} Assessee
+            %th{colspan: @team.users.count + 1} Assessor
+          %tr
+            %th
+            - @team.users.each do |u|
+              %th= u.real_display_name
+          - @team.users.each do |u|
+            %tr
+              %th= u.real_display_name
+              - @team.users.each do |u2|
+                - res = AssessmentResult.where(author: u2, target: u).first
+                %td= res.nil? ? "-" : res.value
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close
