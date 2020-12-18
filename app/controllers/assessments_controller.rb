@@ -193,7 +193,7 @@ class AssessmentsController < ApplicationController
           # Only calculate an individual grade if both team grade and indiv. weighting exist
           ind_grade = "NULL"
           unless t_grade.nil? or weight.nil?
-            ind_grade = team_grade * ind_grade
+            ind_grade = team_grade * ind_weight
           end
 
           csv << [user.username, team.number, team_grade, ind_weight, ind_grade]

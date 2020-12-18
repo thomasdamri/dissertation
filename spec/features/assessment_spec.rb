@@ -279,7 +279,153 @@ describe 'Filling in an assessment' do
 end
 
 describe 'Viewing assessment results' do
-  specify 'I can view peer assessment results as a student only once the closing date has passed'
-  specify "As a student I cannot see another student's results"
+  before(:each) do
+    staff = create :user, staff: true
+    mod = create :uni_module
+    create :staff_module, user: staff, uni_module: mod
+
+    # Make assessment close tomorrow to prevent looking at results early
+    a = create :assessment, uni_module: mod, date_closed: Date.today + 1
+
+    c = create :weighted_criterium, assessment: a
+
+    u1 = create :user, staff: false, username: 'zzz12ac', email: 'something@gmail.com'
+    u2 = create :user, staff: false, username: 'zzz12ad', email: 'something2@gmail.com'
+    u3 = create :user, staff: false, username: 'zzz12ae', email: 'something3@gmail.com'
+    u4 = create :user, staff: false, username: 'zzz12af', email: 'something4@gmail.com'
+
+    t = create :team, uni_module: mod
+
+    create :student_team, user: u1, team: t
+    create :student_team, user: u2, team: t
+    create :student_team, user: u3, team: t
+    create :student_team, user: u4, team: t
+
+    create :assessment_result, author: u1, target: u1, criterium: c, value: '7'
+    create :assessment_result, author: u1, target: u1, criterium: c, value: '8'
+    create :assessment_result, author: u1, target: u1, criterium: c, value: '9'
+    create :assessment_result, author: u1, target: u1, criterium: c, value: '7'
+
+    a.generate_weightings(t)
+  end
+
+  specify 'I can view peer assessment results as a student only once the closing date has passed' do
+    student = User.where(username: 'zzz12ac').first
+    login_as student
+
+    t = Team.first
+    a = Assessment.first
+
+    visit "/teams/#{t.id}"
+
+    within(:css, '#studentAssessTable'){
+      expect(page).to have_content a.name
+    }
+
+    tr = page.first('tr', text: a.name)
+    row = tr.find(:xpath, '..')
+
+    within(row){
+      # The results button should be disabled, so RSpec can't see it
+      expect(row).to_not have_content "Results"
+    }
+
+    # Alter date so that assessment is finished
+    a.date_closed = Date.today - 1
+    a.save
+
+    # Refresh the page
+    visit "/teams/#{t.id}"
+
+    within(:css, '#studentAssessTable'){
+      expect(page).to have_content a.name
+    }
+
+    tr = page.first('tr', text: a.name)
+    row = tr.find(:xpath, '..')
+
+    within(row){
+      # The results button should be disabled, so RSpec can't see it
+      expect(row).to have_content "Results"
+      click_button "Results"
+    }
+
+  end
+
+  specify "As a student I cannot see another student's grade"
+  specify "As staff I can see all student's individual grades"
   specify 'As staff I can see individual student responses to the assessment'
+  specify 'As a student I cannot see the individual student responses to the assessment'
+end
+
+describe "Downloading results" do
+  before(:each) do
+    staff = create :user, staff: true
+    mod = create :uni_module
+    create :staff_module, user: staff, uni_module: mod
+
+    a = create :assessment, uni_module: mod
+
+    c = create :weighted_criterium, assessment: a
+
+    u1 = create :user, staff: false, username: 'zzz12ac', email: 'something@gmail.com'
+    u2 = create :user, staff: false, username: 'zzz12ad', email: 'something2@gmail.com'
+    u3 = create :user, staff: false, username: 'zzz12ae', email: 'something3@gmail.com'
+    u4 = create :user, staff: false, username: 'zzz12af', email: 'something4@gmail.com'
+
+    t = create :team, uni_module: mod
+
+    create :student_team, user: u1, team: t
+    create :student_team, user: u2, team: t
+    create :student_team, user: u3, team: t
+    create :student_team, user: u4, team: t
+
+    create :assessment_result, author: u1, target: u1, criterium: c, value: '7'
+    create :assessment_result, author: u1, target: u1, criterium: c, value: '8'
+    create :assessment_result, author: u1, target: u1, criterium: c, value: '9'
+    create :assessment_result, author: u1, target: u1, criterium: c, value: '7'
+
+    a.generate_weightings(t)
+
+  end
+
+  specify "As staff I can download all the results for an assessment" do
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+
+    mod = UniModule.first
+    a = Assessment.first
+
+    visit "/uni_modules/#{mod.id}"
+
+    within(:css, '#modAssessTable'){
+      expect(page).to have_content a.name
+      click_link 'Download all grades'
+    }
+
+    expect(page.text).to have_content "Student Username,Team Number,Team Grade,Individual Weighting,Individual Grade"
+  end
+
+  specify "As a student I cannot download all the results for an assessment" do
+    student = User.where(staff: false).first
+    login_as student, scope: :user
+
+    # Need to visit at least one page before the routing errors can take effect for some reason
+    visit '/'
+
+    t = student.teams.first
+
+    mod = UniModule.first
+    a = Assessment.first
+
+    # Cannot view the module page
+    expect{
+      visit "/uni_modules/#{mod.id}"
+    }.to raise_error ActionController::RoutingError
+
+    expect {
+      visit "/assessment/#{a.id}/export.csv"
+    }.to raise_error ActionController::RoutingError
+
+  end
 end

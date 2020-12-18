@@ -36,8 +36,8 @@ class Ability
       else
         # Students can view their own team
         can :read, Team, student_teams: {user_id: user.id}
-        # Students can fill in their team's peer assessments
-        can [:fill_in, :process_assess], Assessment do |assess|
+        # Students can fill in their team's peer assessments and see the results
+        can [:fill_in, :process_assess, :results], Assessment do |assess|
           user.teams.pluck(:uni_module_id).include? assess.uni_module.id
         end
       end
