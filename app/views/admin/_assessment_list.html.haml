@@ -20,4 +20,4 @@
       - if disabled_results
         %td= button_to "Results", '#', class: 'btn btn-secondary', disabled: true
       - else
-        %td= button_to "Results", assessment_results_path(assess), class: 'btn btn-info', method: :get
+        %td= button_to "Results", assessment_results_path(assess), remote: true, class: 'btn btn-info', method: :get

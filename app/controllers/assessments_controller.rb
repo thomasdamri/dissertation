@@ -169,6 +169,10 @@ class AssessmentsController < ApplicationController
     else
       @personal_grade = (@weighting.to_f * @team_grade.to_f).round(2)
     end
+
+    respond_to do |format|
+      format.js {render layout: false}
+    end
     
   end
 

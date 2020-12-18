@@ -1,0 +1,16 @@
+.modal.fade#resultsModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "resultsModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#resultsModalLabel= "Your grade for #{@assessment.name}"
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        = "Team grade: #{@team_grade}"
+        %br
+        = "Your weighting: #{@weighting}"
+        %br
+        %h4= "Your grade: #{@personal_grade}"
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close
