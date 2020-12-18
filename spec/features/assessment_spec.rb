@@ -296,6 +296,8 @@ describe 'Viewing assessment results' do
 
     t = create :team, uni_module: mod
 
+    create :team_grade, team: t, assessment: a, grade: 70
+
     create :student_team, user: u1, team: t
     create :student_team, user: u2, team: t
     create :student_team, user: u3, team: t
@@ -309,7 +311,7 @@ describe 'Viewing assessment results' do
     a.generate_weightings(t)
   end
 
-  specify 'I can view peer assessment results as a student only once the closing date has passed' do
+  specify 'I can view my assessment results as a student only once the closing date has passed', js: true do
     student = User.where(username: 'zzz12ac').first
     login_as student
 
@@ -345,9 +347,15 @@ describe 'Viewing assessment results' do
     row = tr.find(:xpath, '..')
 
     within(row){
-      # The results button should be disabled, so RSpec can't see it
-      expect(row).to have_content "Results"
       click_button "Results"
+    }
+
+    sw = StudentWeighting.where(user: student, assessment: a).first
+
+    within(:css, '#resultsModal'){
+      expect(page).to have_content "Team grade: "
+      expect(page).to have_content "Your weighting: #{sw.weighting}"
+      expect(page).to have_content "Your grade: "
     }
 
   end
