@@ -49,6 +49,11 @@ describe 'Creating an assessment' do
       visit "/assessment/new/#{mod.id}"
     }.to raise_error ActionController::RoutingError
   end
+
+  specify 'When creating an assessment I can delete some criteria'
+
+  specify 'I can create an assessment with a criterium of every single type'
+
 end
 
 describe 'Removing an assessment' do
@@ -278,7 +283,7 @@ describe 'Filling in an assessment' do
 
 end
 
-describe 'Viewing assessment results' do
+describe 'Viewing and modifying assessment results' do
   before(:each) do
     staff = create :user, staff: true
     mod = create :uni_module
@@ -288,6 +293,7 @@ describe 'Viewing assessment results' do
     a = create :assessment, uni_module: mod, date_closed: Date.today + 1
 
     c = create :weighted_criterium, assessment: a
+    c2 = create :criterium, assessment: a, title: 'Something else'
 
     u1 = create :user, staff: false, username: 'zzz12ac', email: 'something@gmail.com'
     u2 = create :user, staff: false, username: 'zzz12ad', email: 'something2@gmail.com'
@@ -304,9 +310,11 @@ describe 'Viewing assessment results' do
     create :student_team, user: u4, team: t
 
     create :assessment_result, author: u1, target: u1, criterium: c, value: '7'
-    create :assessment_result, author: u1, target: u1, criterium: c, value: '8'
-    create :assessment_result, author: u1, target: u1, criterium: c, value: '9'
-    create :assessment_result, author: u1, target: u1, criterium: c, value: '7'
+    create :assessment_result, author: u1, target: u2, criterium: c, value: '8'
+    create :assessment_result, author: u1, target: u3, criterium: c, value: '9'
+    create :assessment_result, author: u1, target: u4, criterium: c, value: '7'
+
+    create :assessment_result, author: u1, target: nil, criterium: c2, value: 'Some text'
 
     a.generate_weightings(t)
   end
@@ -350,20 +358,116 @@ describe 'Viewing assessment results' do
       click_button "Results"
     }
 
+    tg = TeamGrade.where(team: t, assessment: a).first
     sw = StudentWeighting.where(user: student, assessment: a).first
+    final_grade = tg.grade.to_f * sw.weighting.to_f
 
     within(:css, '#resultsModal'){
-      expect(page).to have_content "Team grade: "
-      expect(page).to have_content "Your weighting: #{sw.weighting}"
-      expect(page).to have_content "Your grade: "
+      expect(page).to have_content "Team grade: #{tg.grade}"
+      expect(page).to have_content "Your weighting: #{sw.weighting.round(2)}"
+      expect(page).to have_content "Your grade: #{final_grade.round(2)}"
     }
 
   end
 
-  specify "As a student I cannot see another student's grade"
-  specify "As staff I can see all student's individual grades"
-  specify 'As staff I can see individual student responses to the assessment'
-  specify 'As a student I cannot see the individual student responses to the assessment'
+  specify "As staff I can see all student's individual grades", js: true  do
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+
+    t = Team.first
+    a = Assessment.first
+
+    visit "/teams/#{t.id}"
+
+    row = nil
+    within(:css, '#gradeTable'){
+      row = page.first('td', text: a.name).find(:xpath, '..')
+    }
+    within(row){
+      click_link 'View Individual Grades'
+    }
+
+    # Find each user's grade in the modal table
+    table = page.find(:css, '#indGradeTable')
+    t.users.each do |u|
+      sw = StudentWeighting.where(user: u, assessment: a).first
+      within(table){
+        expect(page).to have_content sw.weighting
+      }
+    end
+
+  end
+
+  specify 'As staff I can see individual student responses to the assessment', js: true do
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+
+    t = Team.first
+    a = Assessment.first
+
+    visit "/teams/#{t.id}"
+
+    row = nil
+    within(:css, '#staffAssessTable'){
+      row = page.first('td', text: a.name).find(:xpath, '..')
+    }
+    within(row){
+      click_link 'View Individual Responses'
+    }
+
+    a.criteria.each do |crit|
+      within(:css, "#indResponseTable_#{crit.id}"){
+        # If criteria is single, just do one search, as there is only one response
+        if crit.single
+          ar = AssessmentResult.where(criterium: crit).first
+          expect(page).to have_content ar.value
+        else
+          # If criteria is not single, search for the response targeting each user
+          t.users.each do |u|
+            ar = AssessmentResult.where(target: u, criterium: crit).first
+            expect(page).to have_content ar.value
+          end
+        end
+      }
+    end
+
+  end
+
+  specify 'As a student I cannot see the individual student responses to the assessment, even when on the same team' do
+    student = User.where(staff: false).first
+    login_as student, scope: :user
+
+    t = Team.first
+    a = Assessment.first
+
+    visit "/teams/#{t.id}"
+
+    # Students should not see the table with staff options
+    expect(page).to have_selector '#studentAssessTable'
+    expect(page).to_not have_selector '#staffAssessTable'
+    expect(page).to_not have_content "View Individual Responses"
+
+    # Students should not be able to send a request to the url for individual responses
+    expect{
+      page.driver.send :get, "/assessment/#{a.id}/#{t.id}/get_ind_responses", {}
+    }.to raise_error ActionController::RoutingError
+
+  end
+
+  specify "As staff I can change a student's individual weight manually, then change it back", js: true do
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+
+    t = Team.first
+    a = Assessment.first
+
+    visit "/teams/#{t.id}"
+
+    # Find the button for this assessment to bring up individual grades
+
+  end
+
+  specify "As a student I cannot see other students' weightings or change them"
 end
 
 describe "Downloading results" do

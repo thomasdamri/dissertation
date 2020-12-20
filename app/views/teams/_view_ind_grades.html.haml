@@ -3,7 +3,7 @@
 - else
   %p= "Team grade: #{@team_grade.grade}"
 = form_tag({action: :update_ind_grades}) do
-  %table.table.table-bordered.table-hover.table-striped
+  %table.table.table-bordered.table-hover.table-striped#indGradeTable
     %tr
       %th Student Name
       %th Peer Assessment Weighting

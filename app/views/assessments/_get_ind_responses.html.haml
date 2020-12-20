@@ -8,20 +8,31 @@
       .modal-body
         - @assessment.criteria.each do |crit|
           %h3= crit.title
-          %table.table.table-bordered.table-striped.table-hover
-            %tr
-              %th{rowspan: @team.users.count + 2} Assessee
-              %th{colspan: @team.users.count + 1} Assessor
-            %tr
-              %th
-              - @team.users.each do |u|
-                %th= u.real_display_name
-            - @team.users.each do |u|
+          - if crit.single
+            %table.table.table-bordered.table-striped.table-hover{id: "indResponseTable_#{crit.id}"}
               %tr
-                %th= u.real_display_name
-                - @team.users.each do |u2|
-                  - res = AssessmentResult.where(author: u2, target: u, criterium: crit).first
+                %th Student
+                %th Response
+              - @team.users.each do |u|
+                %tr
+                  %td= u.real_display_name
+                  - res = AssessmentResult.where(author: u, criterium: crit).first
                   %td= res.nil? ? "-" : res.value
+          - else
+            %table.table.table-bordered.table-striped.table-hover{id: "indResponseTable_#{crit.id}"}
+              %tr
+                %th{rowspan: @team.users.count + 2} Assessee
+                %th{colspan: @team.users.count + 1} Assessor
+              %tr
+                %th
+                - @team.users.each do |u|
+                  %th= u.real_display_name
+              - @team.users.each do |u|
+                %tr
+                  %th= u.real_display_name
+                  - @team.users.each do |u2|
+                    - res = AssessmentResult.where(author: u2, target: u, criterium: crit).first
+                    %td= res.nil? ? "-" : res.value
           %hr
       .modal-footer
         %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}

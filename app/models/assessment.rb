@@ -87,8 +87,8 @@ class Assessment < ApplicationRecord
 
 
     team.users.each do |marker|
-      # Sum up the marks the student gave out
-      author_results = assessment_results.where(author_id: marker.id)
+      # Sum up the marks the student gave out in assessed criteria
+      author_results = assessment_results.where(criterium: assessed_crits, author_id: marker.id)
       marks_given = 0
       author_results.each do |res|
         marks_given += res.criterium.weighting * res.value.to_f

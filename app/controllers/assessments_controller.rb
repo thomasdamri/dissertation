@@ -167,7 +167,7 @@ class AssessmentsController < ApplicationController
     if tg.nil? or @stud_weight.nil?
       @personal_grade = "Grade not given yet"
     else
-      @personal_grade = (@weighting.to_f * @team_grade.to_f).round(2)
+      @personal_grade = (@stud_weight.weighting.to_f * @team_grade.to_f).round(2)
     end
 
     respond_to do |format|
@@ -248,6 +248,7 @@ class AssessmentsController < ApplicationController
     end
   end
 
+  # AJAX call to render a modal with the individual responses to each criteria
   def get_ind_responses
     @assessment = Assessment.find(params['id'])
     @team = Team.find(params['team_id'])
