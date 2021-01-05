@@ -18,6 +18,7 @@ class AssessmentsController < ApplicationController
     @title = "Viewing Assessment"
     @num_crits = @assessment.criteria.count
     @assessed_crits = @assessment.criteria.where(assessed: true).count
+    @teams = @assessment.uni_module.teams
   end
 
   # GET /assessments/new

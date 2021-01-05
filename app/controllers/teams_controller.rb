@@ -68,10 +68,11 @@ class TeamsController < ApplicationController
   end
 
   def grade_form
-    @title = "Set Team Grade"
     @team = Team.find(params[:id])
     @assessment = Assessment.find(params[:assess])
-    render 'teams/grade_form'
+    respond_to do |format|
+      format.js { render layout: false }
+    end
   end
 
   # Sets the team's grade for an assignment
@@ -83,7 +84,7 @@ class TeamsController < ApplicationController
     tg.grade = params[:new_grade]
     tg.save!
 
-    redirect_to @team, notice: "Team grade set successfully"
+    redirect_to @assessment, notice: "Team grade set successfully"
 
   end
 

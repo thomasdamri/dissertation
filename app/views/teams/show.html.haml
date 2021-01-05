@@ -1,17 +1,5 @@
 #putModalHere
 
-.modal.fade#indGradeModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "indGradeModalLabel", "aria-hidden": "true"}
-  .modal-dialog.modal-lg{"role": "document"}
-    .modal-content
-      .modal-header
-        %h5.modal-title#indGradeModalLabel Individual Grades
-        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
-          %span{"aria-hidden": "true"} &times;
-      .modal-body#indGradeModalBody
-      .modal-footer
-        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
-          Close
-
 %h2= "Team " + @team.number.to_s
 
 %h3 Members
@@ -31,11 +19,3 @@
   = render 'admin/assessment_list_staff'
 - else
   = render 'admin/assessment_list'
-
-- if current_user.staff
-  %h4 Team Grades
-  = render 'teams/grade_table'
-
-= link_to 'Edit', edit_team_path(@team)
-\|
-= link_to 'Back', teams_path

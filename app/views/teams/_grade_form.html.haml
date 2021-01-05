@@ -1,0 +1,18 @@
+.modal.fade#setGradeModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "setGradeModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#setGradeModalLabel Set Team Grade
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        %h2= "Setting grade for Team #{@team.number} in #{@assessment.name}"
+        = form_tag({action: :set_grade}) do
+          = hidden_field_tag 'team_id', @team.id
+          = hidden_field_tag 'assessment_id', @assessment.id
+          = label_tag 'new_grade', 'New Grade'
+          = number_field_tag 'new_grade'
+          = submit_tag 'Set Grade'
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close

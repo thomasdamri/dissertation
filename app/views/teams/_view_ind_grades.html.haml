@@ -1,28 +1,39 @@
-- if @team_grade.nil?
-  %p Team grade not given yet
-- else
-  %p= "Team grade: #{@team_grade.grade}"
-= form_tag({action: :update_ind_grades}) do
-  %table.table.table-bordered.table-hover.table-striped#indGradeTable
-    %tr
-      %th Student Name
-      %th Peer Assessment Weighting
-      %th Individual Mark
-      %th Manually Set?
-      %th New Mark
-      %th Reset Manual Mark
-    - if @ind_weights.length == 0
-      %tr
-        %td{"colspan": 4}= "No students have completed this assessment yet"
-    - @ind_weights.each do |iw|
-      %tr
-        %td= iw.user.real_display_name
-        %td= iw.weighting
-        - unless @team_grade.nil?
-          %td= (@team_grade.grade * iw.weighting).round(2)
-          %td= iw.manual_set ? "Yes" : "No"
-          %td
-            = number_field_tag "new_weight_#{iw.id}", nil, step: 0.01, min: 0
-          %td
-            = check_box_tag "reset_check_#{iw.id}", nil, false, disabled: !iw.manual_set
-  = submit_tag 'Update Grades', class: 'btn btn-primary'
+.modal.fade#indGradeModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "indGradeModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#indGradeModalLabel Individual Grades
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        - if @team_grade.nil?
+          %p Team grade not given yet
+        - else
+          %p= "Team grade: #{@team_grade.grade}"
+        = form_tag({action: :update_ind_grades}) do
+          %table.table.table-bordered.table-hover.table-striped#indGradeTable
+            %tr
+              %th Student Name
+              %th Peer Assessment Weighting
+              %th Individual Mark
+              %th Manually Set?
+              %th New Mark
+              %th Reset Manual Mark
+            - if @ind_weights.length == 0
+              %tr
+                %td{"colspan": 4}= "No students have completed this assessment yet"
+            - @ind_weights.each do |iw|
+              %tr
+                %td= iw.user.real_display_name
+                %td= iw.weighting
+                - unless @team_grade.nil?
+                  %td= (@team_grade.grade * iw.weighting).round(2)
+                  %td= iw.manual_set ? "Yes" : "No"
+                  %td
+                    = number_field_tag "new_weight_#{iw.id}", nil, step: 0.01, min: 0
+                  %td
+                    = check_box_tag "reset_check_#{iw.id}", nil, false, disabled: !iw.manual_set
+          = submit_tag 'Update Grades', class: 'btn btn-primary'
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close

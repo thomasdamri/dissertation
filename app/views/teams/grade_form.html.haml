@@ -1,7 +1,0 @@
-%h2= "Setting grade for Team #{@team.number} in #{@assessment.name}"
-= form_tag({action: :set_grade}) do
-  = hidden_field_tag 'team_id', @team.id
-  = hidden_field_tag 'assessment_id', @assessment.id
-  = label_tag 'new_grade', 'New Grade'
-  = number_field_tag 'new_grade'
-  = submit_tag 'Set Grade'
