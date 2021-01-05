@@ -12,6 +12,8 @@ source "https://gems.shefcompsci.org.uk" do
   gem 'epi_cas'
 end
 
+# Need a relatively new version of nokogiri due to low severity vulnerability
+gem "nokogiri", ">= 1.11.0"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.3'
 # Use mysql as the database for Active Record
