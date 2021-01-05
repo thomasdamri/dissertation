@@ -137,7 +137,7 @@ class TeamsController < ApplicationController
       assessment.generate_weightings team
     end
 
-    redirect_to team
+    redirect_to assessment
   end
 
   def reset_ind_grade
