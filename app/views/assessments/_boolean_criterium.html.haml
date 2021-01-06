@@ -1,4 +1,4 @@
-.nested-fields.card.card-body.bg-light
+.nested-fields.card.card-body.bg-light.crit-input
   %h3 Boolean Response Question
   - single_collection = {"Single Answer" => 1, "Team Answer" => 0}
   - boolean_collection = {"Yes" => "1", "No" => "0"}
@@ -7,4 +7,5 @@
   = f.input :min_value, as: :string, input_html: { class: 'max-value minmax' }, label: "Negative Label"
   = f.input :single, as: :radio_buttons, collection: single_collection, label: 'Single or Team answer?', input_html: { class: 'single'}
   = f.hidden_field :response_type, value: Criterium.bool_type
-  = link_to 'Remove Criteria', '#', class: 'remove_fields'
+  = f.hidden_field :_destroy
+  = link_to 'Remove Question', '#', class: 'remove_fields'

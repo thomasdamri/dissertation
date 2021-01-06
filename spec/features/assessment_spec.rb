@@ -50,9 +50,126 @@ describe 'Creating an assessment' do
     }.to raise_error ActionController::RoutingError
   end
 
-  specify 'When creating an assessment I can delete some criteria'
+  specify 'When creating an assessment I can delete some criteria', js: true do
+    staff = create :user, staff: true
+    login_as staff
 
-  specify 'I can create an assessment with a criterium of every single type'
+    mod = create :uni_module
+    create :staff_module, user: staff, uni_module: mod
+
+    visit "/assessment/new/#{mod.id}"
+
+    name = "Deletion test"
+
+    fill_in "Name", with: name
+
+    click_link "Add Question - Whole Number Response"
+
+    input_box = page.all('.crit-input').last
+    within(input_box){
+      expect(page).to have_content "Whole Number Response Question"
+      fill_in "Field Title", with: "Integer Question"
+      fill_in "Min value", with: "1"
+      fill_in "Max value", with: "10"
+      choose "Team Answer"
+      choose "Yes"
+      fill_in "Relative Weighting", with: "2"
+    }
+
+    click_link "Add Question - Decimal Number Response"
+
+    input_box = page.all('.crit-input').last
+    within(input_box){
+      expect(page).to have_content "Decimal Number Response Question"
+      fill_in "Field Title", with: "Decimal Question"
+      fill_in "Min value", with: "1.7"
+      fill_in "Max value", with: "10.3"
+      choose "Team Answer"
+      choose "Yes"
+      fill_in "Relative Weighting", with: "1"
+    }
+
+    click_link "Add Question - Boolean Response"
+
+    input_box = page.all('.crit-input').last
+    within(input_box){
+      expect(page).to have_content "Boolean Response Question"
+      fill_in "Field Title", with: "Boolean Question"
+      fill_in "Positive Label", with: "Yes"
+      fill_in "Negative Label", with: "No"
+      choose "Team Answer"
+      click_link "Remove Question"
+    }
+
+    click_button "Create Assessment"
+
+    expect(page).to have_content name
+    expect(page).to have_content "Total criteria: 2"
+
+  end
+
+  specify 'I can create an assessment with a criterium of every single type', js: true do
+    staff = create :user, staff: true
+    login_as staff
+
+    mod = create :uni_module
+    create :staff_module, user: staff, uni_module: mod
+
+    visit "/assessment/new/#{mod.id}"
+
+    name = "All Data Types Test"
+    fill_in "Name", with: name
+
+    click_link "Add Question - Text Response"
+
+    input_box = page.all('.crit-input').last
+    within(input_box){
+      expect(page).to have_content "Text Response Question"
+      fill_in "Field Title", with: "Text Question"
+      choose "Single Answer"
+    }
+
+    click_link "Add Question - Whole Number Response"
+
+    input_box = page.all('.crit-input').last
+    within(input_box){
+      expect(page).to have_content "Whole Number Response Question"
+      fill_in "Field Title", with: "Integer Question"
+      fill_in "Min value", with: "1"
+      fill_in "Max value", with: "10"
+      choose "Team Answer"
+      choose "Yes"
+      fill_in "Relative Weighting", with: "2"
+    }
+
+    click_link "Add Question - Decimal Number Response"
+
+    input_box = page.all('.crit-input').last
+    within(input_box){
+      expect(page).to have_content "Decimal Number Response Question"
+      fill_in "Field Title", with: "Decimal Question"
+      fill_in "Min value", with: "1.7"
+      fill_in "Max value", with: "10.3"
+      choose "Team Answer"
+      choose "Yes"
+      fill_in "Relative Weighting", with: "1"
+    }
+
+    click_link "Add Question - Boolean Response"
+
+    input_box = page.all('.crit-input').last
+    within(input_box){
+      expect(page).to have_content "Boolean Response Question"
+      fill_in "Field Title", with: "Boolean Question"
+      fill_in "Positive Label", with: "Yes"
+      fill_in "Negative Label", with: "No"
+      choose "Team Answer"
+    }
+
+    click_button "Create Assessment"
+
+    expect(page).to have_content name
+  end
 
 end
 
@@ -280,6 +397,8 @@ describe 'Filling in an assessment' do
       page.driver.submit :post, "/assessments/#{a.id}/process", {}
     }.to raise_error ActionController::RoutingError
   end
+
+  specify 'I can fill in an assessment with criteria of multiple data types'
 
 end
 

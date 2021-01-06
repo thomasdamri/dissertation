@@ -271,6 +271,6 @@ class AssessmentsController < ApplicationController
     def assessment_params
       params.require(:assessment).permit(:name, :date_opened, :date_closed, :mod,
                                          criteria_attributes: [:title, :order, :response_type, :min_value, :max_value,
-                                                               :single, :assessed, :weighting])
+                                                               :single, :assessed, :weighting, :_destroy])
     end
 end
