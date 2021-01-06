@@ -1,4 +1,5 @@
 require 'rails_helper'
+require "cancan/matchers"
 
 describe 'Creating an assessment' do
   specify 'I can create an assessment if I am part of the module', js: true do
@@ -60,7 +61,6 @@ describe 'Creating an assessment' do
     visit "/assessment/new/#{mod.id}"
 
     name = "Deletion test"
-
     fill_in "Name", with: name
 
     click_link "Add Question - Whole Number Response"
@@ -247,6 +247,7 @@ describe 'Removing an assessment' do
   specify 'I cannot remove an assessment if I am a student' do
     # Create staff user and login
     student = create(:user, staff: false)
+    ability = Ability.new(student)
     login_as student, scope: :user
     # Create module associated with another user
     other = create :user, staff: true, username: 'zzz12ab', email: 'something@gmail.com'
@@ -257,18 +258,10 @@ describe 'Removing an assessment' do
     a = create :assessment, uni_module: mod
     create :criterium, assessment: a
 
-    expect(Assessment.count).to eq 1
-    # Expect trying to view the module page will give an error
-    expect{
-      visit "/uni_modules/#{mod.id}"
-    }.to raise_error ActionController::RoutingError
-    # Expect the assessment not to have been deleted
-
-    # Try to send a delete request
-    page.driver.submit :delete, "/uni_modules/#{mod.id}", {}
-
-    # The assessment should still exist
-    expect(Assessment.count).to eq 1
+    # Student cannot even view the module page to find the delete button
+    ability.should_not be_able_to(:read, mod)
+    # Student cannot delete the assessment
+    ability.should_not be_able_to(:delete, a)
   end
 end
 
@@ -351,6 +344,7 @@ describe 'Filling in an assessment' do
 
   specify 'I cannot fill in an assessment as a staff member on the module' do
     staff = User.where(staff: true).first
+    ability = Ability.new(staff)
     login_as staff, scope: :user
 
     t = Team.first
@@ -360,45 +354,90 @@ describe 'Filling in an assessment' do
 
     # Should be able to see assessment in the table
     expect(page).to have_content a.name
-    tr = page.first('tr', text: a.name)
-    row = tr.find(:xpath, '..')
+    td = page.first('td', text: a.name)
+    row = td.find(:xpath, '..')
 
     # Cannot see fill in button on this page, not rendered
     within(row){
       expect(page).to_not have_content 'Fill In'
     }
 
-    # Attempt to navigate to the page manually
-    expect{
-      visit "/assessments/#{a.id}/fill_in"
-    }.to raise_error ActionController::RoutingError
-
-    # Sending a manual post request to the form submission url fails
-    expect{
-      page.driver.submit :post, "/assessments/#{a.id}/process", {}
-    }.to raise_error ActionController::RoutingError
-
+    # Attempt to access the fill in page
+    ability.should_not be_able_to(:fill_in, a)
+    # Attempt to send the filled in assessment
+    ability.should_not be_able_to(:process_assess, a)
   end
 
   specify 'I cannot fill in an assessment as a student on a different module' do
     # This student is not on this module
     student = create :user, staff: false, username: 'zzz12ab', email: 'something@gmail.com'
+    ability = Ability.new(student)
+    login_as student, scope: :user
 
     a = Assessment.first
 
-    # Testing if the student can see another team is not covered here
-    # Manually attempt to go to the filling in page
-    expect{
-      visit "/assessments/#{a.id}/fill_in"
-    }.to raise_error ActionController::RoutingError
-
-    # Manually submitting a POST request to the submission url should also fail
-    expect {
-      page.driver.submit :post, "/assessments/#{a.id}/process", {}
-    }.to raise_error ActionController::RoutingError
+    # Cannot reach the page for filling in the assessment
+    ability.should_not be_able_to(:fill_in, a)
+    # Cannot submit a filled in assessment
+    ability.should_not be_able_to(:process_assess, a)
   end
 
-  specify 'I can fill in an assessment with criteria of multiple data types'
+  specify 'I can fill in an assessment with criteria of multiple data types' do
+    t = Team.first
+    mod = UniModule.first
+
+    student = t.users.first
+    ability = Ability.new(student)
+    login_as student, scope: :user
+
+    a = create :assessment, uni_module: mod, name: "All data types test"
+    create :criterium, assessment: a, title: 'Test 1', response_type: 0
+    create :criterium, assessment: a, title: 'Test 2', response_type: 1, min_value: 1, max_value: 10
+    create :criterium, assessment: a, title: 'Test 3', response_type: 2, min_value: 1.1, max_value: 10.1
+    create :criterium, assessment: a, title: 'Test 4', response_type: 3, min_value: "No", max_value: "Yes"
+
+    visit "/teams/#{t.id}"
+
+    # Find the row in the assessment table for this assessment
+    row = nil
+    within(:css, '#studentAssessTable'){
+      td = page.first('td', text: a.name)
+      row = td.find(:xpath, '..')
+    }
+
+    within(row){
+      click_link "Fill In"
+    }
+
+    a.criteria.each do |crit|
+      div = page.first('div.crit-fillin', text: crit.title)
+      within(div){
+        if crit.response_type == Criterium.string_type
+          fill_in "response_#{crit.id}", with: "String response"
+        elsif crit.response_type == Criterium.int_type
+          fill_in "response_#{crit.id}", with: "1"
+        elsif crit.response_type == Criterium.float_type
+          fill_in "response_#{crit.id}", with: "4.5"
+        elsif crit.response_type == Criterium.bool_type
+          choose "No"
+        end
+      }
+    end
+    click_button "Submit"
+
+    # Find the row in the assessment table for this assessment
+    row = nil
+    within(:css, '#studentAssessTable'){
+      td = page.first('td', text: a.name)
+      row = td.find(:xpath, '..')
+    }
+
+    within(row){
+      # Button should be blanked out - assessment filled in
+      expect(page).to_not have_content "Fill In"
+    }
+
+  end
 
 end
 
@@ -440,7 +479,7 @@ describe 'Viewing and modifying assessment results' do
 
   specify 'I can view my assessment results as a student only once the closing date has passed', js: true do
     student = User.where(username: 'zzz12ac').first
-    login_as student
+    login_as student, scope: :user
 
     t = Team.first
     a = Assessment.first
@@ -555,6 +594,7 @@ describe 'Viewing and modifying assessment results' do
 
   specify 'As a student I cannot see the individual student responses to the assessment, even when on the same team' do
     student = User.where(staff: false).first
+    ability = Ability.new(student)
     login_as student, scope: :user
 
     t = Team.first
@@ -567,10 +607,8 @@ describe 'Viewing and modifying assessment results' do
     expect(page).to_not have_selector '#staffAssessTable'
     expect(page).to_not have_content "View Individual Responses"
 
-    # Students should not be able to send a request to the url for individual responses
-    expect{
-      page.driver.send :get, "/assessment/#{a.id}/#{t.id}/get_ind_responses", {}
-    }.to raise_error ActionController::RoutingError
+    # Students should not be able to see individual responses
+    ability.should_not be_able_to(:get_ind_responses, a)
 
   end
 
@@ -670,7 +708,18 @@ describe 'Viewing and modifying assessment results' do
 
   end
 
-  specify "As a student I cannot see other students' weightings or change them"
+  specify "As a student I cannot see other students' weightings or change them" do
+    t = Team.first
+    a = Assessment.first
+
+    student = t.users.first
+    ability = Ability.new(student)
+    login_as student, scope: :user
+
+    ability.should be_able_to(:read, t)
+    ability.should_not be_able_to(:view_ind_grades, t)
+    ability.should_not be_able_to(:update_ind_grades, t)
+  end
 end
 
 describe "Downloading results" do

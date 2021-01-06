@@ -32,6 +32,7 @@ class Ability
             assess.uni_module.staff_modules.pluck(:user_id).include? user.id
           end
         end
+        cannot [:fill_in, :process_assess], Assessment
 
       else
         # Students can view their own team
