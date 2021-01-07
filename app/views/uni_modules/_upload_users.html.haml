@@ -1,0 +1,21 @@
+.modal.fade#userUploadModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "userUploadModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#userUploadModalLabel= "Upload users from TSV file"
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        Upload a TSV file of student data from CEIS here. It must include the following attributes:
+        %ul
+          %li CiCS Username
+          %li Email Address
+          %li First name
+          %li Surname
+          %li Registration number
+        = form_tag({:action => :user_process}, multipart: true) do
+          = file_field_tag :file
+          = submit_tag( "Import" )
+    .modal-footer
+      %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+        Close

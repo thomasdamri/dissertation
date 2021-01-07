@@ -8,11 +8,12 @@ Rails.application.routes.draw do
   get 'home/account'
   get 'about', to: 'home#about', as: 'about'
 
-  get 'upload/users', to: 'upload#upload_users'
-  post 'upload/process_users', to: 'upload#user_process'
-  get 'upload/teams/:id', to: 'upload#upload_teams', as: 'upload_teams'
-  post 'upload/process_teams/:id', to: 'upload#team_process', as: 'process_teams'
-  delete 'upload/delete_teams/:id', to: 'upload#delete_teams', as: 'delete_teams'
+  get 'upload/users', to: 'uni_modules#upload_users', as: 'upload_users'
+  post 'upload/process_users', to: 'uni_modules#user_process', as: 'process_users'
+  get 'upload/teams/:id', to: 'uni_modules#upload_teams', as: 'upload_teams'
+  post 'upload/process_teams/:id', to: 'uni_modules#team_process', as: 'process_teams'
+  delete 'upload/delete_teams/:id', to: 'uni_modules#delete_teams', as: 'delete_teams'
+
   get 'upload/grades/:id', to: 'upload#upload_grades', as: 'upload_grades'
   post 'upload/process_grades/:id', to: 'upload#process_grades', as: 'process_grades'
   delete 'upload/delete_grades/:id', to: 'upload#delete_grades', as: 'delete_grades'

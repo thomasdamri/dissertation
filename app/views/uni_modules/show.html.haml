@@ -1,3 +1,5 @@
+#putModalHere
+
 %h1= @uni_module.title
 
 .card.card-body
@@ -26,12 +28,10 @@
   .card-header
     %h4.card-title Team Assignments
   .card-body
-    = link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info"
+    = link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info", remote: true
     = link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
 
 = render 'admin/team_list'
 
 - if can? :edit, @uni_module
   = link_to 'Edit', edit_uni_module_path(@uni_module)
-\|
-= link_to 'Back', uni_modules_path

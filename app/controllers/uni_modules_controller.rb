@@ -77,6 +77,97 @@ class UniModulesController < ApplicationController
     end
   end
 
+  # AJAX path for uploading a CSV file of user info
+  def upload_users
+    respond_to do |format|
+      format.js { render layout: false }
+    end
+  end
+
+  # POST upload/process
+  # Processes the TSV file of new users
+  def user_process
+    # Check file exists first
+    if params['file'].nil?
+      redirect_to upload_teams_path, notice: 'Error: No file was selected'
+    else
+      count_before = User.count
+      # Read the file into a TSV object
+      tsv_file = TSV.parse(params['file'].read)
+
+      # Extract the user info from each row of the tsv file
+      tsv_file.each do |row|
+        reg_no = row["Reg No."]
+        username = row["Student Username"]
+        surname = row["Surname"]
+        firstname = row["Forename"]
+        email = row["Email"]
+
+        User.create(reg_no: reg_no, username: username, sn: surname, givenname: firstname, email: email,
+                    staff: false, admin: false)
+      end
+
+      count = User.count - count_before
+      redirect_to home_staff_home_path, notice: "Successfully added #{count} students"
+
+    end
+  end
+
+  def upload_teams
+    @title = "Team Assignment Upload"
+    @mod_id = params[:id]
+  end
+
+  def team_process
+    # Check module id is valid
+    if params[:mod_id].nil?
+      redirect_to upload_teams_path, notice: 'There was an error, please try again'
+      return
+    end
+
+    # Check file was selected
+    if params['file'].nil?
+      redirect_to upload_teams_path, notice: 'No file was selected'
+      return
+    end
+
+    # Check module exists
+    mod = UniModule.find(params[:mod_id].to_i)
+    if mod.nil?
+      redirect_to upload_teams_path, notice: 'There was an error, please try again'
+    end
+
+    csv_contents = params['file'].read()
+
+    csv_contents.split("\n").each do |line|
+      # Escape HTML before processing
+      line = line
+      team_attr = line.split(",")
+      # Find user
+      u = User.find_by_username(team_attr[0])
+      # Find team, or create it if it doesnt already exist
+      t = Team.find_or_create_by(uni_module: mod, number: team_attr[1])
+      # Attach student to the team
+      u.student_teams.create(user: u, team: t)
+    end
+
+    redirect_to uni_module_path mod
+
+  end
+
+  # Deletes all teams that are part of the module
+  def delete_teams
+    mod_id = params[:id]
+    mod = UniModule.find(mod_id)
+
+    mod.teams.each do |team|
+      team.delete
+    end
+
+    redirect_to mod, notice: 'Teams were successfully deleted'
+
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_uni_module

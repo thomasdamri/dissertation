@@ -1,5 +1,0 @@
-CSV file order: username,team_no
-= form_tag({:action => :team_process}, multipart: true) do
-  = hidden_field_tag 'mod_id', @mod_id
-  = file_field_tag :file
-  = submit_tag( "Import" )
