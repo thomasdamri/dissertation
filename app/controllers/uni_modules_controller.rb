@@ -114,8 +114,10 @@ class UniModulesController < ApplicationController
   end
 
   def upload_teams
-    @title = "Team Assignment Upload"
     @mod_id = params[:id]
+    respond_to do |format|
+      format.js { render layout: false }
+    end
   end
 
   def team_process

@@ -28,8 +28,11 @@
   .card-header
     %h4.card-title Team Assignments
   .card-body
-    = link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info", remote: true
-    = link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
+    - # Display the upload assignment button if no team assignments yet, otherwise display delete button
+    - if @teams.count == 0
+      = link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info", remote: true
+    - else
+      = link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
 
 = render 'admin/team_list'
 

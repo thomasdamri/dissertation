@@ -12,8 +12,8 @@ class Ability
         can :manage, :all
       end
 
-      # Staff can edit their own modules
       if user.staff
+        # Staff can view and manage their own modules
         can :read, UniModule
         can :manage, UniModule, staff_modules: {user_id: user.id}
 

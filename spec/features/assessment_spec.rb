@@ -258,9 +258,9 @@ describe 'Removing an assessment' do
     create :criterium, assessment: a
 
     # Student cannot even view the module page to find the delete button
-    ability.should_not be_able_to(:read, mod)
+    expect(ability).to_not be_able_to(:read, mod)
     # Student cannot delete the assessment
-    ability.should_not be_able_to(:delete, a)
+    expect(ability).to_not be_able_to(:delete, a)
   end
 end
 
@@ -362,9 +362,9 @@ describe 'Filling in an assessment' do
     }
 
     # Attempt to access the fill in page
-    ability.should_not be_able_to(:fill_in, a)
+    expect(ability).to_not be_able_to(:fill_in, a)
     # Attempt to send the filled in assessment
-    ability.should_not be_able_to(:process_assess, a)
+    expect(ability).to_not be_able_to(:process_assess, a)
   end
 
   specify 'I cannot fill in an assessment as a student on a different module' do
@@ -376,9 +376,9 @@ describe 'Filling in an assessment' do
     a = Assessment.first
 
     # Cannot reach the page for filling in the assessment
-    ability.should_not be_able_to(:fill_in, a)
+    expect(ability).to_not be_able_to(:fill_in, a)
     # Cannot submit a filled in assessment
-    ability.should_not be_able_to(:process_assess, a)
+    expect(ability).to_not be_able_to(:process_assess, a)
   end
 
   specify 'I can fill in an assessment with criteria of multiple data types' do
@@ -607,7 +607,7 @@ describe 'Viewing and modifying assessment results' do
     expect(page).to_not have_content "View Individual Responses"
 
     # Students should not be able to see individual responses
-    ability.should_not be_able_to(:get_ind_responses, a)
+    expect(ability).to_not be_able_to(:get_ind_responses, a)
 
   end
 
@@ -715,9 +715,9 @@ describe 'Viewing and modifying assessment results' do
     ability = Ability.new(student)
     login_as student, scope: :user
 
-    ability.should be_able_to(:read, t)
-    ability.should_not be_able_to(:view_ind_grades, t)
-    ability.should_not be_able_to(:update_ind_grades, t)
+    expect(ability).to be_able_to(:read, t)
+    expect(ability).to_not be_able_to(:view_ind_grades, t)
+    expect(ability).to_not be_able_to(:update_ind_grades, t)
   end
 end
 

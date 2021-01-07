@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+=begin
 describe 'Adding users' do
   specify 'I can create users from a tsv file, assign them a team, then login as a created user' do
     # Create staff user and login
@@ -36,3 +37,4 @@ describe 'Adding users' do
   end
 
 end
+=end
