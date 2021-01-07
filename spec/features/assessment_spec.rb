@@ -243,7 +243,6 @@ describe 'Removing an assessment' do
     }
   end
 
-
   specify 'I cannot remove an assessment if I am a student' do
     # Create staff user and login
     student = create(:user, staff: false)

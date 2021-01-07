@@ -42,6 +42,9 @@ class Assessment < ApplicationRecord
 
   # Returns true if the given user has completed the assessment
   def completed_by?(user)
+    if criteria.size == 0
+      return false
+    end
     # Check if the user has any authored results for this assessment's criteria
     if user.author_results.pluck(:criterium_id).include? criteria.first.id
       true
