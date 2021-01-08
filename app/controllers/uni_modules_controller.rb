@@ -21,11 +21,13 @@ class UniModulesController < ApplicationController
   def new
     @title = "Creating Module"
     @uni_module = UniModule.new
+    @btn_text = "Create"
   end
 
   # GET /uni_modules/1/edit
   def edit
     @title = "Editing Module"
+    @btn_text = "Update"
   end
 
   # POST /uni_modules
@@ -35,6 +37,9 @@ class UniModulesController < ApplicationController
 
     # Link the current user to the module so they have permission to edit it
     @uni_module.staff_modules.build(user: current_user)
+
+    # Text for the submit button if module is not valid
+    @btn_text = "Create"
 
     respond_to do |format|
       if @uni_module.save
@@ -55,6 +60,9 @@ class UniModulesController < ApplicationController
     if @uni_module.staff_modules.length < 1
       @uni_module.errors[:staff_modules] << " must have at least one member of staff"
     end
+
+    # Text for submission button if form fails to save
+    @btn_text = "Update"
 
     respond_to do |format|
       if @uni_module.update(uni_module_params)

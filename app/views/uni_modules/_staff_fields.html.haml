@@ -1,4 +1,4 @@
-.nested-fields
+.card.card-body.nested-fields.staff-fields
   - user_collection = User.where(staff: true).order(:email)
   = f.association :user, as: :select, collection: user_collection, label_method: :email, value_method: :id,  label: 'Staff Member Email', include_blank: false
   = f.hidden_field :_destroy

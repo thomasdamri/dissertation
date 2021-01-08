@@ -71,7 +71,6 @@ describe 'Uploading teams' do
     click_link "Remove Current Team Assignment"
     page.accept_alert("This will permanently remove all teams in this module")
 
-
     expect(page).to have_content "Number of teams: 0"
 
   end

@@ -23,6 +23,10 @@ class HomeController < ApplicationController
   end
 
   def staff_home
+    # Stop students accessing the staff dashboard
+    if current_user.staff == false
+      redirect_to home_student_home_path
+    end
     @title = "Staff Dashboard"
     # Only render modules the user is associated with
     @uni_modules = current_user.uni_modules
