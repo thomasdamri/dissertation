@@ -55,14 +55,26 @@ class UniModulesController < ApplicationController
   # PATCH/PUT /uni_modules/1
   # PATCH/PUT /uni_modules/1.json
   def update
-
-    # Can only validate this in edit mode, as in create mode the user link is not saved until after validation
-    if @uni_module.staff_modules.length < 1
-      @uni_module.errors[:staff_modules] << " must have at least one member of staff"
+    # Ensure that the number of removed staff members does not exceed the number of total staff members
+    net_deleted = 0
+    params["uni_module"]["staff_modules_attributes"].each do |i, sm|
+      if sm["_destroy"] == "1"
+        net_deleted += 1
+      else
+        net_deleted -= 1
+      end
     end
+
+    puts "total deleted: #{net_deleted}"
+    puts "staff_mods: #{@uni_module.staff_modules.length}"
 
     # Text for submission button if form fails to save
     @btn_text = "Update"
+
+    # If the number of net deletions equals the number of existing staff, no more staff are on the module
+    if net_deleted == @uni_module.staff_modules.length
+      return render :edit
+    end
 
     respond_to do |format|
       if @uni_module.update(uni_module_params)
@@ -97,7 +109,7 @@ class UniModulesController < ApplicationController
   def user_process
     # Check file exists first
     if params['file'].nil?
-      redirect_to upload_teams_path, notice: 'Error: No file was selected'
+      redirect_to home_staff_home_path, alert: "Upload failed. Please attach a file before attempting upload"
     else
       count_before = User.count
       # Read the file into a TSV object
@@ -131,20 +143,20 @@ class UniModulesController < ApplicationController
   def team_process
     # Check module id is valid
     if params[:mod_id].nil?
-      redirect_to upload_teams_path, notice: 'There was an error, please try again'
-      return
-    end
-
-    # Check file was selected
-    if params['file'].nil?
-      redirect_to upload_teams_path, notice: 'No file was selected'
+      redirect_to home_staff_home_path, notice: 'There was an error, please try again'
       return
     end
 
     # Check module exists
-    mod = UniModule.find(params[:mod_id].to_i)
+    mod = UniModule.where(id: params[:mod_id].to_i).first
     if mod.nil?
-      redirect_to upload_teams_path, notice: 'There was an error, please try again'
+      redirect_to home_staff_home_path, notice: 'There was an error, please try again'
+    end
+
+    # Check file was selected
+    if params['file'].nil?
+      redirect_to uni_module_path(mod), notice: "Upload failed. Please attach a file before attempting upload"
+      return
     end
 
     csv_contents = params['file'].read()
