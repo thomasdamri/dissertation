@@ -4,6 +4,7 @@ class AssessmentsController < ApplicationController
   load_and_authorize_resource
 
   include ERB::Util
+  require 'tsv'
   require 'csv'
 
   # GET /assessments
@@ -237,18 +238,6 @@ class AssessmentsController < ApplicationController
 
   end
 
-
-  # Sends an ajax response with the team grades for the given assignment
-  def show_team_grades
-    assessment = Assessment.find(params['id'])
-    @team_grades = assessment.team_grades
-
-    # Respond with javascript, as it is an AJAX request
-    respond_to do |format|
-      format.js {render layout: false}
-    end
-  end
-
   # AJAX call to render a modal with the individual responses to each criteria
   def get_ind_responses
     @assessment = Assessment.find(params['id'])
@@ -258,6 +247,71 @@ class AssessmentsController < ApplicationController
       format.js {render layout: false}
     end
 
+  end
+
+  # AJAX request for rendering modal for uploading team grades as a csv
+  def upload_grades
+    @assessment_id = params[:id]
+
+    respond_to do |format|
+      format.js {render layout: false}
+    end
+  end
+
+  # Processes the form submitted to :upload_grades
+  def process_grades
+    # Check assessment id is valid
+    if params[:assess_id].nil?
+      redirect_to home_staff_home_path, notice: 'There was an error, please try again'
+      return
+    end
+
+    # Check assessment exists
+    assessment = Assessment.where(id: params[:assess_id].to_i).first
+    if assessment.nil?
+      redirect_to home_staff_home_path, notice: 'There was an error, please try again'
+    end
+
+    # Check file was selected
+    if params['file'].nil?
+      redirect_to assessment_path(assessment), notice: "Upload failed. Please attach a file before attempting upload"
+      return
+    end
+
+    mod = assessment.uni_module
+    csv_contents = params['file'].read
+
+    # Read in each line of the CSV
+    csv_contents.split("\n").each do |line|
+      # Escape HTML before processing
+      line = h line
+      grade_attr = line.split(",")
+      # Find team
+      t = Team.where(uni_module: mod, number: grade_attr[0]).first
+      # Attach grade to the team
+      t.team_grades.create(team_id: t.id, assessment_id: assessment.id, grade: grade_attr[1])
+    end
+
+    redirect_to assessment
+
+  end
+
+  # Removes all team grades for an assessment
+  def delete_grades
+    # Find the assessment from the parameters
+    assess_id = params[:id]
+    assess = Assessment.where(id: assess_id).first
+    if assess.nil?
+      return redirect_to home_staff_home_path, notice: 'There was an error, please try again'
+    end
+
+    # Delete all team grades associated with this assessment
+    assess.team_grades.each do |tg|
+      tg.destroy
+    end
+
+    # Send user back to the assessment page
+    redirect_to assess, notice: 'Team grades were successfully deleted'
   end
 
 

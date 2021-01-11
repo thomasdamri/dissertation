@@ -1,5 +1,0 @@
-CSV file order: team_no,grade
-= form_tag({:action => :process_grades}, multipart: true) do
-  = hidden_field_tag 'assess_id', @assessment_id
-  = file_field_tag :file
-  = submit_tag( "Import" )

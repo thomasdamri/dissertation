@@ -1,0 +1,19 @@
+.modal.fade#gradeUploadModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "gradeUploadModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#gradeUploadModalLabel Upload Team Grades
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        Please attach a CSV file in the format
+        %i team_number,grade
+        with each team number on a different line.
+        = form_tag({:action => :process_grades}, multipart: true) do
+          = hidden_field_tag 'assess_id', @assessment_id
+          = file_field_tag :file
+          = submit_tag( "Import" )
+
+    .modal-footer
+      %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+        Close

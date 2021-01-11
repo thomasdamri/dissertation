@@ -67,6 +67,7 @@ class TeamsController < ApplicationController
     end
   end
 
+  # AJAX request to display a modal for changing a team's grade for an assessment
   def grade_form
     @team = Team.find(params[:id])
     @assessment = Assessment.find(params[:assess])
@@ -138,17 +139,6 @@ class TeamsController < ApplicationController
     end
 
     redirect_to assessment
-  end
-
-  def reset_ind_grade
-    stud_weight = StudentWeighting.find(params['sw_id'])
-    team = Team.find(params['id'])
-
-    stud_weight.manual_set = false
-    stud_weight.save
-
-    stud_weight.assessment
-
   end
 
   private

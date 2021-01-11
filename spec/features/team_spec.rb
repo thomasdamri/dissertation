@@ -1,80 +1,123 @@
 require "rails_helper"
 require "cancan/matchers"
 
-describe 'Uploading teams' do
+describe "Uploading team assignments" do
   before(:each) do
     staff = create :user, staff: true
     mod = create :uni_module
     create :staff_module, user: staff, uni_module: mod
-
-    create :user, username: "zzx12tu", email: "testuser1@gmail.com", staff: false
-    create :user, username: "zzy12tu", email: "testuser2@gmail.com", staff: false
-    create :user, username: "zzz12tu", email: "testuser3@gmail.com", staff: false
-    create :user, username: "zzw12tu", email: "testuser4@gmail.com", staff: false
-    create :user, username: "zzv12tu", email: "testuser5@gmail.com", staff: false
-    create :user, username: "zzm12tu", email: "testuser6@gmail.com", staff: false
-
   end
 
-  specify "Only staff who are part of the module may upload a team assignment file", js: true do
+  specify "As a staff member on a module I can upload a file assigning students to teams", js: true do
+    # Create users to test assignment on
+    create :user, staff: false, username: "zzx12tu", email: "a@gmail.com"
+    create :user, staff: false, username: "zzy12tu", email: "s@gmail.com"
+    create :user, staff: false, username: "zzz12tu", email: "d@gmail.com"
+    create :user, staff: false, username: "zzw12tu", email: "f@gmail.com"
+    create :user, staff: false, username: "zzv12tu", email: "h@gmail.com"
+    create :user, staff: false, username: "zzm12tu", email: "j@gmail.com"
+
+    mod = UniModule.first
+
     staff = User.where(staff: true).first
     login_as staff, scope: :user
     ability = Ability.new(staff)
 
-    mod = UniModule.first
-
     expect(ability).to be_able_to :upload_teams, mod
     expect(ability).to be_able_to :team_process, mod
-    visit "uni_modules/#{mod.id}"
+
+    visit "/uni_modules/#{mod.id}"
     click_link "Upload Team Assignment"
+    attach_file "spec/uploads/teams.csv"
+    click_button "Import"
 
-    attach_file 'spec/uploads/teams.csv'
-    click_button 'Import'
-
+    # Page should have the remove button now
+    expect(page).to have_content "Remove Current Team Assignment"
     expect(page).to have_content "Number of teams: 2"
+  end
 
-    # A staff member not associated with the module cannot upload a team assignment
-    other_staff = create :user, staff: true, username: "zzz12er", email: "a@gmail.com"
-    login_as other_staff, scope: :user
+  specify "If no file is selected the user is prompted to select one", js: true do
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+    mod = UniModule.first
+
+    visit "/uni_modules/#{mod.id}"
+    click_link "Upload Team Assignment"
+    click_button "Import"
+
+    expect(page).to have_content "Upload failed. Please attach a file before attempting upload"
+  end
+
+  specify "As a staff member not associated with the module, I cannot upload a team assignment" do
+    mod = UniModule.first
+    other_staff = create :user, staff: true, username: "zzz12ll", email: "w@gmail.com"
     ability = Ability.new(other_staff)
     expect(ability).to_not be_able_to :upload_teams, mod
     expect(ability).to_not be_able_to :team_process, mod
+  end
 
-    # A student should not be able to upload a team assignment
-    student = User.where(staff: false).first
-    login_as student
+  specify "As a student I cannot upload a team assignment" do
+    mod = UniModule.first
+    student = create :user, staff: false, username: "zzz12qq", email: "s@gmail.com"
     ability = Ability.new(student)
     expect(ability).to_not be_able_to :upload_teams, mod
     expect(ability).to_not be_able_to :team_process, mod
+  end
+end
 
+describe "Removing a team assignment" do
+  before(:each) do
+    staff = create :user, staff: true
+
+    mod = create :uni_module
+    create :staff_module, user: staff, uni_module: mod
   end
 
-  specify "Only staff who are part of the module may delete a team assignment", js: true do
+  specify "As a staff member on a module I can remove an existing team assignment" do
     mod = UniModule.first
-    t1 = create :team, number: 1, uni_module: mod
-    t2 = create :team, number: 2, uni_module: mod
+    t1 = create :team, uni_module: mod
+    t2 = create :team, uni_module: mod, number: 2
 
-    create :student_team, team: t1, user: User.where(username: "zzx12tu").first
-    create :student_team, team: t1, user: User.where(username: "zzy12tu").first
-    create :student_team, team: t1, user: User.where(username: "zzz12tu").first
-    create :student_team, team: t2, user: User.where(username: "zzw12tu").first
-    create :student_team, team: t2, user: User.where(username: "zzv12tu").first
-    create :student_team, team: t2, user: User.where(username: "zzm12tu").first
+    u1 = create :user, staff: false, username: "zzx12tu", email: "a@gmail.com"
+    u2 = create :user, staff: false, username: "zzy12tu", email: "s@gmail.com"
+    u3 = create :user, staff: false, username: "zzz12tu", email: "d@gmail.com"
+    u4 = create :user, staff: false, username: "zzw12tu", email: "f@gmail.com"
+    u5 = create :user, staff: false, username: "zzv12tu", email: "h@gmail.com"
+    u6 = create :user, staff: false, username: "zzm12tu", email: "j@gmail.com"
+
+    create :student_team, user: u1, team: t1
+    create :student_team, user: u2, team: t1
+    create :student_team, user: u3, team: t1
+    create :student_team, user: u4, team: t2
+    create :student_team, user: u5, team: t2
+    create :student_team, user: u6, team: t2
 
     staff = User.where(staff: true).first
     login_as staff, scope: :user
     ability = Ability.new(staff)
 
     expect(ability).to be_able_to :delete_teams, mod
+
     visit "/uni_modules/#{mod.id}"
     expect(page).to have_content "Number of teams: 2"
     click_link "Remove Current Team Assignment"
-    page.accept_alert("This will permanently remove all teams in this module")
 
     expect(page).to have_content "Number of teams: 0"
-
   end
 
+  specify "As a staff member not associated with a module I cannot remove a team assignment" do
+    mod = UniModule.first
+    other_staff = create :user, staff: true, username: "zzz12er", email: "l@gmail.com"
+    ability = Ability.new(other_staff)
+    expect(ability).to_not be_able_to :delete_teams, mod
+  end
+
+  specify "As a student I cannot remove a team assignment" do
+    student = User.where(username: 'zzx12tu').first
+    ability = Ability.new(student)
+    mod = UniModule.first
+    expect(ability).to_not be_able_to :delete_teams, mod
+  end
 end
 
 describe 'Viewing team pages' do

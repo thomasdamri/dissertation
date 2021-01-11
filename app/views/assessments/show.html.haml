@@ -2,18 +2,6 @@
 
 %h2= @assessment.name
 
-.modal.fade#teamGradeModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "teamGradeModalLabel", "aria-hidden": "true"}
-  .modal-dialog{"role": "document"}
-    .modal-content
-      .modal-header
-        %h5.modal-title#teamGradeModalLabel Team Grades
-        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
-          %span{"aria-hidden": "true"} &times;
-      .modal-body#teamGradeModalBody
-      .modal-footer
-        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
-          Close
-
 %p= "Date opened: " + @assessment.date_opened.to_s
 %p= "Date closed: " + @assessment.date_closed.to_s
 
@@ -36,11 +24,10 @@
 %h3 Team Grades
 .btn-group{"role" => "group"}
   - if @assessment.has_team_grades?
-    = link_to 'View Team Grades', show_team_grades_path(@assessment), remote: true, class: 'btn btn-info'
     = button_to 'Delete Existing Team Grades', delete_grades_path(@assessment), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure? This is a permanent action that will remove group grades for all teams" }
+    = button_to 'Send grades via email', assessment_score_email_path, method: :post, class: 'btn btn-info'
   -else
-    = link_to 'Upload Team Grades', upload_grades_path(@assessment), class: 'btn btn-info'
-  = button_to 'Send grades via email', assessment_score_email_path, method: :post, class: 'btn btn-info'
+    = link_to 'Upload Team Grades', upload_grades_path(@assessment), class: 'btn btn-info', remote: true
 
 = render 'assessments/grade_table'
 
