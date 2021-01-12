@@ -52,9 +52,6 @@ class UniModulesController < ApplicationController
       end
     end
 
-    puts "total deleted: #{net_deleted}"
-    puts "staff_mods: #{@uni_module.staff_modules.length}"
-
     # Text for submission button if form fails to save
     @btn_text = "Update"
 
@@ -73,7 +70,7 @@ class UniModulesController < ApplicationController
   # DELETE /uni_modules/1
   def destroy
     @uni_module.destroy
-    redirect_to uni_modules_url, notice: 'Uni module was successfully destroyed.'
+    redirect_to home_staff_home_path, notice: 'Uni module was successfully destroyed.'
   end
 
   # AJAX path for uploading a CSV file of user info
