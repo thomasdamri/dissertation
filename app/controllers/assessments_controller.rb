@@ -7,14 +7,7 @@ class AssessmentsController < ApplicationController
   require 'tsv'
   require 'csv'
 
-  # GET /assessments
-  # GET /assessments.json
-  def index
-    @assessments = Assessment.all
-  end
-
   # GET /assessments/1
-  # GET /assessments/1.json
   def show
     @title = "Viewing Assessment"
     @num_crits = @assessment.criteria.count
@@ -33,13 +26,7 @@ class AssessmentsController < ApplicationController
     end
   end
 
-  # GET /assessments/1/edit
-  def edit
-    @title = "Edit Assessment"
-  end
-
   # POST /assessments
-  # POST /assessments.json
   def create
     @assessment = Assessment.new(assessment_params)
     @unimod = UniModule.find(params[:assessment][:mod])
@@ -69,26 +56,19 @@ class AssessmentsController < ApplicationController
       end
     end
 
-    respond_to do |format|
-      if @assessment.save
-        format.html { redirect_to @assessment, notice: 'Assessment was successfully created.' }
-        format.json { render :show, status: :created, location: @assessment }
-      else
-        format.html { render :new }
-        format.json { render json: @assessment.errors, status: :unprocessable_entity }
-      end
+    if @assessment.save
+      redirect_to @assessment, notice: 'Assessment was successfully created.'
+    else
+      render :new
     end
   end
 
   # DELETE /assessments/1
-  # DELETE /assessments/1.json
   def destroy
+    # Save uni_module for redirect later
     unimod = @assessment.uni_module
     @assessment.destroy
-    respond_to do |format|
-      format.html { redirect_to unimod, notice: 'Assessment was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to unimod, notice: 'Assessment was successfully destroyed.'
   end
 
   # Shows form for user to fill in the assessment

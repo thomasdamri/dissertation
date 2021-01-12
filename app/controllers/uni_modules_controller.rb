@@ -3,14 +3,7 @@ class UniModulesController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
 
-  # GET /uni_modules
-  # GET /uni_modules.json
-  def index
-    @uni_modules = UniModule.all
-  end
-
   # GET /uni_modules/1
-  # GET /uni_modules/1.json
   def show
     @title = @uni_module.name
     @teams = @uni_module.teams
@@ -31,7 +24,6 @@ class UniModulesController < ApplicationController
   end
 
   # POST /uni_modules
-  # POST /uni_modules.json
   def create
     @uni_module = UniModule.new(uni_module_params)
 
@@ -41,19 +33,14 @@ class UniModulesController < ApplicationController
     # Text for the submit button if module is not valid
     @btn_text = "Create"
 
-    respond_to do |format|
-      if @uni_module.save
-        format.html { redirect_to @uni_module, notice: 'Module was successfully created.' }
-        format.json { render :show, status: :created, location: @uni_module }
-      else
-        format.html { render :new }
-        format.json { render json: @uni_module.errors, status: :unprocessable_entity }
-      end
+    if @uni_module.save
+      redirect_to @uni_module, notice: 'Module was successfully created.'
+    else
+      render :new
     end
   end
 
   # PATCH/PUT /uni_modules/1
-  # PATCH/PUT /uni_modules/1.json
   def update
     # Ensure that the number of removed staff members does not exceed the number of total staff members
     net_deleted = 0
@@ -76,25 +63,17 @@ class UniModulesController < ApplicationController
       return render :edit
     end
 
-    respond_to do |format|
-      if @uni_module.update(uni_module_params)
-        format.html { redirect_to @uni_module, notice: 'Uni module was successfully updated.' }
-        format.json { render :show, status: :ok, location: @uni_module }
-      else
-        format.html { render :edit }
-        format.json { render json: @uni_module.errors, status: :unprocessable_entity }
-      end
+    if @uni_module.update(uni_module_params)
+      redirect_to @uni_module, notice: 'Uni module was successfully updated.'
+    else
+      render :edit
     end
   end
 
   # DELETE /uni_modules/1
-  # DELETE /uni_modules/1.json
   def destroy
     @uni_module.destroy
-    respond_to do |format|
-      format.html { redirect_to uni_modules_url, notice: 'Uni module was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    redirect_to uni_modules_url, notice: 'Uni module was successfully destroyed.'
   end
 
   # AJAX path for uploading a CSV file of user info
@@ -174,7 +153,6 @@ class UniModulesController < ApplicationController
     end
 
     redirect_to uni_module_path mod
-
   end
 
   # Deletes all teams that are part of the module
