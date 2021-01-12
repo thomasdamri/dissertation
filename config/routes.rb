@@ -46,7 +46,7 @@ Rails.application.routes.draw do
   get 'assessment/:id/:team_id/get_ind_responses', to: 'assessments#get_ind_responses', as: 'get_ind_responses'
 
   resources :uni_modules
-  resources :teams
+  get 'uni_modules/:id/show_all_students', to: 'uni_modules#show_all_students', as: 'show_all_students'
 
-  # For details on the DSL available within this file, see https://guides.rubyonrails.org/routing.html
+  resources :teams
 end

@@ -296,3 +296,57 @@ describe "Uploading users" do
     expect(page).to have_content "Successfully added 5 students"
   end
 end
+
+describe "Viewing all students on a module" do
+  before(:each) do
+    staff = create :user, staff: true
+    mod = create :uni_module
+    create :staff_module, user: staff, uni_module: mod
+
+    s1 = create :user, staff: false, username: "zzz12qw", email: "q@gmail.com", display_name: "Student 1"
+    s2 = create :user, staff: false, username: "zzz12qe", email: "e@gmail.com", display_name: "Student 2"
+    s3 = create :user, staff: false, username: "zzz12er", email: "r@gmail.com", display_name: "Can't see this"
+
+    t1 = create :team, uni_module: mod
+    t2 = create :team, uni_module: mod, number: 2
+
+    create :student_team, team: t1, user: s1
+    create :student_team, team: t2, user: s2
+  end
+
+  specify "As a member of staff on a module I can view all the students enrolled on the module", js: true do
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+    ability = Ability.new(staff)
+    mod = UniModule.first
+
+    expect(ability).to be_able_to :show_all_students, mod
+
+    visit "/uni_modules/#{mod.id}"
+    click_link "Show All Students"
+
+    s1 = User.where(username: "zzz12qw").first
+    s2 = User.where(username: "zzz12qe").first
+    s3 = User.where(username: "zzz12er").first
+
+    within(:css, '#allStudentTable'){
+      expect(page).to have_content s1.real_display_name
+      expect(page).to have_content s2.real_display_name
+      expect(page).to_not have_content s3.real_display_name
+    }
+  end
+
+  specify "As a member of staff not associated with a module, I cannot view all the students on it" do
+    other_staff = create :user, staff: true, username: "zzz12ty", email: "t@gmail.com"
+    ability = Ability.new(other_staff)
+    mod = UniModule.first
+    expect(ability).to_not be_able_to :show_all_students, mod
+  end
+
+  specify "As a student I cannot view all the students on a module" do
+    student = create :user, staff: false, username: "zzz12ty", email: "t@gmail.com"
+    ability = Ability.new(student)
+    mod = UniModule.first
+    expect(ability).to_not be_able_to :show_all_students, mod
+  end
+end

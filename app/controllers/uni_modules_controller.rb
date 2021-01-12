@@ -109,6 +109,7 @@ class UniModulesController < ApplicationController
     end
   end
 
+  # AJAX request for uploading a team assignment CSV
   def upload_teams
     @mod_id = params[:id]
     respond_to do |format|
@@ -116,6 +117,7 @@ class UniModulesController < ApplicationController
     end
   end
 
+  # Processes a team assignment CSV and adds the specified StudentTeam objects
   def team_process
     # Check module id is valid
     if params[:mod_id].nil?
@@ -162,7 +164,15 @@ class UniModulesController < ApplicationController
     end
 
     redirect_to mod, notice: 'Teams were successfully deleted'
+  end
 
+  # AJAX call for displaying all students on a module sorted by team
+  def show_all_students
+    @uni_module = UniModule.find(params["id"])
+
+    respond_to do |format|
+      format.js {render layout: false}
+    end
   end
 
   private

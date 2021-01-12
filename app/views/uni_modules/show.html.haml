@@ -7,15 +7,16 @@
     .col-1
     .col-5
       %h3 Module Staff
-      %ul
+      %ul.list-group
         - @uni_module.staff_modules.each do |sm|
-          %li= link_to sm.user.real_display_name, sm.user.email_link
+          %li.list-group-item= link_to sm.user.real_display_name, sm.user.email_link
     .col-1
     .col-5
       %h3 Other Information
-      %ul
-        %li= "Students enrolled: " + @students.to_s
-        %li= "Number of teams: " + @teams.count.to_s
+      %ul.list-group
+        %li.list-group-item= "Students enrolled: " + @students.to_s
+        %li.list-group-item= "Number of teams: " + @teams.count.to_s
+        %li.list-group-item= link_to "Show All Students", show_all_students_path(@uni_module), remote: true
     .col-1
 
 %h2 Assessments
