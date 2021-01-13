@@ -1,5 +1,6 @@
 -# frozen_string_literal: true
-= simple_form_for(@assessment) do |f|
+- # The url needs setting separately, as rails doesn't like the fact that assessments_path doesnt exist
+= simple_form_for(@assessment, url: "/assessment/create") do |f|
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 

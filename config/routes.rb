@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
+  # This should stay at the top to ensure login paths work
   mount EpiCas::Engine, at: "/"
   devise_for :users
+
+  # Home and dashboard routes
   root to: 'home#index'
   get 'home/index'
   get 'home/student_home'
@@ -8,6 +11,7 @@ Rails.application.routes.draw do
   get 'home/account'
   get 'about', to: 'home#about', as: 'about'
 
+  # Routes for uploading CSV files
   get 'upload/users', to: 'uni_modules#upload_users', as: 'upload_users'
   post 'upload/process_users', to: 'uni_modules#user_process', as: 'process_users'
   get 'upload/teams/:id', to: 'uni_modules#upload_teams', as: 'upload_teams'
@@ -18,11 +22,13 @@ Rails.application.routes.draw do
   post 'upload/process_grades/:id', to: 'assessments#process_grades', as: 'process_grades'
   delete 'upload/delete_grades/:id', to: 'assessments#delete_grades', as: 'delete_grades'
 
+  # Team routes (not associated with regular rails CRUD operations)
   get 'teams/grade_form/:id/:assess', to: 'teams#grade_form', as: 'teams_grade_form'
   post 'teams/set_grade', to: 'teams#set_grade', as: 'teams_set_grade'
   get 'teams/:id/:assess/view_ind_grades', to: 'teams#view_ind_grades', as: 'view_ind_grades'
   post 'teams/:id/:assess/update_ind_grades', to: 'teams#update_ind_grades', as: 'update_ind_grades'
 
+  # Admin routes
   get 'admin/staff'
   get 'admin/students'
   get 'admin/modules'
@@ -34,10 +40,8 @@ Rails.application.routes.draw do
   get 'admin/add_new_staff', to: 'admin#add_new_staff', as: 'add_new_staff'
   post 'admin/new_staff_process', to: 'admin#new_staff_process', as: 'new_staff_process'
 
-  # I have to give the same url 2 names because Rails
-  get 'assessment/:id', to: 'assessments#show', as: 'assessments'
+  # Assessment routes
   get 'assessment/:id', to: 'assessments#show', as: 'assessment'
-
   get 'assessment/new/:id', to: 'assessments#new', as: 'new_assessment'
   post 'assessment/:id', to: 'assessments#create', as: 'create_assessment'
   get 'assessment/:id/fill_in', to: 'assessments#fill_in', as: 'fillin_assessment'
@@ -49,6 +53,7 @@ Rails.application.routes.draw do
   get 'assessment/:id/show_team_grades', to: 'assessments#show_team_grades', as: 'show_team_grades'
   get 'assessment/:id/:team_id/get_ind_responses', to: 'assessments#get_ind_responses', as: 'get_ind_responses'
 
+  # Module routes
   resources :uni_modules
   get 'uni_modules/:id/show_all_students', to: 'uni_modules#show_all_students', as: 'show_all_students'
 
