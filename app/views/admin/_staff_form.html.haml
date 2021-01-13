@@ -1,0 +1,13 @@
+-# frozen_string_literal: true
+= simple_form_for(@user, url: 'new_staff_process') do |f|
+  = f.error_notification
+  = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+
+  .form-inputs
+    = f.input :username, label: 'CiCS Username'
+    = f.input :email, label: 'Email Address'
+    = f.input :display_name, label: "Display Name (optional)"
+    = f.input :admin, label: "Admin?"
+
+  .form-actions
+    = f.button :submit, "#{@btn_text} #{@user_type}", class: 'btn btn-lg btn-primary'

@@ -1,0 +1,8 @@
+%h2= "New #{@user_type}"
+- if @user_type == "Staff"
+  = render 'staff_form'
+  = link_to "Back to Staff List", admin_staff_path, class: "btn btn-warning"
+- else
+  = render 'student_form'
+  = link_to "Back to Student List", admin_students_path, class: "btn btn-warning"
+

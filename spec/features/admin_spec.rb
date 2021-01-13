@@ -1,4 +1,5 @@
 require "rails_helper"
+require 'cancan/matchers'
 
 describe "Viewing admin pages" do
   before(:each) do
@@ -10,7 +11,13 @@ describe "Viewing admin pages" do
 
   specify "I can only view the admin pages as an admin" do
     admin = create :user, admin: true, staff: true
+    ability = Ability.new(admin)
     login_as admin, scope: :user
+
+    expect(ability).to be_able_to :students, :admin
+    expect(ability).to be_able_to :staff, :admin
+    expect(ability).to be_able_to :modules, :admin
+    expect(ability).to be_able_to :teams, :admin
 
     mod = UniModule.first
     t = Team.first
@@ -36,9 +43,117 @@ describe "Viewing admin pages" do
   specify "I cannot view the admin pages as a non-admin" do
     staff = User.where(staff: true, admin: false).first
     login_as staff, scope: :user
+    ability = Ability.new(staff)
 
-    expect{
-      visit "/admin/modules"
-    }.to raise_error ActionController::RoutingError
+    expect(ability).to_not be_able_to :students, :admin
+    expect(ability).to_not be_able_to :staff, :admin
+    expect(ability).to_not be_able_to :modules, :admin
+    expect(ability).to_not be_able_to :teams, :admin
+  end
+end
+
+describe "Manually adding users" do
+  before(:each) do
+    admin = create :user, staff: true, admin: true
+  end
+
+  specify "As an admin I can add a new student manually" do
+    admin = User.where(admin: true).first
+    login_as admin, scope: :user
+    ability = Ability.new(admin)
+
+    expect(ability).to be_able_to :add_new_student, :admin
+    expect(ability).to be_able_to :new_student_process, :admin
+
+    visit "/admin/students"
+    click_link "Add New Student"
+
+    fill_in "CiCS Username", with: "zzz12pl"
+    fill_in "Email Address", with: "madeup12@sheffield.ac.uk"
+    fill_in "Display Name (optional)", with: "Bob Smith"
+
+    click_button "Create Student"
+
+    # Should see the new user in the students table after submission
+    within(:css, '#userTable'){
+      expect(page).to have_content "Bob Smith"
+    }
+
+    # Login as new user to test permissions
+    new_user = User.where(username: "zzz12pl").first
+    ability = Ability.new(new_user)
+
+    expect(ability).to_not be_able_to :create, UniModule
+    expect(ability).to_not be_able_to :student, :admin
+  end
+
+  specify "As an admin I can add a new staff member manually" do
+    admin = User.where(admin: true).first
+    login_as admin, scope: :user
+    ability = Ability.new(admin)
+
+    expect(ability).to be_able_to :add_new_staff, :admin
+    expect(ability).to be_able_to :new_staff_process, :admin
+
+    visit "/admin/staff"
+    click_link "Add New Staff"
+
+    fill_in "CiCS Username", with: "zzz12pl"
+    fill_in "Email Address", with: "madeup12@sheffield.ac.uk"
+    fill_in "Display Name (optional)", with: "Bob Smith"
+
+    click_button "Create Staff"
+
+    # Should see the new user in the students table after submission
+    within(:css, '#userTable'){
+      expect(page).to have_content "Bob Smith"
+    }
+
+    # Login as new user to test permissions
+    new_user = User.where(username: "zzz12pl").first
+    ability = Ability.new(new_user)
+
+    expect(ability).to be_able_to :create, UniModule
+    expect(ability).to_not be_able_to :student, :admin
+  end
+
+  specify "As an admin I can add a new admin user manually" do
+    admin = User.where(admin: true).first
+    login_as admin, scope: :user
+    ability = Ability.new(admin)
+
+    visit "/admin/staff"
+    click_link "Add New Staff"
+
+    fill_in "CiCS Username", with: "zzz12pl"
+    fill_in "Email Address", with: "madeup12@sheffield.ac.uk"
+    fill_in "Display Name (optional)", with: "Bob Smith"
+    check "Admin?"
+
+    click_button "Create Staff"
+
+    # Should see the new user in the students table after submission
+    within(:css, '#userTable'){
+      expect(page).to have_content "Bob Smith"
+    }
+
+    # Login as new user to test permissions
+    new_user = User.where(username: "zzz12pl").first
+    ability = Ability.new(new_user)
+
+    expect(ability).to be_able_to :create, UniModule
+    expect(ability).to be_able_to :student, :admin
+  end
+
+  specify "As a non-admin I cannot add a new user" do
+    admin = create :user, admin: false, staff: true, username: "zzz12er", email: "something@gmail.com"
+    login_as admin, scope: :user
+    ability = Ability.new(admin)
+
+    expect(ability).to_not be_able_to :add_new_student, :admin
+    expect(ability).to_not be_able_to :add_new_staff, :admin
+    expect(ability).to_not be_able_to :new_student_process, :admin
+    expect(ability).to_not be_able_to :new_staff_process, :admin
+
   end
 end

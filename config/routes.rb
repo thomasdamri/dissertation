@@ -29,6 +29,10 @@ Rails.application.routes.draw do
   get 'admin/teams'
   post 'admin/make_student'
   post 'admin/make_staff'
+  get 'admin/add_new_student', to: 'admin#add_new_student', as: 'add_new_student'
+  post 'admin/new_student_process', to: 'admin#new_student_process', as: 'new_student_process'
+  get 'admin/add_new_staff', to: 'admin#add_new_staff', as: 'add_new_staff'
+  post 'admin/new_staff_process', to: 'admin#new_staff_process', as: 'new_staff_process'
 
   # I have to give the same url 2 names because Rails
   get 'assessment/:id', to: 'assessments#show', as: 'assessments'
