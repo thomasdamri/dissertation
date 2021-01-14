@@ -34,6 +34,11 @@ class HomeController < ApplicationController
 
   def account
     @title = "My Account"
+
+    # Find all modules a student participates in
+    unless current_user.staff
+      @uni_modules = UniModule.where(id: current_user.teams.pluck(:uni_module_id))
+    end
   end
 
   def about

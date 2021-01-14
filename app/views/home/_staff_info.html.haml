@@ -1,0 +1,9 @@
+.card.col6#modInfo
+  .card-body
+    %h3 My Modules
+    %ul.list-group
+      - if current_user.uni_modules.length == 0
+        %li.list-group-item.list-group-item-secondary You are not currently involved in any modules
+      - else
+        - current_user.uni_modules.each do |mod|
+          %li.list-group-item= link_to mod.title, uni_module_path(mod)
