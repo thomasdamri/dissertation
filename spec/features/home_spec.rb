@@ -33,6 +33,9 @@ describe "Viewing the My Account page" do
     }
   end
 
+end
+
+describe "Viewing the student dashboard" do
   specify "The badge colours for students' assessments are correct", js: true do
     u = create :user, staff: false
     login_as u, scope: :user
@@ -41,7 +44,7 @@ describe "Viewing the My Account page" do
     t = create :team, uni_module: mod
     create :student_team, user: u, team: t
 
-    visit "/home/account"
+    visit "/home/student_home"
 
     # Find the list item for the module
     li = page.find('li', text: mod.title)

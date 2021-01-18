@@ -8,17 +8,7 @@ class HomeController < ApplicationController
   def student_home
     @title = "Dashboard"
 
-    @current_assess = []
-    @completed_assess = []
-    my_assess = Assessment.where(uni_module: UniModule.where(teams: current_user.teams))
-
-    my_assess.each do |assess|
-      if assess.date_closed.past?
-        @completed_assess << assess
-      else
-        @current_assess << assess
-      end
-    end
+    @teams = current_user.teams
 
   end
 
@@ -35,9 +25,9 @@ class HomeController < ApplicationController
   def account
     @title = "My Account"
 
-    # Find all modules a student participates in
+    # Find all teams a student is part of
     unless current_user.staff
-      @uni_modules = UniModule.where(id: current_user.teams.pluck(:uni_module_id))
+      @teams = current_user.teams
     end
   end
 

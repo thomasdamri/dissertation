@@ -440,6 +440,29 @@ describe 'Filling in an assessment' do
 
 end
 
+describe "Viewing the assessment page" do
+  specify "Only associated staff should be able to view the assessment page" do
+    staff = create :user, staff: true
+    other_staff = create :user, staff: true, username: "zzz12lp", email: "l@gmail.com"
+    student = create :user, staff: false, username: "zzz12ty", email: "t@gmail.com"
+
+    mod = create :uni_module
+    t1 = create :team, uni_module: mod
+    create :staff_module, user: staff, uni_module: mod
+    create :student_team, team: t1, user: student
+
+    a = create :assessment, uni_module: mod
+
+    ability = Ability.new(staff)
+    expect(ability).to be_able_to :read, a
+    ability = Ability.new(other_staff)
+    expect(ability).to_not be_able_to :read, a
+    ability = Ability.new(student)
+    expect(ability).to_not be_able_to :read, a
+
+  end
+end
+
 describe 'Viewing and modifying assessment results' do
   before(:each) do
     staff = create :user, staff: true

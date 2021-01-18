@@ -1,13 +1,2 @@
 %h1 Student Dashboard
-%h3 Current Teams
-%ul#teams
-  - current_user.teams.each do |team|
-    %li= link_to team.uni_module.name + " - Team " + team.number.to_s, team_path(team)
-%h3 Current Assessments
-%ul#curr_assess
-  - @current_assess.each do |ca|
-    %li= "#{ca.uni_module.title} - #{ca.name}"
-%h3 Completed Assessments
-%ul#compl_assess
-  - @completed_assess.each do |com_assess|
-    %li= "#{com_assess.uni_module.title} - #{com_assess.name}"
+= render 'student_info'

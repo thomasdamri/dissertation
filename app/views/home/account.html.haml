@@ -1,25 +1,19 @@
 %h2 My Account
-.row
-  - if current_user.staff
-    = render 'home/staff_info'
-  - else
-    = render "home/student_info"
-  .card.col-6#accInfo
-    .card-body
-      %h3 Account Information
-      %strong Username:
-      %p= current_user.username
-      %strong Display Name:
-      %p= current_user.real_display_name
-      %strong Email Address:
-      %p= current_user.email
-      %strong User Type:
-      - if current_user.staff
-        - user_type = "Staff"
-      - else
-        - user_type = "Student"
+.card.col-6#accInfo
+  .card-body
+    %h3 Account Information
+    %strong Username:
+    %p= current_user.username
+    %strong Display Name:
+    %p= current_user.real_display_name
+    %strong Email Address:
+    %p= current_user.email
+    %strong User Type:
+    - if current_user.staff
+      - user_type = "Staff"
+    - else
+      - user_type = "Student"
 
-      - if current_user.admin
-        - user_type << " (Admin)"
-      %p= user_type
-    
+    - if current_user.admin
+      - user_type << " (Admin)"
+    %p= user_type
