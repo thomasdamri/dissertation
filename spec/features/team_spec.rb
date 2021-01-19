@@ -54,6 +54,11 @@ describe "Uploading team assignments" do
     ability = Ability.new(other_staff)
     expect(ability).to_not be_able_to :upload_teams, mod
     expect(ability).to_not be_able_to :team_process, mod
+
+    # Cannot see the team assignment card
+    visit "/uni_modules/#{mod.id}"
+
+    expect(page).to_not have_content "Team Assignments"
   end
 
   specify "As a student I cannot upload a team assignment" do

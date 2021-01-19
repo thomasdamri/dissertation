@@ -1,13 +1,15 @@
-- if @uni_module.teams.length > 0
-  %table.table.table-hover.table-bordered.table-striped
-    %tr
-      %th Team
-      %th
+%table.table.table-hover.table-bordered.table-striped
+  %tr
+    %th Team
+    %th Number of students
 
+  - if @uni_module.teams.length > 0
     %tbody
       - @uni_module.teams.each do |team|
         %tr
-          %td= "Team " + team.number
-          %td= link_to "View", '#'
-- else
-  No teams
+          %td= "Team #{team.number}"
+          %td= team.student_teams.count
+          %td= link_to "View", team, class: 'btn btn-primary'
+  - else
+    %tr
+      %td{colspan: 3} No teams

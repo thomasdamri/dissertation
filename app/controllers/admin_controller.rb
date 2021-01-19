@@ -7,19 +7,19 @@ class AdminController < ApplicationController
   def students
     authorize! :students, :admin
     @title = "Admin Students List"
-    @users = User.where(staff: false)
+    @users = User.where(staff: false).order(:username)
   end
 
   # List of all staff
   def staff
     @title = "Admin Staff List"
-    @users = User.where(staff: true)
+    @users = User.where(staff: true).order(:username)
   end
 
   # List of all modules
   def modules
     @title = "Admin Modules List"
-    @uni_modules = UniModule.all
+    @uni_modules = UniModule.all.order(:code)
   end
 
   # List of all teams

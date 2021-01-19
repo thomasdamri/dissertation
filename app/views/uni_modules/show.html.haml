@@ -25,17 +25,19 @@
 
 %hr
 %h2 Teams
-.card
-  .card-header
-    %h4.card-title Team Assignments
-  .card-body
-    - # Display the upload assignment button if no team assignments yet, otherwise display delete button
-    - if @teams.count == 0
-      = link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info", remote: true
-    - else
-      = link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
+- # Only display the button card if staff have permission to access it
+- if can? :upload_teams, @uni_module
+  .card
+    .card-header
+      %h4.card-title Team Assignments
+    .card-body
+      - # Display the upload assignment button if no team assignments yet, otherwise display delete button
+      - if @teams.count == 0
+        = link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info", remote: true
+      - else
+        = link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
 
-= render 'admin/team_list'
+= render 'uni_modules/team_list'
 
 - if can? :edit, @uni_module
   = link_to 'Edit', edit_uni_module_path(@uni_module)

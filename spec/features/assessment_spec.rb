@@ -851,6 +851,10 @@ describe "Uploading team grades" do
     expect(ability).to be_able_to :process_grades, assess
 
     visit "/assessment/#{assess.id}"
+
+    # Cannot send grade emails prior to team grade upload
+    expect(page).to_not have_content 'Send grades via email'
+
     click_link "Upload Team Grades"
     attach_file "spec/uploads/grades.csv"
     click_button "Import"
@@ -860,6 +864,7 @@ describe "Uploading team grades" do
       expect(page).to have_content 70
       expect(page).to have_content 57
     }
+
   end
 
   specify "If a file is not selected in the team grade form, the user is informed to upload one", js: true do
