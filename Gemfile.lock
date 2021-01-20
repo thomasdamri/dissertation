@@ -119,9 +119,6 @@ GEM
       rails (>= 4.2.0)
       settingslogic (>= 2.0.9)
       sheffield_ldap_lookup (>= 0.0.4)
-    epi_deploy (2.0.11)
-      git (~> 1.5)
-      slop (~> 3.6)
     epi_js (1.0.15)
       coffee-rails (>= 3.2)
       railties (>= 3.0)
@@ -135,8 +132,6 @@ GEM
       factory_bot (~> 6.1.0)
       railties (>= 5.0.0)
     ffi (1.14.2)
-    git (1.8.1)
-      rchardet (~> 1.8)
     globalid (0.4.2)
       activesupport (>= 4.2.0)
     haml (5.2.1)
@@ -224,7 +219,6 @@ GEM
     rb-fsevent (0.10.4)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
-    rchardet (1.8.0)
     regexp_parser (1.8.2)
     responders (3.0.1)
       actionpack (>= 5.0)
@@ -281,7 +275,6 @@ GEM
       simplecov_json_formatter (~> 0.1)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.2)
-    slop (3.6.0)
     spring (2.1.1)
     spring-watcher-listen (2.0.1)
       listen (>= 2.7, < 4.0)
@@ -321,6 +314,7 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    will_paginate (3.1.8)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.4.2)
@@ -339,7 +333,6 @@ DEPENDENCIES
   delayed_job_active_record
   devise
   epi_cas!
-  epi_deploy!
   epi_js!
   factory_bot_rails
   haml-rails (~> 2.0)
@@ -364,6 +357,7 @@ DEPENDENCIES
   web-console (>= 3.3.0)
   webdrivers
   webpacker (~> 4.0)
+  will_paginate (~> 3.1.0)
 
 RUBY VERSION
    ruby 2.6.6p146

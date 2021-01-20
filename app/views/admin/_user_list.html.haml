@@ -1,3 +1,6 @@
+- if @users.length > 0
+  %nav{"aria-label": "Student list navigation"}
+    = will_paginate @users
 %table.table.table-bordered.table-striped.table-hover#userTable
   %thead
     %tr

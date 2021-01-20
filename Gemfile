@@ -6,7 +6,6 @@ ruby '2.6.6'
 source "https://gems.shefcompsci.org.uk" do
   gem 'airbrake'
   gem 'rubycas-client'
-  gem 'epi_deploy', group: :development
   gem 'capybara-select2', group: :test
   gem 'epi_js'
   gem 'epi_cas'
@@ -43,12 +42,18 @@ gem "letter_opener", :group => :development
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '>= 1.4.2', require: false
 
+# Paginating large lists of db models
+gem 'will_paginate', '~> 3.1.0'
+
+# Login authentication
 gem 'devise'
+# Authorization
 gem 'cancancan'
+# Use HAML files instead of ERBs
 gem 'haml-rails', '~> 2.0'
-
+# Provides helpers for rails forms
 gem 'simple_form'
-
+# Provides easy interaction with TSV files (for CEIS output uploading)
 gem 'tsv'
 
 group :development, :test do

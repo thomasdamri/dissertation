@@ -7,25 +7,25 @@ class AdminController < ApplicationController
   def students
     authorize! :students, :admin
     @title = "Admin Students List"
-    @users = User.where(staff: false).order(:username)
+    @users = User.where(staff: false).order(:username).paginate(page: params[:page])
   end
 
   # List of all staff
   def staff
     @title = "Admin Staff List"
-    @users = User.where(staff: true).order(:username)
+    @users = User.where(staff: true).order(:username).paginate(page: params[:page])
   end
 
   # List of all modules
   def modules
     @title = "Admin Modules List"
-    @uni_modules = UniModule.all.order(:code)
+    @uni_modules = UniModule.all.order(:code).paginate(page: params[:page])
   end
 
   # List of all teams
   def teams
     @title = "Admin Teams List"
-    @teams = Team.order(:uni_module_id, :number)
+    @teams = Team.order(:uni_module_id, :number).paginate(page: params[:page])
   end
 
   # Path for making the current user a staff member
