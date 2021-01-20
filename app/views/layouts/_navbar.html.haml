@@ -7,10 +7,16 @@
       %li.nav-item.active
         %a.nav-link{:href => "/"}
           Home
-      %li.nav-item.active
-        %a.nav-link{:href => home_student_home_url} Student Dashboard
-      %li.nav-item.active
-        %a.nav-link{:href => home_staff_home_url} Staff Dashboard
+      - unless current_user.nil?
+        - if current_user.staff
+          %li.nav-item.active
+            %a.nav-link{:href => home_staff_home_url} Dashboard
+        -else
+          %li.nav-item.active
+            %a.nav-link{:href => home_student_home_url} Dashboard
+        - if current_user.admin
+          %li.nav-item.active
+            %a.nav-link{:href => admin_dashboard_path} Admin Dashboard
       %li.nav-item.active
         %a.nav-link{:href => about_url} About
       %li.nav-item.active

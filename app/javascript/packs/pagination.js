@@ -1,5 +1,4 @@
 $(document).on('turbolinks:load', function(){
-    console.log("Hello")
     $('.pagination > span').addClass('page-item');
     $('.pagination > a').addClass('page-item');
     $('.pagination > a').addClass('page-link');

@@ -19,7 +19,7 @@ class Team < ApplicationRecord
 
   # Returns a string which can be used in email clients to email the entire team
   def group_email_link
-    link = "mailto:"
+    link = ""
     users.each do |u|
       link << u.email << ","
     end

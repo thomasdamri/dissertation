@@ -1,7 +1,11 @@
 class AdminController < ApplicationController
   before_action :authenticate_user!
-  # No resource associated with this controller, cancancan shouldnt authorize
+  # Authorise with cancancan, without a db model
   authorize_resource class: false
+
+  def dashboard
+    @title = "Admin Dashboard"
+  end
 
   # List of all students
   def students

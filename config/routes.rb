@@ -29,6 +29,7 @@ Rails.application.routes.draw do
   post 'teams/:id/:assess/update_ind_grades', to: 'teams#update_ind_grades', as: 'update_ind_grades'
 
   # Admin routes
+  get 'admin/dashboard'
   get 'admin/staff'
   get 'admin/students'
   get 'admin/modules'
