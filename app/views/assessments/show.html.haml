@@ -32,9 +32,4 @@
 = render 'assessments/grade_table'
 
 %hr
-
-%p Note: In a development environment this button will not send emails, but will instead open them as browser tabs.
-Students will only have an email sent if they have a team grade AND an individual weighting for this assessment.
-Depending on how many students have grades and weightings, this might open A LOT of tabs.
-%hr
-= link_to 'Back to module', @assessment.uni_module
+= link_to 'Back to module', @assessment.uni_module, class: 'btn btn-secondary'

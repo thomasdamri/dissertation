@@ -196,6 +196,7 @@ class AssessmentsController < ApplicationController
   end
 
 
+  # Tells the StudentMailer to email out grades
   def send_score_email
     assessment = Assessment.find(params['id'])
     teams = assessment.uni_module.teams.pluck(:id)
@@ -209,13 +210,13 @@ class AssessmentsController < ApplicationController
 
       puts "#{u.email} - #{team_grade.nil?}, #{ind_weight.nil?}"
 
+      # Only send the email to the student if they have a team grade and an individual weighting
       unless team_grade.nil? or ind_weight.nil?
         StudentMailer.score_email(u, assessment, team_grade, ind_weight).deliver
       end
     end
 
-    redirect_to assessment.uni_module, notice: "Emails sent successfully"
-
+    redirect_to assessment, notice: "Emails sent successfully"
   end
 
   # AJAX call to render a modal with the individual responses to each criteria

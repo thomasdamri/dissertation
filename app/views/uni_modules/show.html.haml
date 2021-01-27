@@ -4,20 +4,22 @@
 
 .card.card-body#modInfo
   .row
-    .col-1
     .col-5
       %h3 Module Staff
       %ul.list-group
         - @uni_module.staff_modules.each do |sm|
           %li.list-group-item= link_to sm.user.real_display_name, sm.user.email_link
-    .col-1
+    .col-2
     .col-5
       %h3 Other Information
       %ul.list-group
         %li.list-group-item= "Students enrolled: " + @students.to_s
         %li.list-group-item= "Number of teams: " + @teams.count.to_s
         %li.list-group-item= link_to "Show All Students", show_all_students_path(@uni_module), remote: true
-    .col-1
+  .row
+    .col-3
+      - if can? :edit, @uni_module
+        = link_to 'Edit details', edit_uni_module_path(@uni_module), class: "btn btn-info"
 
 %h2 Assessments
 = link_to 'Add new peer assessment', new_assessment_path, class: 'btn btn-primary'
@@ -38,6 +40,3 @@
         = link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
 
 = render 'uni_modules/team_list'
-
-- if can? :edit, @uni_module
-  = link_to 'Edit', edit_uni_module_path(@uni_module)
