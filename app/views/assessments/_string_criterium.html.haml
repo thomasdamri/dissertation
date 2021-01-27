@@ -2,7 +2,12 @@
   %h3 Text Response Question
   - single_collection = {"Single Answer" => 1, "Team Answer" => 0}
   = f.input :response_type, as: :hidden, input_html: { value: Criterium.string_type }
-  = f.input :title, as: :string, label: 'Field Title'
-  = f.input :single, as: :radio_buttons, collection: single_collection, label: 'Single or Team answer?', input_html: { class: 'single'}
+  .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "The question/criteria shown to students when they fill in the form"}
+    = f.input :title, as: :string, label: 'Field Title'
+  %hr
+  .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Single: students provide one response. Team: Students provide one response per team member"}
+    = f.input :single, as: :radio_buttons, collection: single_collection, label: "Single or Team answer?", input_html: { class: 'single'}
   = f.hidden_field :_destroy
-  = link_to 'Remove Question', '#', class: 'remove_fields'
+  .row
+    .col-3
+      = link_to 'Remove Question', '#', class: 'remove_fields remove_crit btn btn-danger'

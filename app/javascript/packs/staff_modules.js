@@ -21,8 +21,17 @@ function disableWeightBox(formElement){
 
 $(document).on('turbolinks:load', function(){
 
+    // For removing staff members from modules
     $('form').on('click', '.remove_fields', function(event){
         $(this).prev('input[type=hidden]').val('1');
+        $(this).closest('.nested-fields').hide();
+        event.preventDefault();
+    });
+
+    // Deal with criteria field removing differently, due to different styling
+    $('form').on('click', '.remove_fields.remove_crit', function(event){
+        // Find the closets hidden element (must first navigate out of styling divs)
+        $(this).closest('.row').prev('input[type=hidden]').val('1');
         $(this).closest('.nested-fields').hide();
         event.preventDefault();
     });

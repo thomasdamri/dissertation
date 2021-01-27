@@ -82,8 +82,8 @@ describe 'Creating an assessment' do
     within(input_box){
       expect(page).to have_content "Decimal Number Response Question"
       fill_in "Field Title", with: "Decimal Question"
-      fill_in "Min value", with: "1.7"
-      fill_in "Max value", with: "10.3"
+      fill_in "Minimum Value", with: "1.7"
+      fill_in "Maximum Value", with: "10.3"
       choose "Team Answer"
       choose "Yes"
       fill_in "Relative Weighting", with: "1"
@@ -148,8 +148,8 @@ describe 'Creating an assessment' do
     within(input_box){
       expect(page).to have_content "Decimal Number Response Question"
       fill_in "Field Title", with: "Decimal Question"
-      fill_in "Min value", with: "1.7"
-      fill_in "Max value", with: "10.3"
+      fill_in "Minimum Value", with: "1.7"
+      fill_in "Maximum Value", with: "10.3"
       choose "Team Answer"
       choose "Yes"
       fill_in "Relative Weighting", with: "1"

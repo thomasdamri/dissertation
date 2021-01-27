@@ -4,9 +4,14 @@
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
 
   .form-inputs
+    %h2 Module Information
     = f.input :code, label: 'Module Code'
     = f.input :name, label: 'Module Name'
 
+    %h2 Staff Members
+    %p Add additional staff members who are associated with the module.
+    - if @btn_text == "Create"
+      %p You are automatically added as a staff member on form submission and do not need to add yourself
     = f.simple_fields_for :staff_modules do |sm|
       = render 'staff_fields', f: sm
 
