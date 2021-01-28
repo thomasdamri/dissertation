@@ -12,6 +12,10 @@
 #
 FactoryBot.define do
   factory :worklog_response do
-    
+    status { 0 }
+  end
+
+  factory :blank_worklog_response, class: 'WorklogResponse' do
+
   end
 end

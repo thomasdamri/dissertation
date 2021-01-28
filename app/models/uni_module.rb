@@ -23,8 +23,15 @@ class UniModule < ApplicationRecord
   # Many students will submit many worklogs for this module
   has_many :worklogs
 
+  # Each module must have a unique name and code
   validates :name, presence: true, uniqueness: true
   validates :code, presence: true, uniqueness: true
+  # Each module must have a start and end date
+  validates :start_date, presence: true
+  validates :end_date, presence: true
+
+  # Additonal validations for checking dates
+  validates_with UniModuleValidator
 
   def title
     code + " " + name

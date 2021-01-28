@@ -37,4 +37,13 @@ RSpec.describe UniModule, type: :model do
     expect(m2).to be_valid
   end
 
+  it 'is invalid with an end date after the start date' do
+    m = build :uni_module, start_date: Date.today, end_date: Date.yesterday
+    expect(m).to_not be_valid
+    m.end_date = Date.today
+    expect(m).to be_valid
+    m.end_date = Date.today + 1
+    expect(m).to be_valid
+  end
+
 end

@@ -71,4 +71,11 @@ RSpec.describe Criterium, type: :model do
     expect(c1).to be_valid
   end
 
+  it 'is invalid if the response_type is outside the allowed range' do
+    c1 = build(:criterium, assessment: Assessment.first, response_type: 550)
+    expect(c1).to_not be_valid
+    c1.response_type = Criterium.string_type
+    expect(c1).to be_valid
+  end
+
 end

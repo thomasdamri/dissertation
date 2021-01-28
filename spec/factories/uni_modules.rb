@@ -14,6 +14,8 @@ FactoryBot.define do
   factory :uni_module, class: 'UniModule' do
     name { 'Test Module' }
     code { 'TST1001' }
+    start_date { Date.today }
+    end_date { Date.today + 50 }
   end
 
   factory :empty_uni_module, class: 'UniModule' do

@@ -40,8 +40,9 @@ class WorklogResponse < ApplicationRecord
   belongs_to :user
 
   # A response must have a status, an associated worklog, and a user
+  # The status must be within the set range
+  validates :status, presence: true, inclusion: @@accept..@@resolved
   # Each user can respond to a worklog only once
-  validates :status, presence: true
   validates :worklog_id, presence: true, uniqueness: {scope: :user}
   validates :user_id, presence: true
 end

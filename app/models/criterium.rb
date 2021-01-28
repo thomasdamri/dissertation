@@ -80,12 +80,16 @@ class Criterium < ApplicationRecord
   belongs_to :assessment
   has_many :assessment_results, dependent: :destroy
 
+  # Must have a title
   validates :title, presence: true
-  validates :response_type, presence: true
+  # Response type must exist and must be within range
+  validates :response_type, presence: true, inclusion: @@string..@@bool
 
+  # Single and assessed cannot be nil
   validates :single, inclusion: {in: [true, false]}
   validates :assessed, inclusion: {in: [true, false]}
 
+  # Additional validations involving min + max values
   validates_with CriteriumValidator
 
 end

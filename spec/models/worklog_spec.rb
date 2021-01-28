@@ -2,16 +2,51 @@
 #
 # Table name: worklogs
 #
-#  id         :bigint           not null, primary key
-#  author_id  :bigint
-#  fill_date  :date
-#  content    :text(65535)
-#  override   :text(65535)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :bigint           not null, primary key
+#  author_id     :bigint
+#  fill_date     :date
+#  content       :text(65535)
+#  override      :text(65535)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  uni_module_id :bigint
 #
 require 'rails_helper'
 
 RSpec.describe Worklog, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  before(:each) do
+    staff = create :user, staff: true
+    mod = create :uni_module
+    create :staff_module, user: staff, uni_module: mod
+    t = create :team, uni_module: mod
+    student = create :user, staff: false, username: "zzz12pl", email: "l@gmail.com"
+    create :student_team, team: t, user: student
+  end
+
+  it 'is valid with valid attributes' do
+    mod = UniModule.first
+    student = User.where(staff: false).first
+    w = build :worklog, author: student, uni_module: mod
+    expect(w).to be_valid
+  end
+
+  it 'is invalid with blank attributes' do
+    w = build(:blank_worklog)
+    expect(w).to_not be_valid
+  end
+
+  describe '#is_overridden?' do
+    it 'returns true when the override attribute is not nil' do
+      mod = UniModule.first
+      student = User.where(staff: false).first
+      w = build(:worklog, uni_module: mod, author: student)
+
+      # Override attribute is nil, should return false
+      expect(w.is_overridden?).to eq false
+
+      w.override = "Something else"
+      expect(w.is_overridden?).to eq true
+    end
+  end
+
 end

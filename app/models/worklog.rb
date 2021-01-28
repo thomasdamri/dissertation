@@ -2,13 +2,14 @@
 #
 # Table name: worklogs
 #
-#  id         :bigint           not null, primary key
-#  author_id  :bigint
-#  fill_date  :date
-#  content    :text(65535)
-#  override   :text(65535)
-#  created_at :datetime         not null
-#  updated_at :datetime         not null
+#  id            :bigint           not null, primary key
+#  author_id     :bigint
+#  fill_date     :date
+#  content       :text(65535)
+#  override      :text(65535)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  uni_module_id :bigint
 #
 class Worklog < ApplicationRecord
   # One user wrote the worklog about one module
@@ -19,7 +20,7 @@ class Worklog < ApplicationRecord
 
   # Returns true if the worklog has been overridden.
   # The override attribute is blank unless a staff member has overriden the worklog contents
-  def has_been_overridden?
+  def is_overridden?
     !override.nil?
   end
 
