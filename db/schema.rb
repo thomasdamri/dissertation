@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_09_131313) do
+ActiveRecord::Schema.define(version: 2021_01_28_134238) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "author_id"
@@ -97,6 +97,8 @@ ActiveRecord::Schema.define(version: 2020_12_09_131313) do
     t.string "code"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.date "start_date"
+    t.date "end_date"
   end
 
   create_table "users", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
@@ -123,6 +125,29 @@ ActiveRecord::Schema.define(version: 2020_12_09_131313) do
     t.index ["username"], name: "index_users_on_username"
   end
 
+  create_table "worklog_responses", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "worklog_id"
+    t.bigint "user_id"
+    t.integer "status"
+    t.text "reason"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["user_id"], name: "index_worklog_responses_on_user_id"
+    t.index ["worklog_id"], name: "index_worklog_responses_on_worklog_id"
+  end
+
+  create_table "worklogs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
+    t.bigint "author_id"
+    t.date "fill_date"
+    t.text "content"
+    t.text "override"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "uni_module_id"
+    t.index ["author_id"], name: "index_worklogs_on_author_id"
+  end
+
   add_foreign_key "assessment_results", "users", column: "author_id"
   add_foreign_key "assessment_results", "users", column: "target_id"
+  add_foreign_key "worklogs", "users", column: "author_id"
 end

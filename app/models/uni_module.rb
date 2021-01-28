@@ -7,6 +7,8 @@
 #  code       :string(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  start_date :date
+#  end_date   :date
 #
 class UniModule < ApplicationRecord
 
@@ -17,6 +19,9 @@ class UniModule < ApplicationRecord
   has_many :users, through: :staff_modules
   # Allows modules to add as many staff members as possible, and remove them as needed
   accepts_nested_attributes_for :staff_modules, reject_if: :all_blank, allow_destroy: true
+
+  # Many students will submit many worklogs for this module
+  has_many :worklogs
 
   validates :name, presence: true, uniqueness: true
   validates :code, presence: true, uniqueness: true

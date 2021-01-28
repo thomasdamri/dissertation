@@ -7,6 +7,8 @@
 #  code       :string(255)
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
+#  start_date :date
+#  end_date   :date
 #
 FactoryBot.define do
   factory :uni_module, class: 'UniModule' do

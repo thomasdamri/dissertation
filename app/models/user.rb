@@ -39,6 +39,11 @@ class User < ApplicationRecord
   # Has many weighting results (one per completed assessment)
   has_many :student_weightings, dependent: :destroy
 
+  # Each user will write many worklogs
+  has_many :worklogs, foreign_key: 'author_id', class_name: 'Worklog'
+  # Each user will respond to many worklogs
+  has_many :worklog_responses
+
   # Must have a username and email. Staff and admin booleans cannot be nil
   validates :username, presence: true, uniqueness: true
   validates :email, presence: true, uniqueness: true

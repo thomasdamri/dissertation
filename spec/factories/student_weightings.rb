@@ -9,7 +9,7 @@
 #  results_at_last_check :integer
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
-#  manual_set            :boolean
+#  manual_set            :boolean          default(FALSE)
 #
 FactoryBot.define do
   factory :student_weighting do
