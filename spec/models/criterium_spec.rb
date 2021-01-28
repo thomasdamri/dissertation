@@ -62,4 +62,13 @@ RSpec.describe Criterium, type: :model do
     expect(c1).to be_valid
   end
 
+  it 'is invalid when a boolean criterium has a missing label' do
+    c1 = build(:criterium, assessment: Assessment.first, min_value: nil, max_value: nil, response_type: Criterium.bool_type)
+    expect(c1).to_not be_valid
+    c1.min_value = "Yes"
+    expect(c1).to_not be_valid
+    c1.max_value = "No"
+    expect(c1).to be_valid
+  end
+
 end
