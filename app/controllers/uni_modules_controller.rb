@@ -183,6 +183,7 @@ class UniModulesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def uni_module_params
-      params.require(:uni_module).permit(:name, :code, staff_modules_attributes: [:id, :user_id, :_destroy])
+      params.require(:uni_module).permit(:name, :code, :start_date, :end_date,
+                                         staff_modules_attributes: [:id, :user_id, :_destroy])
     end
 end
