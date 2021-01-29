@@ -57,6 +57,11 @@ Rails.application.routes.draw do
   # Module routes
   resources :uni_modules
   get 'uni_modules/:id/show_all_students', to: 'uni_modules#show_all_students', as: 'show_all_students'
+  # Worklog routes
+  get 'worklogs/:team/new_worklog', to: 'worklogs#new_worklog', as: 'new_worklog'
+  post 'worklogs/:team/process_worklog', to: 'worklogs#process_worklog', as: 'process_worklog'
+  get 'worklogs/:team/review_worklogs', to: 'worklogs#review_worklogs', as: 'review_worklogs'
+  get 'worklogs/:team/display_worklogs', to: 'worklogs#display_worklogs', as: 'display_worklogs'
 
   resources :teams
 end

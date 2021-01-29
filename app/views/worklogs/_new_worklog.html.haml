@@ -1,0 +1,16 @@
+.modal.fade#newWorklogModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "newWorklogModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#newWorklogModalLabel= "New worklog for week"
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        Please enter a brief summary of what work you have completed between
+        = form_tag({action: 'process_worklog'}) do |f|
+          = text_area_tag 'content', '', required: true
+          %br
+          = submit_tag 'Submit', class: 'btn btn-primary'
+    .modal-footer
+      %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+        Close
