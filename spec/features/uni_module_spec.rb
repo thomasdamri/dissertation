@@ -18,6 +18,14 @@ describe "Creating a module" do
     fill_in "Module Code", with: "TST1001"
     fill_in "Module Name", with: "Test Module"
 
+    select Date.today.strftime("%Y"), from: "uni_module_start_date_1i"
+    select Date.today.strftime("%B"), from: "uni_module_start_date_2i"
+    select Date.today.strftime("%-d"), from: "uni_module_start_date_3i"
+    new_date = Date.today + 90
+    select new_date.strftime("%Y"), from: "uni_module_end_date_1i"
+    select new_date.strftime("%B"), from: "uni_module_end_date_2i"
+    select new_date.strftime("%-d"), from: "uni_module_end_date_3i"
+
     click_link "Add Staff Member"
 
     staff_fields = page.all('.staff-fields').last

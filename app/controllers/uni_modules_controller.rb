@@ -34,6 +34,7 @@ class UniModulesController < ApplicationController
     @btn_text = "Create"
 
     if @uni_module.save
+      @uni_module.ensure_mondays
       redirect_to @uni_module, notice: 'Module was successfully created.'
     else
       render :new
@@ -61,6 +62,7 @@ class UniModulesController < ApplicationController
     end
 
     if @uni_module.update(uni_module_params)
+      @uni_module.ensure_mondays
       redirect_to @uni_module, notice: 'Uni module was successfully updated.'
     else
       render :edit

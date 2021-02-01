@@ -30,11 +30,25 @@ class UniModule < ApplicationRecord
   validates :start_date, presence: true
   validates :end_date, presence: true
 
-  # Additonal validations for checking dates
+  # Additional validations for checking dates
   validates_with UniModuleValidator
 
   def title
     code + " " + name
+  end
+
+  # Ensures start_date and end_date are mondays, so they mark the beginning of the week where logs start/end
+  def ensure_mondays
+    unless self.start_date.nil? or self.end_date.nil?
+      # Don't set it to previous monday if already a monday
+      unless self.start_date.monday?
+        self.start_date = self.start_date.prev_occurring(:monday)
+      end
+      unless self.end_date.monday?
+        self.end_date = self.end_date.prev_occurring(:monday)
+      end
+      save
+    end
   end
 
 end
