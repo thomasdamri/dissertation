@@ -51,4 +51,9 @@ class UniModule < ApplicationRecord
     end
   end
 
+  # Returns true if the team specified has worklogs for the week specified
+  def has_worklogs?(team, week)
+
+  end
+
 end

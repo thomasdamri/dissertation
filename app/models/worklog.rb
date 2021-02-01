@@ -24,6 +24,17 @@ class Worklog < ApplicationRecord
     !override.nil?
   end
 
+  # Ensures fill_date is a monday, so it marks the beginning of the week where log was filled in
+  def ensure_mondays
+    unless self.fill_date.nil?
+      # Don't set it to previous monday if already a monday
+      unless self.fill_date.monday?
+        self.fill_date = self.fill_date.prev_occurring(:monday)
+      end
+      save
+    end
+  end
+
   # A worklog must have a date, an author, and a module
   validates :fill_date, presence: true
   validates :author_id, presence: true

@@ -62,6 +62,7 @@ Rails.application.routes.draw do
   post 'worklogs/:team/process_worklog', to: 'worklogs#process_worklog', as: 'process_worklog'
   get 'worklogs/:team/review_worklogs', to: 'worklogs#review_worklogs', as: 'review_worklogs'
   get 'worklogs/:team/display_worklogs', to: 'worklogs#display_worklogs', as: 'display_worklogs'
+  get 'worklogs/:team/:weeks/display_log', to: 'worklogs#display_log', as: 'display_log'
 
   resources :teams
 end

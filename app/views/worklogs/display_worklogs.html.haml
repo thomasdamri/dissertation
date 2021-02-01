@@ -1,0 +1,15 @@
+#putModalHere
+%h1 Viewing all work logs
+= link_to "Back to team", @team, class: "btn btn-secondary"
+%ul.list-group#weekList
+  - date = @team.uni_module.start_date
+  - end_date = @team.uni_module.end_date
+  - # A backup counter in case the date counter screws up
+  - week_count = 0
+  - while date <= end_date and week_count < 100
+    - if date > Date.today
+      %li.list-group-item= "Week beginning: #{date.strftime("%d/%m/%Y")}"
+    - else
+      %li.list-group-item= link_to "Week beginning: #{date.strftime("%d/%m/%Y")}", display_log_path(@team, week_count), remote: true
+    - date = date + 7
+    - week_count += 1

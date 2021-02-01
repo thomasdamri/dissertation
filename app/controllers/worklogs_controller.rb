@@ -27,22 +27,48 @@ class WorklogsController < ApplicationController
       return redirect_to @team
     end
 
-    # Create new worklog
-    last_mon = Date.today.prev_occurring :monday
-    Worklog.create(author: current_user, uni_module: @uni_module, fill_date: last_mon)
+    # Check user actually entered content into the worklog
+    if params["content"].nil?
+      return redirect_to @team, notice: "Work log content cannot be blank"
+    end
 
-    redirect_to @team, notice: 'Work log uploaded succcessfully'
+    # Create new worklog and ensure fill date is a monday
+    wl = Worklog.create(author: current_user, uni_module: @uni_module, fill_date: Date.today, content: params['content'])
+    wl.ensure_mondays
+
+    redirect_to @team, notice: 'Work log uploaded successfully'
 
   end
 
   # Page for reviewing the past week's worklog
   def review_worklogs
-
+    @title = "Review work logs"
   end
 
   # Page for showing all worklogs for a team
   def display_worklogs
+    @title = "Show all work logs"
+    @team = Team.find(params['team'])
+  end
 
+  # AJAX call for showing a modal of one weeks worth of logs
+  def display_log
+    @team = Team.find(params['team'])
+    @date = @team.uni_module.start_date + (7 * params["weeks"].to_i)
+
+    # Stop date going past module end date
+    if @date > @team.uni_module.end_date
+      return redirect_to display_worklogs_path(@team), notice: "Error: Invalid date"
+    end
+
+    # Find all logs written in the given week by this team
+    @logs = Worklog.where(author: @team.users, fill_date: @date, uni_module: @team.uni_module)
+    puts "------"
+    puts @logs.where(author: @team.users.first)
+
+    respond_to do |format|
+      format.js { render layout: false }
+    end
   end
 
 end
