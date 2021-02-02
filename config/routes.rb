@@ -57,12 +57,16 @@ Rails.application.routes.draw do
   # Module routes
   resources :uni_modules
   get 'uni_modules/:id/show_all_students', to: 'uni_modules#show_all_students', as: 'show_all_students'
+
   # Worklog routes
-  get 'worklogs/:team/new_worklog', to: 'worklogs#new_worklog', as: 'new_worklog'
-  post 'worklogs/:team/process_worklog', to: 'worklogs#process_worklog', as: 'process_worklog'
-  get 'worklogs/:team/review_worklogs', to: 'worklogs#review_worklogs', as: 'review_worklogs'
-  get 'worklogs/:team/display_worklogs', to: 'worklogs#display_worklogs', as: 'display_worklogs'
-  get 'worklogs/:team/:weeks/display_log', to: 'worklogs#display_log', as: 'display_log'
+  get 'worklogs/dispute_form/:id', to: 'worklogs#dispute_form', as: 'dispute_form'
+  post 'worklogs/dispute_worklog/:id', to: 'worklogs#dispute_worklog', as: 'dispute_worklog'
+  post 'worklogs/accept_worklog/:id', to: 'worklogs#accept_worklog', as: 'accept_worklog'
+  get 'worklogs/new_worklog/:team', to: 'worklogs#new_worklog', as: 'new_worklog'
+  post 'worklogs/process_worklog/:team', to: 'worklogs#process_worklog', as: 'process_worklog'
+  get 'worklogs/review_worklogs/:team', to: 'worklogs#review_worklogs', as: 'review_worklogs'
+  get 'worklogs/display_worklogs/:team', to: 'worklogs#display_worklogs', as: 'display_worklogs'
+  get 'worklogs/display_log/:team/:weeks', to: 'worklogs#display_log', as: 'display_log'
 
   resources :teams
 end

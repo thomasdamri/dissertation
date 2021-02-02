@@ -43,6 +43,38 @@ class WorklogsController < ApplicationController
   # Page for reviewing the past week's worklog
   def review_worklogs
     @title = "Review work logs"
+    @team = Team.find(params['team'])
+    @date = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
+    @logs = Worklog.where(author: @team.users, uni_module: @team.uni_module, fill_date: @date)
+  end
+
+  # AJAX call to render a modal for the user to enter the reason for the work log dispute
+  def dispute_form
+    @worklog = Worklog.find(params['id'])
+
+    respond_to do |format|
+      format.js { render layout: false }
+    end
+  end
+
+  # POST request processes a work log dispute and creates a response with a reason
+  def dispute_worklog
+    wl = Worklog.find(params['id'])
+    @team = wl.author.teams.where(uni_module: wl.uni_module).first
+
+    WorklogResponse.create(worklog: wl, user: current_user, status: WorklogResponse.reject_status, reason: params['reason'])
+
+    redirect_to review_worklogs_path(@team)
+  end
+
+  # POST request processes a work log that has been accepts and creates a response
+  def accept_worklog
+    wl = Worklog.find(params['id'])
+    @team = wl.author.teams.where(uni_module: wl.uni_module).first
+
+    WorklogResponse.create(worklog: wl, user: current_user, status: WorklogResponse.accept_status)
+
+    redirect_to review_worklogs_path(@team)
   end
 
   # Page for showing all worklogs for a team

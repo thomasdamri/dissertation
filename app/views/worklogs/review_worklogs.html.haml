@@ -1,0 +1,31 @@
+#putModalHere
+%h1= "Work logs for week #{@date.strftime("%d/%m/%Y")}"
+%table.table
+  %tr
+    %th Author
+    %th Work log
+    %th
+  - @team.users.each do |user|
+    - log = @logs.where(author: user).first
+    - resp = log.nil? ? nil : log.worklog_responses.where(user: current_user).first
+    %tr
+      %td= user.real_display_name
+      - if log.nil?
+        %td
+          %em= "No work log recorded"
+        %td
+          .btn-group
+            = button_to 'Accept', '#', class: 'btn btn-success', disabled: true
+            = button_to 'Dispute', '#', class: 'btn btn-danger', disabled: true
+      - else
+        %td= log.content
+        %td
+          .btn-group
+            - if resp.nil?
+              = button_to 'Accept', accept_worklog_path(log), class: 'btn btn-success'
+              = button_to 'Dispute', dispute_form_path(log), class: 'btn btn-danger', remote: true, method: :get
+            - else
+              = button_to 'Accept', '#', class: 'btn btn-success', disabled: true
+              = button_to 'Dispute', '#', class: 'btn btn-danger', disabled: true
+
+= link_to "Back to team page", @team, class: 'btn btn-secondary'
