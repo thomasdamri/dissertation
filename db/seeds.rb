@@ -2,6 +2,14 @@ u = User.create(username: 'acc17dp', email: 'dperry1@sheffield.ac.uk', staff: tr
 u.get_info_from_ldap
 u.save
 
+u = User.create(email: 'jacob.walker@sheffield.ac.uk', staff: true, admin: true)
+u.get_info_from_ldap
+u.save
+
+u = User.create(email: 'p.mcminn@sheffield.ac.uk', staff: true, admin: true)
+u.get_info_from_ldap
+u.save
+
 =begin
 u1 = User.first
 u2 = User.where(username: 'zzz18as').first

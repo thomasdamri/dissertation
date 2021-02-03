@@ -49,6 +49,6 @@ test:
 #
 production:
   <<: *default
-  database: teamassessplus_production
-  username: teamassess
-  password: <%= ENV['TEAMASSESS_DATABASE_PASSWORD'] %>
+  database: team_player_plus_production
+  username: db_acc17dp
+  password: <%= Rails.application.credentials.prod_db_password %>
