@@ -16,7 +16,7 @@ class Worklog < ApplicationRecord
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
   belongs_to :uni_module
 
-  has_many :worklog_responses
+  has_many :worklog_responses, dependent: :destroy
 
   # Returns true if the worklog has been overridden.
   # The override attribute is blank unless a staff member has overriden the worklog contents

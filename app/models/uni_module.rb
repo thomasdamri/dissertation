@@ -21,7 +21,7 @@ class UniModule < ApplicationRecord
   accepts_nested_attributes_for :staff_modules, reject_if: :all_blank, allow_destroy: true
 
   # Many students will submit many worklogs for this module
-  has_many :worklogs
+  has_many :worklogs, dependent: :destroy
 
   # Each module must have a unique name and code
   validates :name, presence: true, uniqueness: true
@@ -54,6 +54,11 @@ class UniModule < ApplicationRecord
   # Returns true if the team specified has worklogs for the week specified
   def has_worklogs?(team, week)
 
+  end
+
+  # Returns true if the user given has filled in a worklog for the current week
+  def has_filled_in_log?(user, date)
+    Worklog.where(author: user, uni_module: self, fill_date: date).first.nil? ? false : true
   end
 
 end
