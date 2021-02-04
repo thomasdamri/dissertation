@@ -18,7 +18,15 @@
                 %td
                   %em= "No work log recorded"
               - else
-                %td= log.content
+                - if log.override.nil?
+                  %td= log.content
+                - else
+                  %td
+                    %strong Override:
+                    = log.override
+                    %br
+                    %strong Old version:
+                    = log.content
 
       .modal-footer
         %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}

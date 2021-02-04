@@ -1,0 +1,16 @@
+.modal.fade#overrideModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "overrideModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#overrideModalLabel= "Overriding work log"
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        = form_tag({action: :process_override}) do
+          = label_tag 'override', 'Enter a corrected version of this worklog to replace the old one'
+          = text_area_tag 'override', '', required: true
+          = hidden_field 'id', @worklog.id
+          = submit_tag "Confirm Override", class: 'btn btn-primary'
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close

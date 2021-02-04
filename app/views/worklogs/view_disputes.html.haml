@@ -1,3 +1,4 @@
+#putModalHere
 %h1= "List of disputes for #{@uni_module.title}"
 
 Below are a list of work logs written by students where another member of their team has then disputed the work log.
@@ -29,5 +30,8 @@ the work log to correct it.
                   %td= disp.reason
           .card-footer
             .btn-group
-              = button_to "Uphold", '#', class: 'btn btn-success'
-              = button_to "Override", '#', class: 'btn btn-danger'
+              = button_to "Uphold", process_uphold_path(log), class: 'btn btn-success'
+              = button_to "Override", override_form_path(log), class: 'btn btn-danger', remote: true, method: :get
+
+%hr
+= link_to "Back to module page", @uni_module, class: 'btn btn-secondary'

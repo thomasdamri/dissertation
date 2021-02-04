@@ -68,6 +68,9 @@ Rails.application.routes.draw do
   get 'worklogs/display_worklogs/:team', to: 'worklogs#display_worklogs', as: 'display_worklogs'
   get 'worklogs/display_log/:team/:weeks', to: 'worklogs#display_log', as: 'display_log'
   get 'worklogs/view_disputes/:uni_module', to: 'worklogs#view_disputes', as: 'view_disputes'
+  get 'worklogs/override_form/:id', to: 'worklogs#override_form', as: 'override_form'
+  post 'worklogs/process_override/:id', to: 'worklogs#process_override', as: 'process_override'
+  post 'worklogs/process_uphold/:id', to: 'worklogs#process_uphold', as: 'process_uphold'
 
   resources :teams
 end
