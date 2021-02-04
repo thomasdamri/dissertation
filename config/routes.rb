@@ -67,6 +67,7 @@ Rails.application.routes.draw do
   get 'worklogs/review_worklogs/:team', to: 'worklogs#review_worklogs', as: 'review_worklogs'
   get 'worklogs/display_worklogs/:team', to: 'worklogs#display_worklogs', as: 'display_worklogs'
   get 'worklogs/display_log/:team/:weeks', to: 'worklogs#display_log', as: 'display_log'
+  get 'worklogs/view_disputes/:uni_module', to: 'worklogs#view_disputes', as: 'view_disputes'
 
   resources :teams
 end

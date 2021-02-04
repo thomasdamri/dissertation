@@ -103,4 +103,28 @@ class WorklogsController < ApplicationController
     end
   end
 
+  # Page to display all disputes for a module
+  def view_disputes
+    @uni_module = UniModule.find(params['uni_module'])
+    @logs = {}
+    @disputes = {}
+
+    # Find the disputes for each worklog for each team
+    @uni_module.teams.each do |team|
+      logs = Worklog.where(author: team.users, uni_module: @uni_module).order(:fill_date)
+      unless logs.count == 0
+        disputes = WorklogResponse.where(worklog: logs, status: WorklogResponse.reject_status)
+        unless disputes.count == 0
+          @logs[team.id] = logs
+          logs.each do |log|
+            log_disputes = disputes.where(worklog: log)
+            unless log_disputes.count == 0
+              @disputes[log.id] = log_disputes
+            end
+          end
+        end
+      end
+    end
+  end
+
 end
