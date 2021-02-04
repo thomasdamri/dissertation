@@ -3,10 +3,13 @@
 = simple_form_for(@assessment, url: "/assessment/create") do |f|
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
+  
+  %h5 Hover over input boxes to see for a more detailed description
 
   .form-inputs
     %h2 Assessment Information
-    = f.input :name, as: :string, label: 'Name'
+    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "A unique name for this assessment"}
+      = f.input :name, as: :string, label: 'Name'
     .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "The first day students can fill in the assessment"}
       = f.input :date_opened, start_year: Date.today.year, label: "Start date"
     .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "The last day students can fill in the assessment"}

@@ -16,6 +16,6 @@
         = form_tag({:action => :user_process}, multipart: true) do
           = file_field_tag :file
           = submit_tag( "Import" )
-    .modal-footer
-      %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
-        Close
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close
