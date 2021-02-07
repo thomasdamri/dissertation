@@ -36,18 +36,26 @@ describe "Viewing the My Account page" do
 end
 
 describe "Viewing the student dashboard" do
-  specify "The badge colours for students' assessments are correct", js: true do
+  before(:each) do
     u = create :user, staff: false
-    login_as u, scope: :user
-
     mod = create :uni_module
     t = create :team, uni_module: mod
     create :student_team, user: u, team: t
+  end
+
+  specify "The badge colours for students' assessments are correct", js: true do
+    u = User.first
+    login_as u, scope: :user
+
+    mod = UniModule.first
 
     visit "/home/student_home"
 
     # Find the list item for the module
-    li = page.find('li', text: mod.title)
+    li = nil
+    within(:css, '#modInfo'){
+      li = page.find('li', text: mod.title)
+    }
 
     within(li){
       # Find span element to expand assessment list
@@ -63,7 +71,10 @@ describe "Viewing the student dashboard" do
     page.driver.browser.navigate.refresh
 
     # Find the list item for the module
-    li = page.find('li', text: mod.title)
+    li = nil
+    within(:css, '#modInfo'){
+      li = page.find('li', text: mod.title)
+    }
 
     assess_li = nil
     within(li){
@@ -83,7 +94,10 @@ describe "Viewing the student dashboard" do
     page.driver.browser.navigate.refresh
 
     # Find the list item for the module
-    li = page.find('li', text: mod.title)
+    li = nil
+    within(:css, '#modInfo'){
+      li = page.find('li', text: mod.title)
+    }
 
     assess_li = nil
     within(li){
@@ -102,7 +116,10 @@ describe "Viewing the student dashboard" do
     page.driver.browser.navigate.refresh
 
     # Find the list item for the module
-    li = page.find('li', text: mod.title)
+    li = nil
+    within(:css, '#modInfo'){
+      li = page.find('li', text: mod.title)
+    }
 
     assess_li = nil
     within(li){
@@ -122,7 +139,10 @@ describe "Viewing the student dashboard" do
     page.driver.browser.navigate.refresh
 
     # Find the list item for the module
-    li = page.find('li', text: mod.title)
+    li = nil
+    within(:css, '#modInfo'){
+      li = page.find('li', text: mod.title)
+    }
 
     assess_li = nil
     within(li){
@@ -134,6 +154,31 @@ describe "Viewing the student dashboard" do
 
     within(assess_li){
       expect(page).to have_content "Results Ready"
+    }
+
+  end
+
+  specify "The colours of the badges for work logs are correct" do
+    u = User.first
+    mod = UniModule.first
+
+    login_as u, scope: :user
+
+    visit "/home/student_home"
+
+    within(:css, '#worklogInfo'){
+      li = page.find('li', text: mod.title)
+      expect(li).to have_content "Pending"
+    }
+
+    last_mon = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
+    create :worklog, uni_module: mod, author: u, fill_date: last_mon
+
+    visit "/home/student_home"
+
+    within(:css, '#worklogInfo'){
+      li = page.find('li', text: mod.title)
+      expect(li).to have_content "Filled in"
     }
 
   end

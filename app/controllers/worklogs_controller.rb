@@ -1,11 +1,16 @@
 class WorklogsController < ApplicationController
   before_action :authenticate_user!
-  skip_authorization_check
+  load_and_authorize_resource
 
   # AJAX call to display the modal for filling in the worklog for the week
   def new_worklog
     @team = Team.find(params['team'])
     @uni_module = @team.uni_module
+
+    # Check user belongs to the team
+    unless @team.users.pluck(:id).include? current_user.id
+      redirect_to home_student_home_path, notice: "Error: Invalid team"
+    end
 
     # Check for an existing worklog from this week from this user
     if current_user.has_filled_in_log?(@uni_module)
@@ -21,6 +26,11 @@ class WorklogsController < ApplicationController
   def process_worklog
     @team = Team.find(params['team'])
     @uni_module = @team.uni_module
+
+    # Check user belongs to the team
+    unless @team.users.pluck(:id).include? current_user.id
+      redirect_to home_student_home_path, notice: "Error: Invalid team"
+    end
 
     # Check for an existing worklog from this week from this user
     if current_user.has_filled_in_log?(@uni_module)
@@ -95,8 +105,6 @@ class WorklogsController < ApplicationController
 
     # Find all logs written in the given week by this team
     @logs = Worklog.where(author: @team.users, fill_date: @date, uni_module: @team.uni_module)
-    puts "------"
-    puts @logs.where(author: @team.users.first)
 
     respond_to do |format|
       format.js { render layout: false }

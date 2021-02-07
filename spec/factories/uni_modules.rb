@@ -14,8 +14,8 @@ FactoryBot.define do
   factory :uni_module, class: 'UniModule' do
     name { 'Test Module' }
     code { 'TST1001' }
-    start_date { Date.today }
-    end_date { Date.today + 50 }
+    start_date { Date.today.prev_occurring(:monday) - 7 }
+    end_date { Date.today.next_occurring(:monday) + 49 }
   end
 
   factory :empty_uni_module, class: 'UniModule' do

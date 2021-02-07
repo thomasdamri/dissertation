@@ -29,11 +29,12 @@
 %hr
 
 %h3 Work Logs
-- if current_user.has_filled_in_log?(@team.uni_module)
-  = button_to 'Work log filled in', '#', disabled: true, class: 'btn btn-secondary'
-- else
-  = link_to 'Fill in work log for week', new_worklog_path(@team), remote: true, class: 'btn btn-primary'
-%br
+- if can? :new_worklog, Worklog
+  - if current_user.has_filled_in_log?(@team.uni_module)
+    = button_to 'Work log filled in', '#', disabled: true, class: 'btn btn-secondary'
+  - else
+    = link_to 'Fill in work log for week', new_worklog_path(@team), remote: true, class: 'btn btn-primary'
+  %br
 = link_to 'Review team work logs', review_worklogs_path(@team), class: 'btn btn-info'
 %br
 = link_to 'View past work logs', display_worklogs_path(@team), class: 'btn btn-info'

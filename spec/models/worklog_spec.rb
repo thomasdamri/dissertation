@@ -35,6 +35,18 @@ RSpec.describe Worklog, type: :model do
     expect(w).to_not be_valid
   end
 
+  it 'removes all responses on deletion' do
+    mod = UniModule.first
+    student = User.where(staff: false).first
+    responder = create :user, staff: false, username: "zzz12mn", email: "1@gmail.com"
+    w = create :worklog, uni_module: mod, author: student
+    create :worklog_response, worklog: w, user: responder
+
+    expect(WorklogResponse.count).to eq 1
+    w.destroy
+    expect(WorklogResponse.count).to eq 0
+  end
+
   describe '#is_overridden?' do
     it 'returns true when the override attribute is not nil' do
       mod = UniModule.first

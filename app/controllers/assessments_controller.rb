@@ -208,8 +208,6 @@ class AssessmentsController < ApplicationController
       team_grade = team.team_grades.where(assessment: assessment).first
       ind_weight = StudentWeighting.where(user: u, assessment: assessment).first
 
-      puts "#{u.email} - #{team_grade.nil?}, #{ind_weight.nil?}"
-
       # Only send the email to the student if they have a team grade and an individual weighting
       unless team_grade.nil? or ind_weight.nil?
         StudentMailer.score_email(u, assessment, team_grade, ind_weight).deliver
