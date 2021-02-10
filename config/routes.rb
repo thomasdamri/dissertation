@@ -27,6 +27,14 @@ Rails.application.routes.draw do
   post 'teams/set_grade', to: 'teams#set_grade', as: 'teams_set_grade'
   get 'teams/:id/:assess/view_ind_grades', to: 'teams#view_ind_grades', as: 'view_ind_grades'
   post 'teams/:id/:assess/update_ind_grades', to: 'teams#update_ind_grades', as: 'update_ind_grades'
+  # Team routes associated with work logs, but the paths work better under teams because of cancancan
+  get 'teams/new_worklog/:id', to: 'teams#new_worklog', as: 'new_worklog'
+  post 'teams/process_worklog/:id', to: 'teams#process_worklog', as: 'process_worklog'
+  get 'teams/review_worklogs/:id', to: 'teams#review_worklogs', as: 'review_worklogs'
+  get 'teams/display_worklogs/:id', to: 'teams#display_worklogs', as: 'display_worklogs'
+  get 'teams/display_log/:id/:weeks', to: 'teams#display_log', as: 'display_log'
+
+  resources :teams
 
   # Admin routes
   get 'admin/dashboard'
@@ -62,15 +70,8 @@ Rails.application.routes.draw do
   get 'worklogs/dispute_form/:id', to: 'worklogs#dispute_form', as: 'dispute_form'
   post 'worklogs/dispute_worklog/:id', to: 'worklogs#dispute_worklog', as: 'dispute_worklog'
   post 'worklogs/accept_worklog/:id', to: 'worklogs#accept_worklog', as: 'accept_worklog'
-  get 'worklogs/new_worklog/:team', to: 'worklogs#new_worklog', as: 'new_worklog'
-  post 'worklogs/process_worklog/:team', to: 'worklogs#process_worklog', as: 'process_worklog'
-  get 'worklogs/review_worklogs/:team', to: 'worklogs#review_worklogs', as: 'review_worklogs'
-  get 'worklogs/display_worklogs/:team', to: 'worklogs#display_worklogs', as: 'display_worklogs'
-  get 'worklogs/display_log/:team/:weeks', to: 'worklogs#display_log', as: 'display_log'
   get 'worklogs/view_disputes/:uni_module', to: 'worklogs#view_disputes', as: 'view_disputes'
   get 'worklogs/override_form/:id', to: 'worklogs#override_form', as: 'override_form'
   post 'worklogs/process_override/:id', to: 'worklogs#process_override', as: 'process_override'
   post 'worklogs/process_uphold/:id', to: 'worklogs#process_uphold', as: 'process_uphold'
-
-  resources :teams
 end

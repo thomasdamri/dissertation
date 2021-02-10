@@ -13,7 +13,7 @@
 #
 FactoryBot.define do
   factory :worklog do
-    fill_date { Date.today }
+    fill_date { Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday) }
     content { "I did some work this week." }
   end
 

@@ -47,6 +47,16 @@ RSpec.describe Worklog, type: :model do
     expect(WorklogResponse.count).to eq 0
   end
 
+  it 'is invalid if the user has already made work log for the same module and fill date' do
+    mod = UniModule.first
+    student = User.where(staff: false).first
+    responder = create :user, staff: false, username: "zzz12mn", email: "1@gmail.com"
+    w = create :worklog, uni_module: mod, author: student
+    expect(w).to be_valid
+    w2 = build :worklog, uni_module: mod, author: student
+    expect(w2).to_not be_valid
+  end
+
   describe '#is_overridden?' do
     it 'returns true when the override attribute is not nil' do
       mod = UniModule.first

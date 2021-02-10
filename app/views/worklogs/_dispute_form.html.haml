@@ -10,7 +10,6 @@
           = label_tag 'reason', 'Please briefly describe the reason you are disputing this work log'
           = text_area_tag 'reason', '', required: true
           = hidden_field 'id', @worklog.id
-          = hidden_field 'response', WorklogResponse.reject_status
           = submit_tag "Confirm Dispute", class: 'btn btn-primary'
       .modal-footer
         %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}

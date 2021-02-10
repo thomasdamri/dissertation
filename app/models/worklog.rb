@@ -36,7 +36,8 @@ class Worklog < ApplicationRecord
   end
 
   # A worklog must have a date, an author, and a module
-  validates :fill_date, presence: true
+  # A user cant submit a worklog for the same date and module
+  validates :fill_date, presence: true, uniqueness: { scope: [:author_id, :uni_module_id] }
   validates :author_id, presence: true
   validates :uni_module_id, presence: true
 

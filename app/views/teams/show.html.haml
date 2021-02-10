@@ -29,7 +29,7 @@
 %hr
 
 %h3 Work Logs
-- if can? :new_worklog, Worklog
+- if can? :new_worklog, @team
   - if current_user.has_filled_in_log?(@team.uni_module)
     = button_to 'Work log filled in', '#', disabled: true, class: 'btn btn-secondary'
   - else

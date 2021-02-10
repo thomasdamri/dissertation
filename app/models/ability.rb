@@ -23,6 +23,8 @@ class Ability
         can :manage, Team do |team|
           team.uni_module.staff_modules.pluck(:user_id).include? user.id
         end
+        # Staff cannot make work logs
+        cannot [:new_worklog, :process_worklog], Team
 
         # Staff can manage their assessments if they are part of the module
         can :manage, Assessment do |assess|
@@ -37,19 +39,22 @@ class Ability
         cannot [:fill_in, :process_assess], Assessment
 
         # Can only interact with work logs if they are on a module the user is part of
-        can [:review_worklogs, :display_worklogs, :display_log, :view_disputes, :override_form, :process_override, :process_uphold], Worklog do |wl|
+        can [:view_disputes, :override_form, :process_override, :process_uphold], Worklog do |wl|
           wl.uni_module.staff_modules.pluck(:user_id).include? user.id
         end
 
       else
         # Students can view their own team
         can :read, Team, student_teams: {user_id: user.id}
+        # Students can interact with their own team's worklogs
+        can [:new_worklog, :process_worklog, :display_worklogs, :display_log, :review_worklogs], Team, student_teams: {user_id: user.id}
         # Students can fill in their team's peer assessments and see the results
         can [:fill_in, :process_assess, :results], Assessment do |assess|
           user.teams.pluck(:uni_module_id).include? assess.uni_module.id
         end
 
-        can [:review_worklogs, :display_worklogs, :display_log, :accept_worklog, :dispute_worklog, :dispute_form, :new_worklog, :process_worklog], Worklog do |wl|
+        # Can dispute worklogs from their own team
+        can [:accept_worklog, :dispute_worklog, :dispute_form], Worklog do |wl|
           user.teams.pluck(:uni_module_id).include? wl.uni_module.id
         end
 
