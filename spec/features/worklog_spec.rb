@@ -360,24 +360,146 @@ describe 'Staff reviewing a work log' do
 
     last_monday = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
     wl = create :worklog, author: s2, uni_module: mod, fill_date: last_monday
-    create :worklog_response, worklog: wl, user: s1, status: WorklogResponse.reject_status
+    create :worklog_response, worklog: wl, user: s1, status: WorklogResponse.reject_status, reason: "123"
+    create :worklog_response, worklog: wl, user: s2, status: WorklogResponse.reject_status, reason: "blah"
   end
 
-  specify "As a member of staff on the module I can view the list of disputed work logs and uphold one" do
+  specify "As a member of staff on the module I can view the list of disputed work logs and uphold one", js: true do
     staff = User.where(staff: true).first
     login_as staff, scope: :user
     ability = Ability.new(staff)
 
     mod = UniModule.first
     t = mod.teams.first
+    wl = Worklog.first
+
+    expect(ability).to be_able_to :view_disputes_path, mod
+    expect(ability).to be_able_to :process_uphold, wl
 
     visit "/uni_modules/#{mod.id}"
     click_link "View Disputes"
+
+    expect(page).to have_content "Team #{t.number}"
+    page.find("#disputesTeam#{t.id}Btn").click
+
+    within(:css, "#disputesTeam#{t.id}"){
+      within(:css, '.card-header'){
+        expect(page).to have_content wl.author.real_display_name
+        expect(page).to have_content wl.fill_date.strftime("%d/%m/%Y")
+      }
+
+      within(:css, '.card-body'){
+        wl.worklog_responses.each do |wr|
+          expect(page).to have_content wr.user.real_display_name
+          expect(page).to have_content wr.reason
+        end
+
+      }
+
+      # Pick the first response to deal with
+      row = page.find(".card-footer")
+      within(row){
+        click_button "Uphold"
+      }
+    }
+
+    expect(page).to have_content "Work log upheld successfully"
+    # Refresh the worklog object, caching means the old responses cause the test to fail
+    wl = Worklog.first
+    wl.worklog_responses.each do |wr|
+      expect(wr.status).to eq WorklogResponse.resolved_status
+    end
   end
 
-  specify "As a member of staff on the module I can override a work log with a new value"
+  specify "As a member of staff on the module I can override a work log with a new value", js: true do
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+    ability = Ability.new(staff)
 
-  specify "As a member of staff not on the module I cannot view or resolve any work log disputes"
+    mod = UniModule.first
+    t = mod.teams.first
+    wl = Worklog.first
 
-  specify "As a student I cannot resolve a work log dispute"
+    expect(ability).to be_able_to :view_disputes_path, mod
+    expect(ability).to be_able_to :process_uphold, wl
+
+    visit "/uni_modules/#{mod.id}"
+    click_link "View Disputes"
+
+    expect(page).to have_content "Team #{t.number}"
+    page.find("#disputesTeam#{t.id}Btn").click
+
+    within(:css, "#disputesTeam#{t.id}"){
+      within(:css, '.card-header'){
+        expect(page).to have_content wl.author.real_display_name
+        expect(page).to have_content wl.fill_date.strftime("%d/%m/%Y")
+      }
+
+      within(:css, '.card-body'){
+        wl.worklog_responses.each do |wr|
+          expect(page).to have_content wr.user.real_display_name
+          expect(page).to have_content wr.reason
+        end
+
+      }
+
+      # Pick the first response to deal with
+      row = page.find(".card-footer")
+      within(row){
+        click_button "Override"
+      }
+    }
+
+    # Override modal form loads up
+    within(:css, '.modal-body'){
+      fill_in "override", with: "The proper work log contents"
+      click_button "Confirm Override"
+    }
+
+    expect(page).to have_content "Work log overriden successfully"
+    # Refresh the worklog object, caching means the old responses cause the test to fail
+    wl = Worklog.first
+    wl.worklog_responses.each do |wr|
+      expect(wr.status).to eq WorklogResponse.resolved_status
+    end
+
+    # View all worklogs shows both versions now
+    visit "/teams/display_worklogs/#{t.id}"
+    last_monday = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
+    click_link "Week beginning: #{last_monday.strftime("%d/%m/%Y")}"
+
+    within('.modal-body'){
+      row = page.find('tr', text: wl.author.real_display_name)
+      within(row){
+        expect(page).to have_content wl.content
+        expect(page).to have_content wl.override
+      }
+    }
+  end
+
+  specify "As a member of staff not on the module I cannot view or resolve any work log disputes" do
+    other_staff = create :user, staff: true, username: "zzz12po", email: "6@gmail.com"
+    login_as other_staff, scope: :user
+    ability = Ability.new(other_staff)
+
+    mod = UniModule.first
+    wl = Worklog.first
+
+    expect(ability).to_not be_able_to :view_disputes, mod
+    expect(ability).to_not be_able_to :process_uphold, wl
+    expect(ability).to_not be_able_to :process_override, wl
+  end
+
+  specify "As a student I cannot resolve a work log dispute" do
+    student = User.where(staff: false).first
+    login_as student, scope: :user
+    ability = Ability.new(student)
+
+    mod = UniModule.first
+    wl = Worklog.first
+
+    expect(ability).to_not be_able_to :view_disputes, mod
+    expect(ability).to_not be_able_to :process_uphold, wl
+    expect(ability).to_not be_able_to :process_override, wl
+  end
 end

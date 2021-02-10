@@ -65,12 +65,12 @@ Rails.application.routes.draw do
   # Module routes
   resources :uni_modules
   get 'uni_modules/:id/show_all_students', to: 'uni_modules#show_all_students', as: 'show_all_students'
+  get 'uni_modules/view_disputes/:id', to: 'uni_modules#view_disputes', as: 'view_disputes'
 
   # Worklog routes
   get 'worklogs/dispute_form/:id', to: 'worklogs#dispute_form', as: 'dispute_form'
   post 'worklogs/dispute_worklog/:id', to: 'worklogs#dispute_worklog', as: 'dispute_worklog'
   post 'worklogs/accept_worklog/:id', to: 'worklogs#accept_worklog', as: 'accept_worklog'
-  get 'worklogs/view_disputes/:uni_module', to: 'worklogs#view_disputes', as: 'view_disputes'
   get 'worklogs/override_form/:id', to: 'worklogs#override_form', as: 'override_form'
   post 'worklogs/process_override/:id', to: 'worklogs#process_override', as: 'process_override'
   post 'worklogs/process_uphold/:id', to: 'worklogs#process_uphold', as: 'process_uphold'

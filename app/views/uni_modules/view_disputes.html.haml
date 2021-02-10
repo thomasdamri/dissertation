@@ -11,7 +11,7 @@ the work log to correct it.
 - @uni_module.teams.order(:number).each do |team|
   - unless @logs[team.id].nil?
     %h3= "Team #{team.number}"
-    %button.btn.btn-primary{type: "button", 'data-toggle': "collapse", 'data-target': "#disputesTeam#{team.id}", 'aria-expanded': "false", 'aria-controls': "collapseExample"}
+    %button.btn.btn-primary{type: "button", id: "disputesTeam#{team.id}Btn", 'data-toggle': "collapse", 'data-target': "#disputesTeam#{team.id}", 'aria-expanded': "false", 'aria-controls': "collapseExample"}
       Show disputes
 
     .collapse{id: "disputesTeam#{team.id}"}
