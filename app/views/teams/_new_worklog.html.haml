@@ -6,7 +6,7 @@
         %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
           %span{"aria-hidden": "true"} &times;
       .modal-body
-        Please enter a brief summary of what work you have completed between
+        Please enter a brief summary of what work you have completed since the last time you filled in a worklog
         = form_tag({action: 'process_worklog'}) do |f|
           = text_area_tag 'content', '', required: true
           %br

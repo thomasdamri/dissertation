@@ -78,4 +78,32 @@ RSpec.describe Criterium, type: :model do
     expect(c1).to be_valid
   end
 
+  describe "#subtitle" do
+    specify "it returns nil for string or bool responses" do
+      c1 = build :criterium, response_type: Criterium.string_type
+      c2 = build :criterium, response_type: Criterium.bool_type
+
+      expect(c1.subtitle).to eq nil
+      expect(c2.subtitle).to eq nil
+    end
+
+    specify "It returns the min, max, or both values for integer and float values" do
+      c1 = build :criterium, response_type: Criterium.int_type
+      expect(c1.subtitle).to eq "Enter a whole number"
+
+      c1.response_type = Criterium.float_type
+      expect(c1.subtitle).to eq "Enter a number"
+
+      c1.min_value = 1
+      expect(c1.subtitle).to eq "Enter a number which is 1 or more"
+
+      c1.min_value = nil
+      c1.max_value = 10.1
+      expect(c1.subtitle).to eq "Enter a number which is 10.1 or less"
+
+      c1.min_value = 1.2
+      expect(c1.subtitle).to eq "Enter a number between 1.2 and 10.1"
+    end
+  end
+
 end

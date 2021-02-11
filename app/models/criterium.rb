@@ -55,11 +55,11 @@ class Criterium < ApplicationRecord
       max = max_value
       # Include 'whole' in first part, if needs a whole number
       if response_type.to_i == @@int
-        whole = "whole"
+        whole = "whole "
         min = min.to_i
         max = max.to_i
       end
-      first_part = "Enter a #{whole} number"
+      first_part = "Enter a #{whole}number"
 
       # Second part deals with minimum and maximum values
 
@@ -69,7 +69,7 @@ class Criterium < ApplicationRecord
       elsif max_value.nil?
         "#{first_part} which is #{min} or more"
       elsif min_value.nil?
-        "#{first_part} below #{max}"
+        "#{first_part} which is #{max} or less"
       else
         "#{first_part} between #{min} and #{max}"
       end

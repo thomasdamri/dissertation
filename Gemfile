@@ -6,8 +6,6 @@ ruby '2.6.6'
 source "https://gems.shefcompsci.org.uk" do
   gem 'airbrake'
   gem 'rubycas-client'
-  gem 'capybara-select2', group: :test
-  gem 'epi_js'
   gem 'epi_cas'
 end
 
