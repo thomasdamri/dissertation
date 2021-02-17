@@ -360,6 +360,7 @@ describe 'Staff reviewing a work log' do
 
     last_monday = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
     wl = create :worklog, author: s2, uni_module: mod, fill_date: last_monday
+    wl2 = create :worklog, author: s1, uni_module: mod, fill_date: last_monday
     create :worklog_response, worklog: wl, user: s1, status: WorklogResponse.reject_status, reason: "123"
     create :worklog_response, worklog: wl, user: s2, status: WorklogResponse.reject_status, reason: "blah"
   end

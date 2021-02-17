@@ -192,7 +192,9 @@ class UniModulesController < ApplicationController
       unless logs.count == 0
         disputes = WorklogResponse.where(worklog: logs, status: WorklogResponse.reject_status)
         unless disputes.count == 0
-          @logs[team.id] = logs
+          # Get the ids of all worklogs with a dispute
+          disputed_log_ids = disputes.pluck(:worklog_id)
+          @logs[team.id] = Worklog.where(id: disputed_log_ids)
           logs.each do |log|
             log_disputes = disputes.where(worklog: log)
             unless log_disputes.count == 0
