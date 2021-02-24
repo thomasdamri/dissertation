@@ -42,6 +42,7 @@ Rails.application.routes.draw do
   get 'admin/students'
   get 'admin/modules'
   get 'admin/teams'
+  get 'admin/worklogs/:mod_id', to: 'admin#worklogs', as: 'admin_worklogs'
   post 'admin/make_student'
   post 'admin/make_staff'
   get 'admin/add_new_student', to: 'admin#add_new_student', as: 'add_new_student'

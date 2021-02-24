@@ -32,6 +32,17 @@ class AdminController < ApplicationController
     @teams = Team.order(:uni_module_id, :number).paginate(page: params[:page])
   end
 
+  def worklogs
+    @uni_module = UniModule.find(params['mod_id'])
+    @worklogs = []
+    logs = Worklog.where(uni_module: @uni_module)
+    # Manually order worklogs by team, then by fill date
+    @uni_module.teams.each do |team|
+      team_logs = logs.where(author: team.users).order(:fill_date)
+      @worklogs.concat team_logs
+    end
+  end
+
   # Path for making the current user a staff member
   def make_staff
     current_user.staff = true

@@ -7,6 +7,10 @@ describe "Viewing admin pages" do
     t = create :team, number: '71', uni_module: mod
     create :user, staff: false, username: "zzz12lo", email: "l@gmail.com"
     create :user, staff: true, username: "zzz12rt", email: "k@gmail.com"
+
+    u1 = create :user, staff: false, username: "zzz12lk", email: "p@gmail.com"
+    create :student_team, user: u1, team: t
+    wl = create :worklog, uni_module: mod, author: u1, content: "Blah blah blah"
   end
 
   specify "I can only view the admin pages as an admin" do
@@ -18,13 +22,19 @@ describe "Viewing admin pages" do
     expect(ability).to be_able_to :staff, :admin
     expect(ability).to be_able_to :modules, :admin
     expect(ability).to be_able_to :teams, :admin
+    expect(ability).to be_able_to :worklogs, :admin
 
     mod = UniModule.first
     t = Team.first
+    wl = Worklog.first
 
     # Can see the module, even though the user is not an associated staff member
     visit "/admin/modules"
     expect(page).to have_content mod.title
+
+    # Can also view the work logs for a module
+    visit "/admin/worklogs/#{mod.id}"
+    expect(page).to have_content wl.content
 
     visit "/admin/teams"
     expect(page).to have_content t.number
@@ -49,6 +59,7 @@ describe "Viewing admin pages" do
     expect(ability).to_not be_able_to :staff, :admin
     expect(ability).to_not be_able_to :modules, :admin
     expect(ability).to_not be_able_to :teams, :admin
+    expect(ability).to_not be_able_to :worklogs, :admin
   end
 end
 

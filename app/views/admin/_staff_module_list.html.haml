@@ -8,11 +8,13 @@
       %th
       %th
       %th
+      %th
 
   %tbody
     - @uni_modules.each do |uni_module|
       %tr
         %td= uni_module.title
         %td= link_to 'View', uni_module, class: 'btn btn-primary'
+        %td= link_to "View Work Logs", admin_worklogs_path(uni_module), class: 'btn btn-primary'
         %td= link_to 'Edit', edit_uni_module_path(uni_module), class: 'btn btn-info'
         %td= link_to 'Delete', uni_module, method: :delete, data: { confirm: 'Are you sure? This is a permanent action that will remove all module data?' }, class: 'btn btn-danger'
