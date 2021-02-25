@@ -61,7 +61,7 @@ end
 
 
 describe "Editing a module" do
-  specify "I can change a module's name and code as a staff member associated with the module" do
+  specify "I can change a module's name and code as a staff member associated with the module", js: true do
     staff = create :user, staff: true
     ability = Ability.new(staff)
     mod = create :uni_module
@@ -73,8 +73,9 @@ describe "Editing a module" do
 
     login_as staff, scope: :user
     visit "/home/staff_home"
-    row = page.find('tr', text: old_title)
-    within(row){
+    li = page.find('li', text: old_title)
+    within(li){
+      click_button "collapseBtn#{mod.id}"
       click_link "Edit"
     }
 
@@ -98,9 +99,10 @@ describe "Editing a module" do
 
     login_as staff, scope: :user
     visit "/home/staff_home"
-    row = page.find("tr", text: mod.title)
+    li = page.find("li", text: mod.title)
 
-    within(row){
+    within(li){
+      click_button "collapseBtn#{mod.id}"
       click_link "Edit"
     }
 
@@ -205,8 +207,9 @@ describe "Deleting a module" do
     expect(ability).to be_able_to :delete, mod
 
     visit "/home/staff_home"
-    row = page.find('tr', text: mod.title)
-    within(row){
+    li = page.find('li', text: mod.title)
+    within(li){
+      click_button "collapseBtn#{mod.id}"
       click_link "Delete"
     }
     page.accept_alert "Are you sure? This is a permanent action that will remove all module data?"

@@ -13,6 +13,7 @@
 FactoryBot.define do
   factory :worklog_response do
     status { 0 }
+    reason { "They are lying" }
   end
 
   factory :blank_worklog_response, class: 'WorklogResponse' do

@@ -7,9 +7,7 @@ class HomeController < ApplicationController
 
   def student_home
     @title = "Dashboard"
-
     @teams = current_user.teams
-
   end
 
   def staff_home
@@ -20,6 +18,20 @@ class HomeController < ApplicationController
     @title = "Staff Dashboard"
     # Only render modules the user is associated with
     @uni_modules = current_user.uni_modules
+
+    @team_disputes = {}
+    my_teams = Team.where(uni_module: @uni_modules)
+    my_teams.each do |team|
+      # Find disputed worklogs, and count them
+      team_logs = Worklog.where(author: team.users)
+      disputes = WorklogResponse.where(worklog: team_logs, status: WorklogResponse.reject_status)
+      disputed_logs = Worklog.where(id: disputes.pluck(:worklog_id)).count
+
+      # Add teams to list if there are disputes
+      unless disputed_logs == 0
+        @team_disputes[team.id] = disputed_logs
+      end
+    end
   end
 
   def account
