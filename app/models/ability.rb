@@ -13,10 +13,11 @@ class Ability
       end
 
       if user.staff
-        # Staff can view and manage their own modules
-        can :read, UniModule
+        # Staff can view any module, as well as staff associated with it
+        can [:read, :show_all_staff], UniModule
         # Can create modules regardless of ownership (as no ownership has been set yet)
         can [:new, :create], UniModule
+        # Staff can only manage their own modules
         can :manage, UniModule, staff_modules: {user_id: user.id}
 
         # Staff can edit their modules' teams

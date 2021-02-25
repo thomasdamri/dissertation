@@ -7,19 +7,23 @@
     .col-6
       %h3 Module Staff
       %ul.list-group
-        - @uni_module.staff_modules.each do |sm|
+        - @staff_list.each do |sm|
           %li.list-group-item= link_to sm.user.real_display_name, sm.user.email_link
+        - if @show_all and can? :show_all_staff, @uni_module
+          %li.list-group-item.list-group-item-info= link_to "Show All Staff", show_all_staff_path(@uni_module), remote: true
     .col-6
       %h3 Work Log Info
       %ul.list-group
         %li.list-group-item= "First work log week: " + @uni_module.start_date.to_formatted_s(:long_ordinal)
         %li.list-group-item= "Last work log week: " + @uni_module.end_date.to_formatted_s(:long_ordinal)
-        %li.list-group-item= link_to "View Disputes", view_disputes_path(@uni_module)
+        - if can? :view_disputes, @uni_module
+          %li.list-group-item= link_to "View Disputes", view_disputes_path(@uni_module)
       %h3 Student Info
       %ul.list-group
         %li.list-group-item= "Students enrolled: " + @students.to_s
         %li.list-group-item= "Number of teams: " + @teams.count.to_s
-        %li.list-group-item= link_to "Show All Students", show_all_students_path(@uni_module), remote: true
+        - if can? :show_all_students, @uni_module
+          %li.list-group-item= link_to "Show All Students", show_all_students_path(@uni_module), remote: true
   .row
     .col-3
       - if can? :edit, @uni_module

@@ -5,9 +5,14 @@ class UniModulesController < ApplicationController
 
   # GET /uni_modules/1
   def show
+    max_staff_shown = 6
+
     @title = @uni_module.name
     @teams = @uni_module.teams
     @students = User.where(id: StudentTeam.where(team_id: @teams.pluck(:id)).pluck(:user_id)).count
+
+    @show_all = @uni_module.staff_modules.count > max_staff_shown
+    @staff_list = @uni_module.staff_modules.first(max_staff_shown)
   end
 
   # GET /uni_modules/new
@@ -167,6 +172,18 @@ class UniModulesController < ApplicationController
 
     redirect_to mod, notice: 'Teams were successfully deleted'
   end
+
+
+  # Shows all staff in a module if there are more than can be shown
+  def show_all_staff
+    @uni_module = UniModule.find(params["id"])
+    @staff_list = @uni_module.staff_modules
+
+    respond_to do |format|
+      format.js {render layout: false}
+    end
+  end
+
 
   # AJAX call for displaying all students on a module sorted by team
   def show_all_students

@@ -1,0 +1,14 @@
+.modal.fade#allStaffModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "allStaffModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#allStaffModalLabel= "All staff for #{@uni_module.title}"
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        %ul.list-group
+          - @staff_list.each do |sm|
+            %li.list-group-item= link_to sm.user.real_display_name, sm.user.email_link
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close

@@ -65,6 +65,7 @@ Rails.application.routes.draw do
 
   # Module routes
   resources :uni_modules
+  get 'uni_modules/:id/show_all_staff', to: 'uni_modules#show_all_staff', as: 'show_all_staff'
   get 'uni_modules/:id/show_all_students', to: 'uni_modules#show_all_students', as: 'show_all_students'
   get 'uni_modules/view_disputes/:id', to: 'uni_modules#view_disputes', as: 'view_disputes'
 

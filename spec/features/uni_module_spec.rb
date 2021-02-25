@@ -361,3 +361,53 @@ describe "Viewing all students on a module" do
     expect(ability).to_not be_able_to :show_all_students, mod
   end
 end
+
+describe "Viewing all staff on a module" do
+  before(:each) do
+    mod = create :uni_module
+    (1..11).each do |i|
+      u = create :user, staff: true, username: "zzz12d#{i}", email: "a#{i}@gmail.com", display_name: "#{i} Jones"
+      create :staff_module, uni_module: mod, user: u
+    end
+  end
+
+  specify "As a staff member on a module, I can view all staff", js: true do
+    staff = User.where(username: "zzz12d1").first
+    login_as staff, scope: :user
+    ability = Ability.new(staff)
+
+    mod = UniModule.first
+    last_name = mod.staff_modules.last.user.real_display_name
+
+    expect(ability).to be_able_to :show_all_staff, mod
+    visit "/uni_modules/#{mod.id}"
+    within(:css, '#modInfo'){
+      expect(page).to_not have_content(last_name)
+      click_link "Show All Staff"
+    }
+
+    within(:css, '.modal-body'){
+      expect(page).to have_content(last_name)
+    }
+  end
+
+  specify "As a staff member not on a module, I can view all staff" do
+    other_staff = create :user, staff: true, username: "zzz12ab", email: "ab@gmail.com"
+    login_as other_staff, scope: :user
+    ability = Ability.new(other_staff)
+
+    mod = UniModule.first
+
+    expect(ability).to be_able_to :show_all_staff, mod
+
+    visit "/uni_modules/#{mod.id}"
+    expect(page).to have_content "Show All Staff"
+  end
+
+  specify "As a student I cannot view all staff" do
+    student = create :user, staff: false, username: "zzz12er", email: "er@gmail.com"
+    ability = Ability.new(student)
+    mod = UniModule.first
+    expect(ability).to_not be_able_to :show_all_staff, mod
+  end
+end
