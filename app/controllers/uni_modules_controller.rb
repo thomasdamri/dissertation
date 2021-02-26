@@ -20,6 +20,9 @@ class UniModulesController < ApplicationController
     @title = "Creating Module"
     @uni_module = UniModule.new
     @btn_text = "Create"
+
+    # Link the current user to the module so they have permission to edit it
+    @uni_module.staff_modules.build(user: current_user)
   end
 
   # GET /uni_modules/1/edit
@@ -31,9 +34,6 @@ class UniModulesController < ApplicationController
   # POST /uni_modules
   def create
     @uni_module = UniModule.new(uni_module_params)
-
-    # Link the current user to the module so they have permission to edit it
-    @uni_module.staff_modules.build(user: current_user)
 
     # Text for the submit button if module is not valid
     @btn_text = "Create"
