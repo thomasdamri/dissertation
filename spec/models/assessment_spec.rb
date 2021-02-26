@@ -43,11 +43,10 @@ RSpec.describe Assessment, type: :model do
 
   it 'is invalid with a close date before its opening date' do
     u = create :uni_module
-    a = create(:assessment, uni_module: u)
-    c = build(:criterium, assessment: a)
-    a.date_closed = Date.new 2020, 9, 12
+    a = build(:assessment, uni_module: u)
+    a.date_closed = Date.today - 14
     expect(a).to_not be_valid
-    a.date_closed = Date.new 2020, 12, 12
+    a.date_closed = Date.today + 14
     expect(a).to be_valid
   end
 
@@ -156,6 +155,25 @@ RSpec.describe Assessment, type: :model do
       expect(a.num_completed(t)).to eq 3
     end
 
+  end
+
+  describe '#within_fill_dates?' do
+    it 'returns true when a date is inside the open and close dates' do
+      a = build(:assessment, date_opened: Date.yesterday, date_closed: Date.tomorrow)
+      expect(a.within_fill_dates?).to eq true
+    end
+
+    it 'returns true when a date is the open or close date' do
+      a = build(:assessment, date_opened: Date.today, date_closed: Date.today)
+      expect(a.within_fill_dates?).to eq true
+    end
+
+    it 'returns false when a date is outside the open or close date' do
+      a = build(:assessment, date_opened: Date.yesterday - 1, date_closed: Date.yesterday)
+      expect(a.within_fill_dates?).to eq false
+      a2 = build(:assessment, date_opened: Date.tomorrow + 1, date_closed: Date.tomorrow + 1)
+      expect(a2.within_fill_dates?).to eq false
+    end
   end
 
   describe '#generate_weightings' do

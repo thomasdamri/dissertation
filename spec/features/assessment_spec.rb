@@ -289,6 +289,72 @@ describe 'Filling in an assessment' do
 
   end
 
+  specify 'I can only fill in an assessment during the set period of time' do
+    student = User.where(username: 'zzz12ac').first
+    login_as student, scope: :user
+
+    t = Team.first
+    a = Assessment.first
+
+    # First test when before open date
+    a.date_opened = Date.tomorrow
+    a.date_closed = Date.tomorrow + 7
+    a.save
+
+    visit "/teams/#{t.id}"
+
+    # Should be able to see assessment in the table
+    expect(page).to have_content a.name
+    tr = page.first('tr', text: a.name)
+    row = tr.find(:xpath, '..')
+
+    within(row){
+      expect(page).to_not have_content "Fill In"
+    }
+    # Expect a redirect
+    visit "/assessment/#{a.id}/fill_in"
+    expect(page).to have_content "Group Email Info"
+
+    # Now test when after close date
+    a.date_opened = Date.yesterday - 7
+    a.date_closed = Date.yesterday
+    a.save
+
+    visit "/teams/#{t.id}"
+
+    # Should be able to see assessment in the table
+    expect(page).to have_content a.name
+    tr = page.first('tr', text: a.name)
+    row = tr.find(:xpath, '..')
+
+    within(row){
+      expect(page).to_not have_content "Fill In"
+    }
+    # Expect a redirect
+    visit "/assessment/#{a.id}/fill_in"
+    expect(page).to have_content "Group Email Info"
+
+    # Now try with a correct date
+    a.date_opened = Date.yesterday
+    a.date_closed = Date.tomorrow
+    a.save
+
+    visit "/teams/#{t.id}"
+
+    # Should be able to see assessment in the table
+    expect(page).to have_content a.name
+    tr = page.first('tr', text: a.name)
+    row = tr.find(:xpath, '..')
+
+    within(row){
+      expect(page).to have_content "Fill In"
+    }
+    # Expect a redirect
+    visit "/assessment/#{a.id}/fill_in"
+    expect(page).to_not have_content "Group Email Info"
+    expect(page).to have_content a.name
+  end
+
   # This test needs to have js: true, even though it doesn't have any remote component
   specify 'I can fill in an assessment if I am a student who is on the module, but only once, and all fields must be filled', js: true do
     student = User.where(username: 'zzz12ac').first

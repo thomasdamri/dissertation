@@ -81,7 +81,12 @@ class AssessmentsController < ApplicationController
 
     # Check user has not already filled in the form
     if @assessment.completed_by? current_user
-      redirect_to @team
+      redirect_to @team, notice: "You have already filled in this assessment"
+    end
+
+    # Check if assessment close date has expired
+    unless @assessment.within_fill_dates?
+      redirect_to @team, notice: "This assessment can no longer be filled in"
     end
 
   end

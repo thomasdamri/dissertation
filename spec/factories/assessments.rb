@@ -14,8 +14,8 @@ FactoryBot.define do
 
   factory :assessment, class: Assessment do
     name { 'Test Assessment' }
-    date_opened { Date.new(2020, 10, 30) }
-    date_closed { Date.new(2020, 11, 10) }
+    date_opened { Date.today - 7 }
+    date_closed { Date.today + 7 }
   end
 
   factory :blank_assessment, class: Assessment do

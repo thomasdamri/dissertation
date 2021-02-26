@@ -64,6 +64,10 @@ class Assessment < ApplicationRecord
     comp
   end
 
+  # Returns true if the current date is between the opening and closing date
+  def within_fill_dates?
+    Date.today.between?(self.date_opened, self.date_closed) ? true : false
+  end
 
   # Generates the individual weightings for all students in a given team according to the WebPA system
   def generate_weightings(team)
