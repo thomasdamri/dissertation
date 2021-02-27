@@ -10,6 +10,7 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  manual_set            :boolean          default(FALSE)
+#  reason                :string(255)
 #
 class StudentWeighting < ApplicationRecord
 
@@ -22,6 +23,9 @@ class StudentWeighting < ApplicationRecord
   validates :user, uniqueness: {scope: :assessment}
   validates :manual_set, inclusion: {in: [true, false]}
 
+  # Checks that a reason is always provided when manually changed
+  validates_with StudentWeightingValidator
+
   # Updates the weighting attribute and results at last check together
   def update_weighting(new_weighting, new_results)
     # If the weighting is manually set, do not update it
@@ -33,8 +37,9 @@ class StudentWeighting < ApplicationRecord
   end
 
   # Manually sets the weighting of the object
-  def manual_update(new_weighting)
+  def manual_update(new_weighting, new_reason)
     self.manual_set = true
+    self.reason = new_reason
     self.weighting = new_weighting
     save
   end

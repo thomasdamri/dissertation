@@ -625,14 +625,7 @@ describe 'Viewing and modifying assessment results' do
 
     visit "/assessment/#{a.id}"
 
-    # Find the row in the table with the team's number in it
-    row = nil
-    within(:css, '#gradeTable'){
-      row = page.first('td', text: t.number).find(:xpath, '..')
-    }
-    within(row){
-      click_link 'View Individual Grades'
-    }
+    click_link 'View Individual Grades'
 
     # Find each user's grade in the modal table
     table = page.find(:css, '#indGradeTable')
@@ -698,115 +691,6 @@ describe 'Viewing and modifying assessment results' do
     # Students should not be able to see individual responses
     expect(ability).to_not be_able_to(:get_ind_responses, a)
 
-  end
-
-  specify "As staff I can change a student's individual weight manually, then change it back", js: true do
-    staff = User.where(staff: true).first
-    login_as staff, scope: :user
-
-    t = Team.first
-    a = Assessment.first
-
-    # Give student a recognisable name so they can be found in the table
-    student = t.users.first
-    student.display_name = "Dan Perry"
-    student.save
-
-    visit "/assessment/#{a.id}"
-
-    # Find the button for this team to bring up individual grades
-    row = nil
-    within(:css, '#gradeTable'){
-      row = page.first('td', text: t.number).find(:xpath, '..')
-    }
-    within(row){
-      click_link 'View Individual Grades'
-    }
-
-    # Find the first student in the team, and the row with their grade in
-    #row = nil
-    within(:css, "#indGradeTable"){
-      row = page.first('td', text: student.real_display_name).find(:xpath, '..')
-    }
-
-    current_weight = StudentWeighting.where(assessment: a, user: student).first
-    old_weighting = current_weight.weighting
-
-    new_val = 0.7
-
-    # Get the weighting to identify the input field
-    within(row){
-      # Should see current weighting there
-      expect(page).to have_content old_weighting
-      # Should see "No" in the "Manually set" column
-      expect(page).to have_content "No"
-      # Update weighting
-      fill_in "new_weight_#{current_weight.id}", with: new_val
-
-    }
-    click_button "Update Grades"
-
-    # Page has now reloaded, re-open the modal
-    row = nil
-    within(:css, '#gradeTable'){
-      row = page.first('td', text: t.number).find(:xpath, '..')
-    }
-    within(row){
-      click_link 'View Individual Grades'
-    }
-
-    # Find the row for the current user
-    within(:css, '#indGradeTable'){
-      row = page.first('td', text: student.real_display_name).find(:xpath, '..')
-    }
-
-    within(row){
-      # Should only see the manually set grading, not the generated one
-      expect(page).to have_content new_val
-      expect(page).to_not have_content old_weighting
-      # Should also see "Yes" for the manually set column
-      expect(page).to have_content "Yes"
-
-      # Click the reset button
-      check "reset_check_#{current_weight.id}"
-    }
-    # Click update to submit changes
-    click_button "Update Grades"
-
-    # Re-find the team's row again and re-open the modal
-    within(:css, '#gradeTable'){
-      row = page.first('td', text: t.number).find(:xpath, '..')
-    }
-    within(row){
-      click_link 'View Individual Grades'
-    }
-
-    # Find the row for the current user
-    within(:css, '#indGradeTable'){
-      row = page.first('td', text: student.real_display_name).find(:xpath, '..')
-    }
-
-    within(row){
-      # Should only see the auto-generated one, not the manual one
-      expect(page).to_not have_content new_val
-      expect(page).to have_content old_weighting
-      # Should also see "No" for the manually set column
-      expect(page).to have_content "No"
-    }
-
-  end
-
-  specify "As a student I cannot see other students' weightings or change them" do
-    t = Team.first
-    a = Assessment.first
-
-    student = t.users.first
-    ability = Ability.new(student)
-    login_as student, scope: :user
-
-    expect(ability).to be_able_to(:read, t)
-    expect(ability).to_not be_able_to(:view_ind_grades, t)
-    expect(ability).to_not be_able_to(:update_ind_grades, t)
   end
 end
 

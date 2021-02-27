@@ -1,5 +1,5 @@
 class StudentMailer < ApplicationMailer
-  default from: "testing@example.com"
+  default from: "no-reply@sheffield.ac.uk"
 
   # Given a user and an assessment, email that user's score for that assessment to the user
   def score_email(user, assessment, team_grade, ind_weight)

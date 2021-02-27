@@ -298,6 +298,11 @@ class AssessmentsController < ApplicationController
     redirect_to assess, notice: 'Team grades were successfully deleted'
   end
 
+  # Page for viewing individual grades for an assessment
+  def view_ind_grades
+    @assess = Assessment.find(params['id'])
+    @teams = @assess.uni_module.teams
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

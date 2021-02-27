@@ -302,7 +302,7 @@ RSpec.describe Assessment, type: :model do
       expect(sw.weighting.round(2)).to eq 0.95
 
       # Set last sw to be manually set
-      sw.manual_update(1.2)
+      sw.manual_update(1.2, "Some reason")
 
       expect(sw.weighting).to eq 1.2
 

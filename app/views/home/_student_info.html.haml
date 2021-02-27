@@ -17,20 +17,23 @@
                 - else
                   - mod.assessments.each do |assess|
                     %li.list-group-item
-                      = link_to assess.name, assessment_path(assess)
                       - # Calculating which colour the badge should be
                       - if assess.date_opened.past?
                         - if assess.date_closed.past?
+                          = assess.name
                           - badge_class = "badge-primary"
                           - badge_text = "Results Ready"
                         - else
                           - if assess.completed_by? current_user
+                            = assess.name
                             - badge_class = "badge-success"
                             - badge_text = "Completed"
                           - else
+                            = link_to assess.name, fillin_assessment_path(assess)
                             - badge_class = "badge-warning"
                             - badge_text = "Open"
                       - else
+                        = assess.name
                         - badge_class = "badge-secondary"
                         - badge_text = "Not Open"
                       %span{class: "badge #{badge_class}"}= badge_text

@@ -25,8 +25,6 @@ Rails.application.routes.draw do
   # Team routes (not associated with regular rails CRUD operations)
   get 'teams/grade_form/:id/:assess', to: 'teams#grade_form', as: 'teams_grade_form'
   post 'teams/set_grade', to: 'teams#set_grade', as: 'teams_set_grade'
-  get 'teams/:id/:assess/view_ind_grades', to: 'teams#view_ind_grades', as: 'view_ind_grades'
-  post 'teams/:id/:assess/update_ind_grades', to: 'teams#update_ind_grades', as: 'update_ind_grades'
   # Team routes associated with work logs, but the paths work better under teams because of cancancan
   get 'teams/new_worklog/:id', to: 'teams#new_worklog', as: 'new_worklog'
   post 'teams/process_worklog/:id', to: 'teams#process_worklog', as: 'process_worklog'
@@ -62,6 +60,12 @@ Rails.application.routes.draw do
   post 'assessment/:id/send_email', to: 'assessments#send_score_email', as: 'assessment_score_email'
   get 'assessment/:id/show_team_grades', to: 'assessments#show_team_grades', as: 'show_team_grades'
   get 'assessment/:id/:team_id/get_ind_responses', to: 'assessments#get_ind_responses', as: 'get_ind_responses'
+  get 'assessment/:id/view_ind_grades', to: 'assessments#view_ind_grades', as: 'view_ind_grades'
+
+  # StudentWeighting routes
+  get 'student_weighting/:id/update_grade_form', to: 'student_weighting#update_grade_form', as: 'update_grade_form'
+  post 'student_weighting/:id/process_grade_update', to: 'student_weighting#process_grade_update', as: 'process_grade_update'
+  post 'student_weighting/:id/reset_grade', to: 'student_weighting#reset_grade', as: 'reset_grade'
 
   # Module routes
   resources :uni_modules

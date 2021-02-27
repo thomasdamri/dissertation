@@ -68,58 +68,6 @@ class TeamsController < ApplicationController
 
   end
 
-  # GET '/teams/:id/:assess/view_ind_grades' (AJAX)
-  # Sends all the individual grades for the team and assessment given as AJAX data
-  def view_ind_grades
-    team = Team.find(params['id'])
-    assessment = Assessment.find(params['assess'])
-    @team_grade = TeamGrade.where(team_id: team.id, assessment_id: assessment.id).first
-
-    @ind_weights = StudentWeighting.where(user: team.users, assessment: assessment)
-
-    respond_to do |format|
-      format.js { render layout: false }
-    end
-
-  end
-
-  # POST /teams/:id/:assess/update_ind_grades
-  # Updates all the individual grades for the team and assessment
-  def update_ind_grades
-    team = Team.find(params['id'])
-    assessment = Assessment.find(params['assess'])
-
-    # Find all the ids of student weightings for this team and assessment
-    stud_weights = StudentWeighting.where(assessment: assessment, user: team.users)
-
-    # Checks if there was at least one grade reset when checking all student weightings
-    did_reset = false
-
-    stud_weights.each do |sw|
-      # Check if this weighting needs manually setting
-      new_weight = params["new_weight_#{sw.id}"]
-      unless new_weight.nil? or new_weight == ""
-        sw.manual_update new_weight
-      end
-
-      # Check if this weighting needs resetting
-      should_reset = params["reset_check_#{sw.id}"]
-      if should_reset == "on"
-        did_reset = true
-        sw.manual_set = false
-        sw.save
-      end
-
-    end
-
-    # Re-generate the peer assessment scores if there was a reset
-    if did_reset
-      assessment.generate_weightings team
-    end
-
-    redirect_to assessment
-  end
-
   # Work log stuff - makes more sense to be in here, so cancancan can properly authorise based on team
 
   # AJAX call to display the modal for filling in the worklog for the week

@@ -10,6 +10,7 @@
 #  created_at            :datetime         not null
 #  updated_at            :datetime         not null
 #  manual_set            :boolean          default(FALSE)
+#  reason                :string(255)
 #
 FactoryBot.define do
   factory :student_weighting do

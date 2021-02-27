@@ -6,3 +6,8 @@
   %li Your team grade: #{@team_grade.grade.round(2)}
   %li Your peer-assessment weighting: #{@ind_weight.weighting.round(2)}
   %li Your individual grade: #{@ind_grade.round(2)}
+
+- if @ind_weight.manual_set
+  %strong Note:
+  Your peer-assessed weighting has been manually changed by a member of staff. Their reason for doing so is:
+  %p= @ind_weight.reason

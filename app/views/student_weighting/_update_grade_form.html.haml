@@ -1,0 +1,20 @@
+.modal.fade#updateGradeModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "updateGradeModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#updateGradeModalLabel= "Update weighting for #{@ind_weight.user.real_display_name}"
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        = form_tag({action: :process_grade_update}) do
+          = hidden_field_tag 'sw_id', @ind_weight.id
+          = label_tag 'new_weight', 'New Individual Weighting'
+          = number_field_tag 'new_weight', nil, step: 0.01, min: 0, max: 10, required: true
+          %br
+          = label_tag 'reason', 'Reason for grade change'
+          = text_field_tag 'reason', nil, required: true
+          %br
+          = submit_tag 'Update Weighting', class: 'btn btn-primary'
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close

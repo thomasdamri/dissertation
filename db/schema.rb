@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_28_134238) do
+ActiveRecord::Schema.define(version: 2021_02_27_194524) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci", force: :cascade do |t|
     t.bigint "author_id"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2021_01_28_134238) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.boolean "manual_set", default: false
+    t.string "reason"
     t.index ["assessment_id"], name: "index_student_weightings_on_assessment_id"
     t.index ["user_id"], name: "index_student_weightings_on_user_id"
   end

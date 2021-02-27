@@ -23,6 +23,7 @@
     = button_to 'Send grades via email', assessment_score_email_path, method: :post, class: 'btn btn-info'
   -else
     = link_to 'Upload Team Grades', upload_grades_path(@assessment), class: 'btn btn-info', remote: true
+  = link_to "View Individual Grades", view_ind_grades_path(@assessment), class: 'btn btn-info'
 
 = render 'assessments/grade_table'
 

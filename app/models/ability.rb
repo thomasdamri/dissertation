@@ -39,6 +39,12 @@ class Ability
         end
         cannot [:fill_in, :process_assess], Assessment
 
+        # Staff can manage the peer assessment weightings for students on their modules
+        can :manage, StudentWeighting do |sw|
+          # Does the assessment's module involve the current user?
+          sw.assessment.uni_module.staff_modules.pluck(:user_id).include? user.id
+        end
+
         # Can only interact with work logs if they are on a module the user is part of
         can [:view_disputes, :override_form, :process_override, :process_uphold], Worklog do |wl|
           wl.uni_module.staff_modules.pluck(:user_id).include? user.id
