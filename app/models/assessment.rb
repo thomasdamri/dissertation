@@ -9,6 +9,7 @@
 #  date_closed   :date
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  show_results  :boolean
 #
 class Assessment < ApplicationRecord
 
@@ -28,7 +29,9 @@ class Assessment < ApplicationRecord
   validates :name, uniqueness: {scope: :uni_module}, presence: true
   validates :date_opened, presence: true
   validates :date_closed, presence: true
+  validates :show_results, inclusion: { in: [true, false] }
 
+  # Checks opening date is before closing date
   validates_with AssessmentValidator
 
   # Returns true if this assessment has had team grades uploaded for it

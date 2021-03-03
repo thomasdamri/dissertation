@@ -9,6 +9,7 @@
 #  date_closed   :date
 #  created_at    :datetime         not null
 #  updated_at    :datetime         not null
+#  show_results  :boolean
 #
 require 'rails_helper'
 

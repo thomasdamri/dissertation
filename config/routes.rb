@@ -61,6 +61,7 @@ Rails.application.routes.draw do
   get 'assessment/:id/show_team_grades', to: 'assessments#show_team_grades', as: 'show_team_grades'
   get 'assessment/:id/:team_id/get_ind_responses', to: 'assessments#get_ind_responses', as: 'get_ind_responses'
   get 'assessment/:id/view_ind_grades', to: 'assessments#view_ind_grades', as: 'view_ind_grades'
+  post 'assessment/:id/toggle_results', to: 'assessments#toggle_results', as: 'toggle_results'
 
   # StudentWeighting routes
   get 'student_weighting/:id/update_grade_form', to: 'student_weighting#update_grade_form', as: 'update_grade_form'

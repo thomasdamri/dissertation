@@ -133,8 +133,31 @@ describe "Viewing the student dashboard" do
       expect(page).to have_content "Completed"
     }
 
-    # Test a closed assessment
+    # Test a closed assessment with show_results as false
     a.date_closed = Date.today - 1
+    a.save
+    page.driver.browser.navigate.refresh
+
+    # Find the list item for the module
+    li = nil
+    within(:css, '#modInfo'){
+      li = page.find('li', text: mod.title)
+    }
+
+    assess_li = nil
+    within(li){
+      # Find span element to expand assessment list
+      span = page.find('span', text: 'Show Assessments')
+      span.click
+      assess_li = page.find('li', text: a.name)
+    }
+
+    within(assess_li){
+      expect(page).to have_content "Awaiting Results"
+    }
+
+    # Test a closed assessment with show_results as true
+    a.show_results = true
     a.save
     page.driver.browser.navigate.refresh
 

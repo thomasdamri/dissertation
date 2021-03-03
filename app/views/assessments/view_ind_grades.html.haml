@@ -26,10 +26,7 @@
           %td{"colspan": 4}= "No students from this team have completed this assessment yet"
         - else
           %td= ind_weight.weighting
-          - if team_grade.nil?
-            %td Pending team grade
-          - else
-            %td= (team_grade.grade * ind_weight.weighting).round(2)
+          %td= team_grade.nil? ? "Pending team grade" : (team_grade.grade * ind_weight.weighting).round(2)
           - if ind_weight.manual_set
             %td
               Yes

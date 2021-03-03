@@ -7,7 +7,10 @@
     %th
 
   - @assessments.each do |assess|
-    - disabled_results = not(assess.date_closed.past?)
+    - # Can only view results when closing date has passed, and staff have released results
+    - disabled_results = true
+    - if assess.date_closed.past? and assess.show_results
+      - disabled_results = false
     %tr
       %td= assess.name
       - # Only allow user to fill in form if not already done so, and within the fill in date

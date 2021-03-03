@@ -33,6 +33,8 @@ class AssessmentsController < ApplicationController
 
     # Set parent module
     @assessment.uni_module = @unimod
+    # Set show_results to a default value
+    @assessment.show_results = false
 
     # Set the criteria min/max values to nil if response type is a string
     @assessment.criteria.each do |crit|
@@ -135,9 +137,15 @@ class AssessmentsController < ApplicationController
   end
 
 
-  # Shows the student their final weighting
+  # Shows the student their final weighting and grade
   def results
     @assessment = Assessment.find(params[:id])
+
+    # Check that the student can view the results
+    unless @assessment.show_results
+      team = current_user.teams.where(uni_module: @assessment.uni_module).first
+      redirect_to team, notice: "You cannot view your results yet. Contact a staff member if you think this is a mistake"
+    end
     @stud_weight = StudentWeighting.where(user: current_user, assessment: @assessment).first
 
     # If the assessment is not closed yet, or the student has no mark, do not show it
@@ -163,6 +171,14 @@ class AssessmentsController < ApplicationController
     
   end
 
+  # POST '/assessment/:id/toggle_results'
+  # Toggles whether students are able to see their results for this assessment
+  def toggle_results
+    @assessment = Assessment.find(params['id'])
+    @assessment.show_results = not(@assessment.show_results)
+    @assessment.save
+    redirect_to @assessment
+  end
 
   # Exports each student's grades to a CSV file
   def csv_export
@@ -293,6 +309,10 @@ class AssessmentsController < ApplicationController
     assess.team_grades.each do |tg|
       tg.destroy
     end
+
+    # Ensure students cannot view their results now
+    assess.show_results = false
+    assess.save
 
     # Send user back to the assessment page
     redirect_to assess, notice: 'Team grades were successfully deleted'

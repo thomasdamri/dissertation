@@ -572,6 +572,10 @@ describe 'Viewing and modifying assessment results' do
     t = Team.first
     a = Assessment.first
 
+    # Set show_results to true, as I am only testing the dates in this test
+    a.show_results = true
+    a.save
+
     visit "/teams/#{t.id}"
 
     within(:css, '#studentAssessTable'){
@@ -589,6 +593,7 @@ describe 'Viewing and modifying assessment results' do
     # Alter date so that assessment is finished
     a.date_closed = Date.today - 1
     a.save
+
 
     # Refresh the page
     visit "/teams/#{t.id}"
@@ -614,6 +619,73 @@ describe 'Viewing and modifying assessment results' do
       expect(page).to have_content "Your grade: #{final_grade.round(2)}"
     }
 
+  end
+
+  specify 'As a member of staff I can toggle whether students can see their grades', js: true do
+    student = User.where(username: 'zzz12ac').first
+    login_as student, scope: :user
+    ability = Ability.new(student)
+
+    t = Team.first
+    a = Assessment.first
+    # Set the date of the assessment to the previous day, so that the date_closed doesnt matter
+    a.date_closed = Date.yesterday
+    a.save
+    # Reloading the assessment from the db, because sometimes caching is a pain
+    a = Assessment.first
+    # By default, the assessment should not show results to students
+    expect(a.show_results).to eq false
+
+    # Quick permissions check - student cannot set show_results
+    expect(ability).to_not be_able_to :toggle_results, a
+
+    visit "/teams/#{t.id}"
+
+    tr = page.first('tr', text: a.name)
+    row = tr.find(:xpath, '..')
+
+    within(row){
+      # The results button should be disabled, so RSpec can't see it
+      expect(row).to_not have_content "Results"
+    }
+
+    # Login as a staff member and change the show_results attribute to true
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+    ability = Ability.new(staff)
+
+    # Associated staff member can toggle the value of show_results
+    expect(ability).to be_able_to :toggle_results, a
+
+    visit "/assessment/#{a.id}"
+
+    # Set show_results to false
+    within(:css, '#gradeTools'){
+      click_button "Show students their grade"
+    }
+
+    # After changing, log back in as student
+    login_as student, scope: :user
+    visit "/teams/#{t.id}"
+
+    tr = page.first('tr', text: a.name)
+    row = tr.find(:xpath, '..')
+
+    within(row){
+      # The results button is now visible - click it
+      click_button "Results"
+    }
+
+    # Not re-checking the contents of the modal, as this was done in previous test
+    within(:css, '#resultsModal'){
+      expect(page).to have_content "Team grade:"
+    }
+
+
+    # Finally just check an unassociated staff member cannot toggle show_results
+    other_staff = create :user, staff: false, username: "zzz12mj", email: "123@gmail.com"
+    ability = Ability.new(other_staff)
+    expect(ability).to_not be_able_to :toggle_results, a
   end
 
   specify "As staff I can see all student's individual grades", js: true  do
