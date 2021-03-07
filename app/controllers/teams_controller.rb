@@ -111,10 +111,14 @@ class TeamsController < ApplicationController
     end
 
     # Create new worklog and ensure fill date is a monday
-    wl = Worklog.create(author: current_user, uni_module: @uni_module, fill_date: Date.today, content: params['content'])
+    wl = Worklog.new(author: current_user, uni_module: @uni_module, fill_date: Date.today, content: params['content'])
     wl.ensure_mondays
 
-    redirect_to @team, notice: 'Work log uploaded successfully'
+    if wl.save
+      redirect_to @team, notice: 'Work log uploaded successfully'
+    else
+      redirect_to @team, notice: "Error uploading worklog"
+    end
   end
 
   # Page for reviewing the past week's worklog

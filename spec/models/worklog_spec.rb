@@ -35,6 +35,15 @@ RSpec.describe Worklog, type: :model do
     expect(w).to_not be_valid
   end
 
+  it 'is invalid when content is > 280 characters' do
+    mod = UniModule.first
+    student = User.where(staff: false).first
+    w = build :worklog, author: student, uni_module: mod, content: ("a" * 281)
+    expect(w).to_not be_valid
+    w.content = ("a" * 280)
+    expect(w).to be_valid
+  end
+
   it 'removes all responses on deletion' do
     mod = UniModule.first
     student = User.where(staff: false).first

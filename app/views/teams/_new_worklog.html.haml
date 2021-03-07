@@ -7,8 +7,12 @@
           %span{"aria-hidden": "true"} &times;
       .modal-body
         Please enter a brief summary of what work you have completed since the last time you filled in a worklog
+        (
+        = Worklog.max_content_length.to_s
+        characters max)
+        .putErrorHere
         = form_tag({action: 'process_worklog'}) do |f|
-          = text_area_tag 'content', '', required: true
+          = text_area_tag 'content', '', required: true, cols: 50
           %br
           = submit_tag 'Submit', class: 'btn btn-primary'
       .modal-footer

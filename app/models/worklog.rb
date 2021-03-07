@@ -12,6 +12,11 @@
 #  uni_module_id :bigint
 #
 class Worklog < ApplicationRecord
+
+  def self.max_content_length
+    return 280
+  end
+
   # One user wrote the worklog about one module
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
   belongs_to :uni_module
@@ -40,5 +45,7 @@ class Worklog < ApplicationRecord
   validates :fill_date, presence: true, uniqueness: { scope: [:author_id, :uni_module_id] }
   validates :author_id, presence: true
   validates :uni_module_id, presence: true
+  # Content must be within 280 characters to prevent students writing too much
+  validates :content, presence: true, length: { maximum: self.max_content_length }
 
 end
