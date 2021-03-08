@@ -71,7 +71,7 @@ class Criterium < ApplicationRecord
       elsif min_value.nil?
         "#{first_part} which is #{max} or less"
       else
-        "#{first_part} between #{min} and #{max}"
+        "#{first_part} between #{min} and #{max}, where #{min} is worst and #{max} is best"
       end
 
     end

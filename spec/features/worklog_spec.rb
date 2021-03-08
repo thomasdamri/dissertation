@@ -26,6 +26,8 @@ describe 'Creating a work log' do
     expect(ability).to be_able_to :new_worklog, t
     expect(ability).to be_able_to :process_worklog, t
 
+    expect(Worklog.count).to eq 0
+
     visit "/teams/#{t.id}"
     click_link "Fill in work log for week"
 
@@ -38,8 +40,8 @@ describe 'Creating a work log' do
     }
 
     expect(page).to have_content "Work log uploaded successfully"
-
     expect(page).to_not have_content "Fill in work log for week"
+    expect(Worklog.count).to eq 1
 
   end
 

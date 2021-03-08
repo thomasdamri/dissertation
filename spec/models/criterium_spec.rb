@@ -102,7 +102,7 @@ RSpec.describe Criterium, type: :model do
       expect(c1.subtitle).to eq "Enter a number which is 10.1 or less"
 
       c1.min_value = 1.2
-      expect(c1.subtitle).to eq "Enter a number between 1.2 and 10.1"
+      expect(c1.subtitle).to eq "Enter a number between 1.2 and 10.1, where 1.2 is worst and 10.1 is best"
     end
   end
 

@@ -33,7 +33,11 @@
               %br
               %strong Reason:
               = ind_weight.reason
-            %td= button_to "Reset Weighting", reset_grade_path(ind_weight), method: :post, class: 'btn btn-warning'
+            %td
+              - if can? :reset_grade, ind_weight
+                = button_to "Reset Weighting", reset_grade_path(ind_weight), method: :post, class: 'btn btn-warning'
           - else
             %td= "No"
-            %td= link_to "Set Weighting", update_grade_form_path(ind_weight), remote: true, class: 'btn btn-warning'
+            %td
+              - if can? :update_grade, ind_weight
+                = link_to "Set Weighting", update_grade_form_path(ind_weight), remote: true, class: 'btn btn-warning'

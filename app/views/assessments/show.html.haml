@@ -22,16 +22,20 @@
   .card-body
     .row
       - if @assessment.has_team_grades?
-        = button_to 'Delete Existing Team Grades', delete_grades_path(@assessment), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure? This is a permanent action that will remove group grades for all teams" }
+        - if can? :delete_grades, @assessment
+          = button_to 'Delete Existing Team Grades', delete_grades_path(@assessment), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure? This is a permanent action that will remove group grades for all teams" }
         = button_to 'Send grades via email', assessment_score_email_path, method: :post, class: 'btn btn-info'
       -else
-        = link_to 'Upload Team Grades', upload_grades_path(@assessment), class: 'btn btn-info', remote: true
-      = link_to "View Individual Grades", view_ind_grades_path(@assessment), class: 'btn btn-info'
+        - if can? :upload_grades, @assessment
+          = link_to 'Upload Team Grades', upload_grades_path(@assessment), class: 'btn btn-info', remote: true
+      - if can? :view_ind_grades, @assessment
+        = link_to "View Individual Grades", view_ind_grades_path(@assessment), class: 'btn btn-info'
       - if @assessment.has_team_grades?
-        - if @assessment.show_results
-          = link_to "Hide students' grades", toggle_results_path(@assessment), method: :post, class: 'btn btn-warning'
-        - else
-          = button_to "Show students their grade", toggle_results_path(@assessment), method: :post, class: 'btn btn-warning'
+        - if can? :toggle_results, @assessment
+          - if @assessment.show_results
+            = link_to "Hide students' grades", toggle_results_path(@assessment), method: :post, class: 'btn btn-warning'
+          - else
+            = button_to "Show students their grade", toggle_results_path(@assessment), method: :post, class: 'btn btn-warning'
 
 %h3 Team Grades
 = render 'assessments/grade_table'
