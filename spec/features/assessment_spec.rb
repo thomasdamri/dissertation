@@ -173,6 +173,70 @@ describe 'Creating an assessment' do
 
 end
 
+describe 'Editing an assessment' do
+  before(:each) do
+    staff = create :user, staff: true
+    mod = create :uni_module
+    create :staff_module, user: staff, uni_module: mod
+
+    a = create :assessment, uni_module: mod
+  end
+
+  specify 'I can edit an assessment if I am part of the module' do
+    staff = User.first
+    login_as staff, scope: :user
+    ability = Ability.new(staff)
+
+    assess = Assessment.first
+    old_start_date = assess.date_opened
+    old_end_date = assess.date_closed
+
+    expect(ability).to be_able_to :edit, assess
+    expect(ability).to be_able_to :update, assess
+
+    visit "/assessment/#{assess.id}"
+    click_link "Change Dates"
+
+    select "2026", from: 'assessment_date_opened_1i'
+    select "August", from: 'assessment_date_opened_2i'
+    select "18", from: "assessment_date_opened_3i"
+    new_open_date = Date.new(2026, 8, 18)
+
+    select "2026", from: 'assessment_date_closed_1i'
+    select "December", from: 'assessment_date_closed_2i'
+    select "25", from: "assessment_date_closed_3i"
+    new_close_date = Date.new(2026, 12, 25)
+
+    click_button "Update Assessment"
+
+    within(:css, '#assessDate'){
+      expect(page).to have_content new_open_date.to_s
+      expect(page).to have_content new_close_date.to_s
+      expect(page).to_not have_content old_start_date.to_s
+      expect(page).to_not have_content old_end_date.to_s
+    }
+
+  end
+
+  specify 'I cannot edit an assessment if I am a member of staff not associated with the module' do
+    new_staff = create :user, staff: true, username: "zzz12er", email: "1@gmail.com"
+    ability = Ability.new(new_staff)
+    assess = Assessment.first
+
+    expect(ability).to_not be_able_to :edit, assess
+    expect(ability).to_not be_able_to :update, assess
+  end
+
+  specify 'I cannot edit an assessment if I am a student' do
+    student = create :user, staff: false, username: "zzz12et", email: "2@gmail.com"
+    ability = Ability.new(student)
+    assess = Assessment.first
+
+    expect(ability).to_not be_able_to :edit, assess
+    expect(ability).to_not be_able_to :update, assess
+  end
+end
+
 describe 'Removing an assessment' do
   specify 'I can remove an assessment if I am part of the module' do
     # Create staff user and login

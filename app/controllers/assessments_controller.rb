@@ -20,6 +20,7 @@ class AssessmentsController < ApplicationController
     @title = "Create Assessment"
     @assessment = Assessment.new
     @unimod = UniModule.find(params[:id].to_i)
+    @create = true
     # Check the user is a member of this module
     unless @unimod.staff_modules.pluck(:user_id).include? current_user.id
       raise ActionController::RoutingError.new('Not Found')
@@ -30,6 +31,7 @@ class AssessmentsController < ApplicationController
   def create
     @assessment = Assessment.new(assessment_params)
     @unimod = UniModule.find(params[:assessment][:mod])
+    @create = true
 
     # Set parent module
     @assessment.uni_module = @unimod
@@ -62,6 +64,25 @@ class AssessmentsController < ApplicationController
       redirect_to @assessment, notice: 'Assessment was successfully created.'
     else
       render :new
+    end
+  end
+
+  def edit
+    @title = "Editing Assessment"
+    @create = false
+    @assessment = Assessment.find(params["id"])
+    @unimod = @assessment.uni_module
+  end
+
+  def update
+    @create = false
+    @assessment = Assessment.find(params["id"])
+    @unimod = @assessment.uni_module
+
+    if @assessment.update(assessment_params)
+      redirect_to @assessment, notice: "Assessment updated successfully"
+    else
+      render :edit
     end
   end
 

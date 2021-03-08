@@ -1,10 +1,10 @@
 -# frozen_string_literal: true
-- # The url needs setting separately, as rails doesn't like the fact that assessments_path doesnt exist
-= simple_form_for(@assessment, url: "/assessment/create") do |f|
+- form_url = @create ? "/assessment/create" : "/assessment/edit/#{@assessment.id}"
+= simple_form_for(@assessment, url: form_url) do |f|
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
   
-  %h5 Hover over input boxes to see for a more detailed description
+  %h5 Hover over input boxes to see a more detailed description
 
   .form-inputs
     %h2 Assessment Information
@@ -16,24 +16,26 @@
       = f.input :date_closed, start_year: Date.today.year, label: "End date"
     = f.input :mod, as: :hidden, input_html: {value: @unimod.id}
 
-    %hr
+    - # Only show the question options if the assessment being created - cannot be edited
+    - if @create
+      %hr
 
-    %h2 Assessment Questions
-    = f.simple_fields_for :criteria do |af|
-      - if af.object.response_type == Criterium.string_type
-        = render 'string_criterium', f: af
-      - elsif af.object.response_type == Criterium.int_type
-        = render 'integer_criterium', f: af
-      - elsif af.object.response_type == Criterium.float_type
-        = render 'float_criterium', f: af
-      - elsif af.object.response_type == Criterium.bool_type
-        = render 'boolean_criterium', f: af
+      %h2 Assessment Questions
+      = f.simple_fields_for :criteria do |af|
+        - if af.object.response_type == Criterium.string_type
+          = render 'string_criterium', f: af
+        - elsif af.object.response_type == Criterium.int_type
+          = render 'integer_criterium', f: af
+        - elsif af.object.response_type == Criterium.float_type
+          = render 'float_criterium', f: af
+        - elsif af.object.response_type == Criterium.bool_type
+          = render 'boolean_criterium', f: af
 
-    .buttons
-      = link_to_add_fields 'Add Question - Text Response', f, :criteria, 'string_criterium'
-      = link_to_add_fields 'Add Question - Whole Number Response', f, :criteria, 'integer_criterium'
-      = link_to_add_fields 'Add Question - Decimal Number Response', f, :criteria, 'float_criterium'
-      = link_to_add_fields 'Add Question - Boolean Response', f, :criteria, 'boolean_criterium'
+      .buttons
+        = link_to_add_fields 'Add Question - Text Response', f, :criteria, 'string_criterium'
+        = link_to_add_fields 'Add Question - Whole Number Response', f, :criteria, 'integer_criterium'
+        = link_to_add_fields 'Add Question - Decimal Number Response', f, :criteria, 'float_criterium'
+        = link_to_add_fields 'Add Question - Boolean Response', f, :criteria, 'boolean_criterium'
 
   .form-actions
     = f.button :submit, class: 'btn btn-lg btn-primary'
