@@ -55,6 +55,7 @@ Rails.application.routes.draw do
   get 'assessment/edit/:id', to: 'assessments#edit', as: 'edit_assessment'
   patch 'assessment/edit/:id', to: 'assessments#update', as: 'update_assessment'
   get 'assessment/:id/fill_in', to: 'assessments#fill_in', as: 'fillin_assessment'
+  get 'assessment/:id/mock_view', to: 'assessments#mock_view', as: 'mock_view_assessment'
   post 'assessment/:id/process', to: 'assessments#process_assess', as: 'process_assessment'
   delete 'assessment/:id', to: 'assessments#destroy', as: 'delete_assessment'
   get 'assessment/:id/results', to: 'assessments#results', as: 'assessment_results'

@@ -14,11 +14,12 @@
       %h3 Assessment Criteria
       %p= "Total criteria: " + @num_crits.to_s
       %p= "Assessed criteria: " + @assessed_crits.to_s
-      %button.btn.btn-primary{"type" => "button", "data-toggle" => "collapse", "data-target" => "#crits", "aria-expanded" => "false", "aria-controls" => "crits"}
-        Show Criteria
-#crits.collapse
-  - @assessment.criteria.each do |crit|
-    = render 'crit_card', crit: crit
+      - if can? :mock_view, @assessment
+        - if @assessment.uni_module.teams.length > 0
+          = link_to "Show Student View", mock_view_assessment_path(@assessment) , class: 'btn btn-primary'
+        - else
+          .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "You need to add teams in order to use the student view"}
+            = button_to "Show Student View", '#', class: 'btn btn-secondary', disabled: true
 %hr
 
 .card#gradeTools

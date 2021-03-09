@@ -179,15 +179,32 @@ describe 'Editing an assessment' do
     mod = create :uni_module
     create :staff_module, user: staff, uni_module: mod
 
-    a = create :assessment, uni_module: mod
+    a = create :assessment, uni_module: mod, show_results: true
   end
 
-  specify 'I can edit an assessment if I am part of the module' do
-    staff = User.first
+  specify 'I can edit an assessment if I am part of the module, and students are affected by the date change' do
+    # By default, the assessment is open, as today falls within the open and close dates
+    student = create :user, staff: false, username: "zzz12rf", email: "k@gmail.com"
+    t = create :team, uni_module: UniModule.first
+    create :student_team, user: student, team: t
+    login_as student, scope: :user
+    assess = Assessment.first
+
+    visit "/teams/#{t.id}"
+    row = nil
+    within(:css, '#studentAssessTable'){
+      row = page.first('tr', text: assess.name)
+    }
+
+    within(row){
+      expect(page).to have_content "Fill In"
+    }
+
+    # Log in as a staff member to change the date
+    staff = User.where(staff: true).first
     login_as staff, scope: :user
     ability = Ability.new(staff)
 
-    assess = Assessment.first
     old_start_date = assess.date_opened
     old_end_date = assess.date_closed
 
@@ -214,6 +231,19 @@ describe 'Editing an assessment' do
       expect(page).to have_content new_close_date.to_s
       expect(page).to_not have_content old_start_date.to_s
       expect(page).to_not have_content old_end_date.to_s
+    }
+
+    # Now the dates have changed, confirm a student can no longer fill in the assessment
+    login_as student, scope: :user
+
+    visit "/teams/#{t.id}"
+    row = nil
+    within(:css, '#studentAssessTable'){
+      row = page.first('tr', text: assess.name)
+    }
+
+    within(row){
+      expect(page).to_not have_content "Fill In"
     }
 
   end
@@ -566,6 +596,48 @@ describe 'Filling in an assessment' do
       expect(page).to_not have_content "Fill In"
     }
 
+  end
+
+  specify "I can see the mock view of this assessment as a staff member on the module, when there are teams" do
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+    ability = Ability.new(staff)
+    a = Assessment.first
+
+    expect(ability).to be_able_to :mock_view, a
+
+    visit "/assessment/#{a.id}"
+    click_link "Show Student View"
+
+    a.criteria.each do |crit|
+      expect(page).to have_content crit.title
+    end
+  end
+
+  specify "I cannot see the mock view of the assessment when there are no teams uploaded" do
+    # First remove all the teams
+    a = Assessment.first
+    a.uni_module.teams.each do |t|
+      t.destroy
+    end
+
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+
+    visit "/assessment/#{a.id}"
+    expect(page).to_not have_content "Show Student View"
+  end
+
+  specify "I cannot see the mock view as an unassociated staff member or a student" do
+    t = Team.first
+    student = t.users.first
+    other_staff = create :user, staff: true, username: "zzz12bg", email: "lkj@gmail.com"
+    ability = Ability.new(student)
+    ability2 = Ability.new(other_staff)
+    a = Assessment.first
+
+    expect(ability).to_not be_able_to :mock_view, a
+    expect(ability2).to_not be_able_to :mock_view, a
   end
 
 end

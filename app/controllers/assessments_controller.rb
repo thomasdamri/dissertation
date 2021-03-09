@@ -157,6 +157,13 @@ class AssessmentsController < ApplicationController
     render 'assessments/fill_in'
   end
 
+  # View for staff to see what students see when filling in the assessment form
+  def mock_view
+    @assessment = Assessment.find(params['id'])
+    @title = "Student view for #{@assessment.name}"
+    @team = @assessment.uni_module.teams.first
+  end
+
 
   # Shows the student their final weighting and grade
   def results
