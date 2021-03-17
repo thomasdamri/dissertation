@@ -1,6 +1,6 @@
 .row
   .col6#modInfo
-    %h3 My Modules
+    %h3 My Teams
     %ul.list-group
       - if @teams.length == 0
         %li.list-group-item.list-group-item-secondary You are not currently involved in any modules
@@ -9,6 +9,8 @@
           - mod = team.uni_module
           %li.list-group-item
             = "#{mod.title} - Team #{team.number}"
+            %br
+            %span= link_to "View Team", team, class: 'btn btn-sm btn-primary'
             %span.btn.btn-sm.btn-info{"data-toggle": "collapse", href: "#collapse_#{mod.id}", role: "button", "aria-expanded": "false", "aria-controls": "collapse_#{mod.id}"} Show Assessments
             .collapse{id: "collapse_#{mod.id}"}
               %ul.list-group

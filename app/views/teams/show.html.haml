@@ -8,15 +8,14 @@
   .glyphRow
     %h5 Group Email Info
     %span.material-icons email
-  %button.btn.btn-primary{"data-toggle":"collapse", "data-target":"#groupEmail", "role": "button", "aria-expanded": "false", "aria-controls": "collapseExample"} Show
-  .collapse#groupEmail
-    .card.card-body
-      .row
-        .col-9
-          .card
-            %p#groupEmailText= @team.group_email_link
-        .col-2
-          %button.copy-btn.btn.btn-info Copy to clipboard
+    #groupEmail
+      .card.card-body
+        .row
+          .col-9
+            .card
+              %p#groupEmailText= @team.group_email_link
+          .col-2
+            %button.copy-btn.btn.btn-info Copy to clipboard
 
 %hr
 
@@ -38,3 +37,7 @@
 = link_to 'Review team work logs', review_worklogs_path(@team), class: 'btn btn-info'
 %br
 = link_to 'View past work logs', display_worklogs_path(@team), class: 'btn btn-info'
+
+%hr
+- if can? :show, @team.uni_module
+  = link_to "Back to module", @team.uni_module, class: 'btn btn-secondary'

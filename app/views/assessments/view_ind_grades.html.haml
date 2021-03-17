@@ -41,3 +41,5 @@
             %td
               - if can? :update_grade, ind_weight
                 = link_to "Set Weighting", update_grade_form_path(ind_weight), remote: true, class: 'btn btn-warning'
+
+= link_to "Back to Assessment", @assess, class: 'btn btn-secondary'
