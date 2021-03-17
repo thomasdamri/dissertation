@@ -18,7 +18,7 @@
                   - mod.assessments.each do |assess|
                     %li.list-group-item
                       - # Calculating which colour the badge should be
-                      - if assess.date_opened.past?
+                      - if assess.date_opened.past? or assess.date_opened.today?
                         - if assess.date_closed.past?
                           - if assess.show_results
                             - team = current_user.teams.where(uni_module: assess.uni_module).first

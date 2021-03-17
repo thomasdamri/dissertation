@@ -13,6 +13,10 @@ class UniModulesController < ApplicationController
 
     @show_all = @uni_module.staff_modules.count > max_staff_shown
     @staff_list = @uni_module.staff_modules.first(max_staff_shown)
+
+    if @staff_list.nil?
+      @staff_list = []
+    end
   end
 
   # GET /uni_modules/new

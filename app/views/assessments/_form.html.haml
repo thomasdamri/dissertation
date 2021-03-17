@@ -1,6 +1,5 @@
 -# frozen_string_literal: true
-- form_url = @create ? "/assessment/create" : "/assessment/edit/#{@assessment.id}"
-= simple_form_for(@assessment, url: form_url) do |f|
+= simple_form_for(@assessment, url: @form_url) do |f|
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
   
@@ -16,8 +15,8 @@
       = f.input :date_closed, start_year: Date.today.year, label: "End date"
     = f.input :mod, as: :hidden, input_html: {value: @unimod.id}
 
-    - # Only show the question options if the assessment being created - cannot be edited
-    - if @create
+    - # Only show the question options if the assessment being created - questions cannot be edited
+    - if @form_url == create_assessment_path
       %hr
 
       %h2 Assessment Questions

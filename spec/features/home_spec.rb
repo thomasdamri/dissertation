@@ -67,7 +67,7 @@ describe "Viewing the student dashboard" do
     a = create :assessment, uni_module: mod, date_opened: Date.today + 1, date_closed: Date.today + 2
     c = create :criterium, assessment: a
 
-    # Test a future assessment
+    # Test a future assessment (open day tomorrow)
     page.driver.browser.navigate.refresh
 
     # Find the list item for the module
@@ -88,8 +88,8 @@ describe "Viewing the student dashboard" do
       expect(page).to have_content "Not Open"
     }
 
-    # Test an open incomplete assessment
-    a.date_opened = Date.today - 1
+    # Test an open incomplete assessment (open date today)
+    a.date_opened = Date.today
     a.save
     page.driver.browser.navigate.refresh
 
@@ -108,6 +108,30 @@ describe "Viewing the student dashboard" do
     }
 
     within(assess_li){
+      expect(page).to have_content "Open"
+    }
+
+    # Test an open incomplete assessment (close date today)
+    a.date_closed = Date.today
+    a.save
+    page.driver.browser.navigate.refresh
+
+    # Find the list item for the module
+    li = nil
+    within(:css, '#modInfo'){
+      li = page.find('li', text: mod.title)
+    }
+
+    assess_li = nil
+    within(li){
+      # Find span element to expand assessment list
+      span = page.find('span', text: 'Show Assessments')
+      span.click
+      assess_li = page.find('li', text: a.name)
+    }
+
+    within(assess_li){
+      expect(page).to_not have_content "Not Open"
       expect(page).to have_content "Open"
     }
 
@@ -134,6 +158,8 @@ describe "Viewing the student dashboard" do
     }
 
     # Test a closed assessment with show_results as false
+    a.show_results = false
+    a.date_opened = Date.today - 2
     a.date_closed = Date.today - 1
     a.save
     page.driver.browser.navigate.refresh
