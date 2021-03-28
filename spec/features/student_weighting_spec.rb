@@ -27,12 +27,12 @@ describe "Changing individual student's weightings " do
     create :student_team, user: u3, team: t
     create :student_team, user: u4, team: t
 
-    create :assessment_result, author: u1, target: u1, criterium: c, value: '7'
-    create :assessment_result, author: u1, target: u2, criterium: c, value: '8'
-    create :assessment_result, author: u1, target: u3, criterium: c, value: '9'
-    create :assessment_result, author: u1, target: u4, criterium: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u1, criterium: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u2, criterium: c, value: '8'
+    create :assessment_result_empty, author: u1, target: u3, criterium: c, value: '9'
+    create :assessment_result_empty, author: u1, target: u4, criterium: c, value: '7'
 
-    create :assessment_result, author: u1, target: nil, criterium: c2, value: 'Some text'
+    create :assessment_result_empty, author: u1, target: nil, criterium: c2, value: 'Some text'
 
     a.generate_weightings(t)
   end

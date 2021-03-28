@@ -1,6 +1,12 @@
-%h2= @assessment.name
+%h2= "Peer Assessment: #{@assessment.name}"
+
+.card
+  Ensure each of your answers does not exceed 250 characters.
+%br
 
 = form_tag({action: 'process_assess'}) do |f|
+  #errorsHere
+    = @error
   - @assessment.criteria.each do |crit|
     = render 'criteria/answer_fields', crit: crit
   = submit_tag 'Submit', class: 'btn btn-primary'

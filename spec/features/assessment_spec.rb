@@ -171,6 +171,33 @@ describe 'Creating an assessment' do
     expect(page).to have_content name
   end
 
+  specify "I cannot create an assessment with criteria with a length", js: true do
+    # Create staff user and login
+    staff = create(:user, staff: true)
+    login_as staff, scope: :user
+    # Create module associated with the user
+    mod = create :uni_module
+    create :staff_module, user: staff, uni_module:  mod
+    # Visit page for creating new assessment for the module
+    visit "/assessment/new/#{mod.id}"
+
+    fill_in "Name", with: "This should fail"
+
+    click_link "Add Question - Text Response"
+
+    input_box = page.all('.crit-input').last
+    within(input_box){
+      expect(page).to have_content "Text Response Question"
+      fill_in "Field Title", with: ("a" * (Criterium.max_title_length + 1))
+      choose "Single Answer"
+    }
+
+    click_button "Create Assessment"
+
+    expect(page).to have_content "Title is too long (maximum is 250 characters)"
+    expect(page).to_not have_content "Assessment was successfully created."
+  end
+
 end
 
 describe 'Editing an assessment' do
@@ -598,6 +625,34 @@ describe 'Filling in an assessment' do
 
   end
 
+  specify "I am able to re-submit if one of my responses is too large" do
+    t = Team.first
+    mod = UniModule.first
+
+    student = t.users.first
+    login_as student, scope: :user
+
+    a = create :assessment, uni_module: mod, name: "All data types test"
+    c = create :criterium, assessment: a, title: 'Test 1', response_type: 0
+
+    val1 = "a" * (AssessmentResult.max_value_length + 1)
+    val2 = "a" * AssessmentResult.max_value_length
+
+    visit "/assessment/#{a.id}/fill_in"
+    fill_in "response_#{c.id}", with: val1
+
+    click_button "Submit"
+    expect(page).to have_content "An error occurred. Are all your responses 250 characters or shorter?"
+    expect(AssessmentResult.count).to eq 0
+
+    # Have to re-visit the page, as the text box still has the old contents in it
+    visit "/assessment/#{a.id}/fill_in"
+    fill_in "response_#{c.id}", with: val2
+    click_button "Submit"
+    expect(page).to_not have_content "An error occurred. Are all your responses 250 characters or shorter?"
+    expect(AssessmentResult.count).to eq 1
+  end
+
   specify "I can see the mock view of this assessment as a staff member on the module, when there are teams" do
     staff = User.where(staff: true).first
     login_as staff, scope: :user
@@ -691,12 +746,12 @@ describe 'Viewing and modifying assessment results' do
     create :student_team, user: u3, team: t
     create :student_team, user: u4, team: t
 
-    create :assessment_result, author: u1, target: u1, criterium: c, value: '7'
-    create :assessment_result, author: u1, target: u2, criterium: c, value: '8'
-    create :assessment_result, author: u1, target: u3, criterium: c, value: '9'
-    create :assessment_result, author: u1, target: u4, criterium: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u1, criterium: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u2, criterium: c, value: '8'
+    create :assessment_result_empty, author: u1, target: u3, criterium: c, value: '9'
+    create :assessment_result_empty, author: u1, target: u4, criterium: c, value: '7'
 
-    create :assessment_result, author: u1, target: nil, criterium: c2, value: 'Some text'
+    create :assessment_result_empty, author: u1, target: nil, criterium: c2, value: 'Some text'
 
     a.generate_weightings(t)
   end
@@ -924,10 +979,10 @@ describe "Downloading results" do
     create :student_team, user: u3, team: t
     create :student_team, user: u4, team: t
 
-    create :assessment_result, author: u1, target: u1, criterium: c, value: '7'
-    create :assessment_result, author: u1, target: u1, criterium: c, value: '8'
-    create :assessment_result, author: u1, target: u1, criterium: c, value: '9'
-    create :assessment_result, author: u1, target: u1, criterium: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u1, criterium: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u1, criterium: c, value: '8'
+    create :assessment_result_empty, author: u1, target: u1, criterium: c, value: '9'
+    create :assessment_result_empty, author: u1, target: u1, criterium: c, value: '7'
 
     a.generate_weightings(t)
 

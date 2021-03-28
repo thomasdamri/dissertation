@@ -3,7 +3,7 @@
   - single_collection = {"Single Answer" => 1, "Team Answer" => 0}
   - boolean_collection = {"Yes" => "1", "No" => "0"}
   .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "The question/criteria shown to students when they fill in the form"}
-    = f.input :title, as: :string, label: 'Field Title'
+    = f.input :title, as: :string, label: 'Field Title (Max 250 characters)'
   .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Minimum and maximum values that students can enter for this criteria (inclusive)"}
     = f.input :min_value, as: :string, label: 'Minimum Value', input_html: { class: 'min-value minmax' }
     = f.input :max_value, as: :string, label: 'Maximum Value', input_html: { class: 'max-value minmax' }

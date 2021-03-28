@@ -47,6 +47,11 @@ class Criterium < ApplicationRecord
      "Boolean" => @@bool}
   end
 
+  def self.max_title_length
+    return 250
+  end
+
+
   # If integer or float, this text displays the min/max values to the user
   def subtitle
     if response_type.to_i == @@int or response_type.to_i == @@float
@@ -71,7 +76,7 @@ class Criterium < ApplicationRecord
       elsif min_value.nil?
         "#{first_part} which is #{max} or less"
       else
-        "#{first_part} between #{min} and #{max}, where #{min} is worst and #{max} is best"
+        "#{first_part} between #{min} and #{max}"
       end
 
     end
@@ -81,7 +86,7 @@ class Criterium < ApplicationRecord
   has_many :assessment_results, dependent: :destroy
 
   # Must have a title
-  validates :title, presence: true
+  validates :title, presence: true, length: { maximum: self.max_title_length }
   # Response type must exist and must be within range
   validates :response_type, presence: true, inclusion: @@string..@@bool
 
