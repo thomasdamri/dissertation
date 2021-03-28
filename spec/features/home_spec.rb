@@ -136,7 +136,7 @@ describe "Viewing the student dashboard" do
     }
 
     # Test an open completed assessment
-    create :assessment_result, criterium: c, author: u, value: "Test Answer"
+    create :assessment_result_empty, criterium: c, author: u, value: "Test Answer"
     page.driver.browser.navigate.refresh
 
     # Find the list item for the module

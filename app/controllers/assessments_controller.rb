@@ -97,6 +97,7 @@ class AssessmentsController < ApplicationController
   # Shows form for user to fill in the assessment
   def fill_in
     @title = "Completing Assessment"
+    @error = ""
     # Get current assessment, so the server knows which assessment is being filled in
     @assessment = Assessment.find(params[:id])
     # Get the team this assessment is being filled in for
@@ -154,6 +155,7 @@ class AssessmentsController < ApplicationController
   # Prevent an error page being shown to the user, send back to fill in page
   rescue ActiveRecord::RecordInvalid
     @team = team
+    @error = "An error occurred. Are all your responses 250 characters or shorter?"
     render 'assessments/fill_in'
   end
 

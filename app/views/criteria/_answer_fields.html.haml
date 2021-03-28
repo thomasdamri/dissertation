@@ -20,7 +20,9 @@
       = render field_render, crit: crit, name: name
     - else
       - @team.users.each do |user|
-        - name = "response_#{crit.id}_#{user.id}"
-        = user.real_display_name
-        = render field_render, crit: crit, name: name
+        .input-group
+          .input-group-prepend
+            %span.input-group-text= user.real_display_name
+          - name = "response_#{crit.id}_#{user.id}"
+          = render field_render, crit: crit, name: name
         %hr

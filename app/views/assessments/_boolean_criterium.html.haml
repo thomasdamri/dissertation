@@ -2,7 +2,7 @@
   %h3 Boolean Response Question
   - single_collection = {"Single Answer" => 1, "Team Answer" => 0}
   .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "The question/criteria shown to students when they fill in the form"}
-    = f.input :title, as: :string, label: 'Field Title'
+    = f.input :title, as: :string, label: 'Field Title (Max 250 characters)'
   .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "The two options the student has to choose from when answering (eg. yes or no, true or false)"}
     = f.input :max_value, as: :string, input_html: { class: 'min-value minmax' }, label: "Positive Label"
     = f.input :min_value, as: :string, input_html: { class: 'max-value minmax' }, label: "Negative Label"

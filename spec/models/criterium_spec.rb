@@ -38,6 +38,17 @@ RSpec.describe Criterium, type: :model do
     expect(c1).to_not be_valid
   end
 
+  it 'is invalid with a title that is too long' do
+    a = Assessment.first
+    # Create a non-assessed string type criteria
+    c1 = build(:criterium, assessment: a)
+    c1.title = "a" * Criterium.max_title_length
+    expect(c1).to be_valid
+
+    c1.title = "a" * (Criterium.max_title_length + 1)
+    expect(c1).to_not be_valid
+  end
+
   it 'is invalid when max value is less than the min value' do
     c1 = build(:weighted_criterium, assessment: Assessment.first, min_value: 11)
     expect(c1).to_not be_valid
@@ -102,7 +113,8 @@ RSpec.describe Criterium, type: :model do
       expect(c1.subtitle).to eq "Enter a number which is 10.1 or less"
 
       c1.min_value = 1.2
-      expect(c1.subtitle).to eq "Enter a number between 1.2 and 10.1, where 1.2 is worst and 10.1 is best"
+      #expect(c1.subtitle).to eq "Enter a number between 1.2 and 10.1, where 1.2 is worst and 10.1 is best"
+      expect(c1.subtitle).to eq "Enter a number between 1.2 and 10.1"
     end
   end
 
