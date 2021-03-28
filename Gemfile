@@ -5,18 +5,19 @@ ruby '2.6.6'
 
 # Development Gems (Ensure commented out in production env)
 
-
+=begin
 source "https://gems.shefcompsci.org.uk" do
   gem 'airbrake'
   gem 'rubycas-client'
   gem 'epi_cas'
 end
+=end
 
 
 # Production gems (Ensure commented out in development env)
 
-#gem 'rubycas-client', git: 'git@git.shefcompsci.org.uk:gems/rubycas-client.git'
-#gem 'epi_cas', git: 'git@git.shefcompsci.org.uk:gems/epi_cas.git'
+gem 'rubycas-client', git: 'git@git.shefcompsci.org.uk:gems/rubycas-client.git'
+gem 'epi_cas', git: 'git@git.shefcompsci.org.uk:gems/epi_cas.git'
 
 # Need a relatively new version of nokogiri due to low severity vulnerability
 gem "nokogiri", ">= 1.11.0"
