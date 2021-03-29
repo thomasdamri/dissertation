@@ -9,6 +9,7 @@
       %th Surname
       %th Display Name
       %th Email
+      %th
 
   %tbody
     - @users.each do |user|
@@ -18,3 +19,4 @@
         %td= user.sn
         %td= user.real_display_name
         %td= user.email
+        %td= link_to "Change Name", change_name_path(user), remote: true, class: "btn btn-info"

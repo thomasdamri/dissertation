@@ -61,6 +61,16 @@ class HomeController < ApplicationController
       redirect_to home_account_path, notice: "Could not change name: permission denied"
     end
 
+    # If the user is changing a name other than their own, send them back to the admin page
+    next_url = home_account_path
+    if current_user.admin and (not @user.id == current_user.id)
+      if @user.staff
+        next_url = admin_staff_path
+      else
+        next_url = admin_students_path
+      end
+    end
+
     new_name = params["user"]["display_name"]
 
     # Description of error to return to user if the input is wrong
@@ -83,7 +93,7 @@ class HomeController < ApplicationController
     if error_str.nil?
       error_str = "Name changed successfully"
     end
-    redirect_to home_account_path, notice: error_str
+    redirect_to next_url, notice: error_str
   end
 
   def about
