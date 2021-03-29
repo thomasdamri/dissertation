@@ -13,5 +13,13 @@ class UserValidator < ActiveModel::Validator
         #user.errors[:email] << " does not belong to the university or does not exist"
       end
     end
+
+    # Check display name does not exceed the character limit (if it exists)
+    unless user.display_name.nil?
+      if user.display_name.length > User.max_display_name_length
+        user.errors[:display_name] << " is too long (exceeds maximum character limit of 250)"
+      end
+    end
+
   end
 end

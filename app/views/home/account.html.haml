@@ -1,3 +1,5 @@
+#putModalHere
+
 %h2 My Account
 .card.col-6#accInfo
   .card-body
@@ -6,6 +8,8 @@
     %p= current_user.username
     %strong Display Name:
     %p= current_user.real_display_name
+    = link_to "Change Name", change_name_path(current_user), remote: true, class: 'btn btn-info'
+    %br
     %strong Email Address:
     %p= current_user.email
     %strong User Type:

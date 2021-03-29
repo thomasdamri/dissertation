@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   get 'home/student_home'
   get 'home/staff_home'
   get 'home/account'
+  get 'home/change_name/:id', to: 'home#change_name', as: 'change_name'
+  post 'home/process_name_change/:id', to: 'home#process_name_change', as: 'process_name_change'
   get 'about', to: 'home#about', as: 'about'
 
   # Routes for uploading CSV files

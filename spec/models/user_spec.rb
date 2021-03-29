@@ -57,6 +57,13 @@ RSpec.describe User, type: :model do
     expect(u).to_not be_valid
   end
 
+  it 'is invalid with a display_name that is too long' do
+    u = build :user, display_name: "a" * User.max_display_name_length
+    expect(u).to be_valid
+    u.display_name = "a" * (User.max_display_name_length + 1)
+    expect(u).to_not be_valid
+  end
+
   describe '#has_filled_in_log?' do
     specify "It returns true if there is a worklog, and false if not" do
       u = create :user

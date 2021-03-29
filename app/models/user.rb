@@ -26,6 +26,10 @@
 class User < ApplicationRecord
   include EpiCas::DeviseHelper
 
+  def self.max_display_name_length
+    return 250
+  end
+
   # Can be part of multiple teams, teams have multiple students
   has_many :student_teams, dependent: :destroy
   has_many :teams, through: :student_teams

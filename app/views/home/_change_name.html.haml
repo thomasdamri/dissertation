@@ -1,0 +1,19 @@
+.modal.fade#nameChangeModal{"tabindex":"-1", "role": "dialog", "aria-labelledby": "nameChangeModalLabel", "aria-hidden": "true"}
+  .modal-dialog.modal-lg{"role": "document"}
+    .modal-content
+      .modal-header
+        %h5.modal-title#nameChangeModalLabel Change Name
+        %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
+          %span{"aria-hidden": "true"} &times;
+      .modal-body
+        = label_tag 'old_name', "Old name"
+        = text_field_tag 'old_name', @user.real_display_name, disabled: true, class: 'form-control string'
+        %hr
+        = simple_form_for(@user, url: process_name_change_path(@user), method: :post) do |f|
+          .form-inputs
+            = f.input :display_name, label: "New name", required: true
+          .form-actions
+            = submit_tag "Change Name", class: 'btn btn-lg btn-primary'
+      .modal-footer
+        %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
+          Close

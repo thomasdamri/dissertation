@@ -43,6 +43,49 @@ class HomeController < ApplicationController
     end
   end
 
+  # Displays the change name form
+  def change_name
+    @user = User.find(params["id"].to_i)
+    respond_to do |format|
+      format.js { render layout: false }
+    end
+  end
+
+  # Processes the change name form
+  def process_name_change
+    @user = User.find(params["id"])
+
+    # Admins can edit all users
+    # Regular users can only edit themselves
+    if (not current_user.admin) and (not @user.id == current_user.id)
+      redirect_to home_account_path, notice: "Could not change name: permission denied"
+    end
+
+    new_name = params["user"]["display_name"]
+
+    # Description of error to return to user if the input is wrong
+    error_str = nil
+
+    if new_name.nil? or new_name.empty?
+      error_str = "Error: Name was empty, could not update"
+    end
+
+    # Only attempt to save the new name if there is no error so far
+    if error_str.nil?
+      @user.display_name = new_name
+      unless @user.save
+        # Set error state if it could not save
+        error_str = "Error: Could not save name change. Are you sure it does not exceed 250 characters?"
+      end
+    end
+
+    # Error_str is used to send a success notification if it's still nil here
+    if error_str.nil?
+      error_str = "Name changed successfully"
+    end
+    redirect_to home_account_path, notice: error_str
+  end
+
   def about
     @title = "About"
   end
