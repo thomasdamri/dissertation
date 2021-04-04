@@ -126,6 +126,71 @@ describe "Changing individual student's weightings " do
     }
   end
 
+  specify "The change individual grade can deal with invalid input", js: true do
+    staff = User.where(staff: true).first
+    login_as staff, scope: :user
+    ability = Ability.new(staff)
+
+    t = Team.first
+    a = Assessment.first
+
+    # Give student a recognisable name so they can be found in the table
+    student = t.users.first
+    student.display_name = "Dan Perry"
+    student.save
+
+    sw = StudentWeighting.where(assessment: a, user: student).first
+
+    visit "/assessment/#{a.id}"
+    click_link 'View Individual Grades'
+
+    # Find the first student in the team, and the row with their grade in
+    row = nil
+    within(:css, "#indGradeTable"){
+      row = page.first('td', text: student.real_display_name).find(:xpath, '..')
+    }
+
+    current_weight = StudentWeighting.where(assessment: a, user: student).first
+    old_weighting = current_weight.weighting
+
+    new_val = -0.1
+    reason = "Some reason for updating the weighting"
+
+    within(row){
+      click_link "Set Weighting"
+    }
+
+    # Try inputting invalid data
+    within(:css, '.modal-body'){
+      # Update weighting
+      fill_in "new_weight", with: new_val
+      fill_in "reason", with: reason
+      click_button "Update Weighting"
+    }
+
+    expect(page).to_not have_content "Weighting updated successfully"
+
+    new_val = 0
+
+    within(:css, '.modal-body'){
+      # Update weighting
+      fill_in "new_weight", with: ""
+      fill_in "new_weight", with: new_val
+      fill_in "reason", with: ""
+      click_button "Update Weighting"
+    }
+
+    expect(page).to_not have_content "Weighting updated successfully"
+
+    within(:css, '.modal-body'){
+      fill_in "reason", with: "a"
+      click_button "Update Weighting"
+    }
+
+    expect(page).to have_content "Weighting updated successfully"
+  end
+
+
   specify "As a student I cannot see other students' weightings or change them" do
     t = Team.first
     a = Assessment.first

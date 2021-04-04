@@ -5,6 +5,9 @@ describe "Viewing the My Account page" do
     u = create :user, staff: false, username: "acc17dp", email: "dperry1@sheffield.ac.uk", display_name: "Dan Perry"
     login_as u, scope: :user
 
+    # Just putting this here to increase coverage. The about page does nothing
+    visit "/about"
+
     visit "/home/account"
 
     within(:css, '#accInfo'){

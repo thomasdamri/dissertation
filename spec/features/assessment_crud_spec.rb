@@ -178,6 +178,16 @@ describe 'Creating an assessment' do
       fill_in "Relative Weighting", with: "1"
     }
 
+    # Add another decimal question, but with no min or max, and single answer
+    click_link "Add Question - Decimal Number Response"
+
+    input_box = page.all('.crit-input').last
+    within(input_box){
+      expect(page).to have_content "Decimal Number Response Question"
+      fill_in "Field Title", with: "Decimal Question"
+      choose "Single Answer"
+    }
+
     click_link "Add Question - Boolean Response"
 
     input_box = page.all('.crit-input').last
@@ -194,7 +204,7 @@ describe 'Creating an assessment' do
     expect(page).to have_content name
   end
 
-  specify "I cannot create an assessment with criteria with a length", js: true do
+  specify "I cannot create an assessment with criteria with a length exceeding the max length", js: true do
     # Create staff user and login
     staff = create(:user, staff: true)
     login_as staff, scope: :user

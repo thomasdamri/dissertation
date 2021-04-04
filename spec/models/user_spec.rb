@@ -64,6 +64,22 @@ RSpec.describe User, type: :model do
     expect(u).to_not be_valid
   end
 
+  describe '#real_display_name' do
+    specify "It returns the correct values" do
+      u = create :user, givenname: "", sn: "", display_name: ""
+      expect(u.real_display_name).to eq "Name not found"
+
+      u.givenname = "John"
+      u.sn = "Smith"
+      u.save
+      expect(u.real_display_name).to eq "John Smith"
+
+      u.display_name = "Bob Johnson"
+      u.save
+      expect(u.real_display_name).to eq "Bob Johnson"
+    end
+  end
+
   describe '#has_filled_in_log?' do
     specify "It returns true if there is a worklog, and false if not" do
       u = create :user

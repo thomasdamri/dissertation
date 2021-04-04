@@ -58,10 +58,10 @@ class User < ApplicationRecord
 
   # Either displays the name for the student, or the one they set
   def real_display_name
-    if display_name.nil? and givenname.nil? and sn.nil?
+    if (display_name.nil? or display_name.empty?) and (givenname.nil? or givenname.empty?) and (sn.nil? or sn.empty?)
       return "Name not found"
     end
-    if display_name.nil?
+    if (display_name.nil? or display_name.empty?)
       givenname + " " + sn
     else
       display_name

@@ -89,6 +89,12 @@ RSpec.describe Criterium, type: :model do
     expect(c1).to be_valid
   end
 
+  describe "#type_dict" do
+    specify "It returns the correct value" do
+      expect(Criterium.type_dict["Text"]).to eq 0
+    end
+  end
+
   describe "#subtitle" do
     specify "it returns nil for string or bool responses" do
       c1 = build :criterium, response_type: Criterium.string_type

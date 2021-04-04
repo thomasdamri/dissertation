@@ -28,6 +28,9 @@ describe "Viewing admin pages" do
     t = Team.first
     wl = Worklog.first
 
+    visit "/admin/dashboard"
+    expect(page).to have_content "Admin Dashboard"
+
     # Can see the module, even though the user is not an associated staff member
     visit "/admin/modules"
     expect(page).to have_content mod.title
@@ -79,9 +82,22 @@ describe "Manually adding users" do
     visit "/admin/students"
     click_link "Add New Student"
 
-    fill_in "CiCS Username", with: "zzz12pl"
+    fill_in "CiCS Username", with: ""
     fill_in "Email Address", with: "madeup12@sheffield.ac.uk"
     fill_in "Display Name (optional)", with: "Bob Smith"
+
+    click_button "Create Student"
+
+    expect(page).to_not have_content "Successfully added student"
+
+    fill_in "CiCS Username", with: "zzz12pl"
+    fill_in "Email Address", with: ""
+
+    click_button "Create Student"
+
+    expect(page).to_not have_content "Successfully added student"
+
+    fill_in "Email Address", with: "madeup12@sheffield.ac.uk"
 
     click_button "Create Student"
 

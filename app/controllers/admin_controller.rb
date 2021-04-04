@@ -3,6 +3,8 @@ class AdminController < ApplicationController
   # Authorise with cancancan, without a db model
   authorize_resource class: false
 
+  skip_before_action :verify_authenticity_token, only: [:new_student_process, :new_staff_process]
+
   def dashboard
     @title = "Admin Dashboard"
   end
