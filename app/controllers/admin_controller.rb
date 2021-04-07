@@ -45,6 +45,7 @@ class AdminController < ApplicationController
     end
   end
 
+=begin
   # Path for making the current user a staff member
   def make_staff
     current_user.staff = true
@@ -58,6 +59,7 @@ class AdminController < ApplicationController
     current_user.save
     redirect_to '/'
   end
+=end
 
   # Path for adding a new student manually (not through a CEIS TSV file)
   def add_new_student

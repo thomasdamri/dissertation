@@ -19,10 +19,6 @@
             %a.nav-link{:href => admin_dashboard_path} Admin Dashboard
       %li.nav-item.active
         %a.nav-link{:href => about_url} About
-      %li.nav-item.active
-        = button_to 'Be Staff', admin_make_staff_path, class: 'btn btn-primary'
-      %li.nav-item.active
-        = button_to 'Be Student', admin_make_student_path, class: 'btn btn-primary'
     %span.nav-item.active
       - if current_user.nil?
         = link_to 'Sign in', new_user_session_path, class: 'btn', style: 'color: white;'
