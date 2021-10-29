@@ -1,28 +1,37 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
+git_source(:gitlab) { |repo_name| "git@git.shefcompsci.org.uk:#{repo_name}.git" }
 
 ruby '2.6.6'
 
 # Development Gems (Ensure commented out in production env)
 
-source "https://gems.shefcompsci.org.uk" do
-  gem 'airbrake'
-  gem 'rubycas-client'
-  gem 'epi_cas'
-end
+# source "https://gems.shefcompsci.org.uk" do
+#   gem 'airbrake'
+#   gem 'rubycas-client'
+#   gem 'epi_cas'
+# end
+
+
+gem 'airbrake', github: 'epigenesys/airbrake', branch: 'airbrake-v4'
+gem 'rubycas-client', gitlab: 'gems/rubycas-client'
+gem 'epi_js'
 
 
 # Production gems (Ensure commented out in development env)
 
-#gem 'rubycas-client', git: 'git@git.shefcompsci.org.uk:gems/rubycas-client.git'
-#gem 'epi_cas', git: 'git@git.shefcompsci.org.uk:gems/epi_cas.git'
+gem 'rubycas-client', git: 'git@git.shefcompsci.org.uk:gems/rubycas-client.git'
+gem 'epi_cas', git: 'git@git.shefcompsci.org.uk:gems/epi_cas.git'
 
 # Need a relatively new version of nokogiri due to low severity vulnerability
 gem "nokogiri", ">= 1.11.0"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6.0.3', '>= 6.0.3.3'
+
 # Use mysql as the database for Active Record
-gem 'mysql2', '>= 0.4.4'
+gem 'mysql2', '~> 0.4.10'
+
+
 # Use Puma as the app server
 gem 'puma', '~> 4.1'
 # Use SCSS for stylesheets
@@ -33,6 +42,7 @@ gem 'webpacker', '~> 4.0'
 gem 'turbolinks', '~> 5'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
+#gem 'arel'
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 4.0'
 # Use Active Model has_secure_password
@@ -62,6 +72,8 @@ gem 'simple_form'
 # Provides easy interaction with TSV files (for CEIS output uploading)
 gem 'tsv'
 
+
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
@@ -81,6 +93,7 @@ group :development do
   # Using capistrano for deployment
   gem "capistrano", "~> 3.10", require: false
   gem "capistrano-rails", "~> 1.6", require: false
+
 end
 
 group :test do

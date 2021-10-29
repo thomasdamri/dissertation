@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  before_action :authenticate_user!, except: [:index, :about]
+  #before_action :authenticate_user!, except: [:index, :about]
   skip_authorization_check
 
   def index

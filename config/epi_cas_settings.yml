@@ -66,8 +66,8 @@ defaults: &defaults
   # Usernames specified here can always log in and are always automatically created in the app when logging in,
   # regardless of their group and department.
   username_whitelist:
-    # - user1
-    # - user2
+    - user1
+    - test1
     # - etc
 
 development:
