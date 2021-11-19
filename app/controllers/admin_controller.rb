@@ -31,7 +31,7 @@ class AdminController < ApplicationController
   # List of all teams
   def teams
     @title = "Admin Teams List"
-    @teams = Team.order(:uni_module_id, :number).paginate(page: params[:page])
+    @teams = Team.order(:uni_module_id, :team_number).paginate(page: params[:page])
   end
 
   def worklogs

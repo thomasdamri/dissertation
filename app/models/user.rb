@@ -35,7 +35,7 @@ class User < ApplicationRecord
   #has_many :teams, through: :student_teams
   # Can manage many modules
   has_many :staff_modules, dependent: :destroy
-  #has_many :uni_modules, through: :staff_modules
+  has_many :uni_modules, through: :staff_modules
   # Has many AssessmentResults written by the user
   #has_many :author_results, foreign_key: 'author_id', class_name: 'AssessmentResult', dependent: :destroy
   # Has many AssessmentResults written about the user
@@ -50,7 +50,7 @@ class User < ApplicationRecord
 
   # Must have a username and email. Staff and admin booleans cannot be nil
   validates :username, presence: true, uniqueness: true
-  validates :email, presence: true, uniqueness: true
+  #validates :email, presence: true, uniqueness: true, case_sensitive: true
   validates :staff, inclusion: {in: [true, false]}
   validates :admin, inclusion: {in: [true, false]}
 

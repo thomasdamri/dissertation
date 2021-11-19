@@ -15,7 +15,7 @@ class Team < ApplicationRecord
   has_many :team_grades, dependent: :destroy
   belongs_to :uni_module
 
-  validates :number, presence: true, uniqueness: {scope: :uni_module}
+  validates :team_number, presence: true, uniqueness: {scope: :uni_module}
 
   # Returns a string which can be used in email clients to email the entire team
   def group_email_link

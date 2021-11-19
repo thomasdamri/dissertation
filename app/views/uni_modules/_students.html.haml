@@ -12,10 +12,10 @@
             %th Student Name
             %th Student Username
             %th Student Email
-          - @uni_module.teams.order(:number).each do |team|
+          - @uni_module.teams.order(:team_number).each do |team|
             - team.users.each do |user|
               %tr
-                %td= link_to "Team #{team.number}", team_path(team)
+                %td= link_to "Team #{team.team_number}", team_path(team)
                 %td= user.real_display_name
                 %td= user.username
                 %td= user.email

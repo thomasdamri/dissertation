@@ -8,7 +8,7 @@
     %tbody
       - @uni_module.teams.each do |team|
         %tr
-          %td= "Team #{team.number}"
+          %td= "Team #{team.team_number}"
           %td= team.student_teams.count
           %td= link_to "View", team, class: 'btn btn-primary'
   - else
