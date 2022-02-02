@@ -7,7 +7,7 @@ class HomeController < ApplicationController
 
   def student_home
     @title = "Dashboard"
-    @teams = current_user.student_teams
+    @student_teams = current_user.student_teams
     #@teams = current_user.teams
   end
 
