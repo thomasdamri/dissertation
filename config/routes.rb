@@ -86,4 +86,7 @@ Rails.application.routes.draw do
   get 'worklogs/override_form/:id', to: 'worklogs#override_form', as: 'override_form'
   post 'worklogs/process_override/:id', to: 'worklogs#process_override', as: 'process_override'
   post 'worklogs/process_uphold/:id', to: 'worklogs#process_uphold', as: 'process_uphold'
+
+  resources :student_task 
+
 end
