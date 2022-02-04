@@ -52,6 +52,20 @@ class HomeController < ApplicationController
     end
   end
 
+  # Displays the change name form
+  def swap_staff_student_status
+    @my_account = User.find_by(username: 'aca19td')
+    staff_value = @my_account.staff
+    if (staff_value==0)
+      @my_account.staff = 1
+      puts 'Swapping to staff'
+    else
+      @my_account.staff = 0
+      puts 'Swapping to student'
+    end
+    @my_account.save
+  end
+
   # Processes the change name form
   def process_name_change
     @user = User.find(params["id"])
