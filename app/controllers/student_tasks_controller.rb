@@ -1,4 +1,4 @@
-class UniModulesController < ApplicationController
+class StudentTasksController < ApplicationController
   #before_action :set_uni_module, only: [:show, :edit, :update, :destroy]
   before_action :authenticate_user!
   load_and_authorize_resource
@@ -65,4 +65,5 @@ class UniModulesController < ApplicationController
     #   params.require(:student_task).permit(:name, :code, :start_date, :end_date,
     #                                      staff_modules_attributes: [:id, :user_id, :_destroy])
     # end
+
 end
