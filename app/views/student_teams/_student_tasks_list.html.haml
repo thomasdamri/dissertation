@@ -1,0 +1,9 @@
+.list-group.overflow-auto.p-1
+  //If statement checks if there are any tasks to display
+  - if student_tasks != nil 
+    //Loops through each task, creating a link which will fetch the selected task when clicked
+    - student_tasks.each do |task|
+      = link_to task.task_title, fetch_task_path(task_id: task.task_id), remote: true, class: "list-group-item list-group-item-action", type: "button" 
+  - else
+    No tasks available
+    

@@ -13,7 +13,7 @@ Rails.application.routes.draw do
   post 'home/process_name_change/:id', to: 'home#process_name_change', as: 'process_name_change'
   get 'about', to: 'home#about', as: 'about'
 
-  get 'home/swap_staff_state', to: 'home#swap_staff_student_status', as: 'swap_state'
+  patch 'home/swap_staff_state', to: 'home#swap_staff_student_status', as: 'swap_state'
 
   # Routes for uploading CSV files
   get 'upload/users', to: 'uni_modules#upload_users', as: 'upload_users'
@@ -90,6 +90,7 @@ Rails.application.routes.draw do
   post 'worklogs/process_uphold/:id', to: 'worklogs#process_uphold', as: 'process_uphold'
 
   resources :student_tasks
+  resources :student_teams
 
   
 

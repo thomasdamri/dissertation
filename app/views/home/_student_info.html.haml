@@ -10,7 +10,7 @@
           %li.list-group-item
             = "#{module_info.title} - Team #{student_team.team_id}"
             %br
-            - # %span= link_to "View Team", student_team, class: 'btn btn-sm btn-primary'
+            %span= link_to "Enter Team Home", student_teams_path, class: 'btn btn-sm btn-primary'
             %span.btn.btn-sm.btn-info{"data-toggle": "collapse", href: "#collapse_#{module_info.id}", role: "button", "aria-expanded": "false", "aria-controls": "collapse_#{module_info.id}"} Show Assessments
             .collapse{id: "collapse_#{module_info.id}"}
               %ul.list-group
@@ -45,22 +45,22 @@
                         - badge_class = "badge-secondary"
                         - badge_text = "Not Open"
                       %span{class: "badge #{badge_class}"}= badge_text
-  .col6#worklogInfo
-    %h3 Work logs this week
-    %ul.list-group
-      - if @student_teams.length == 0
-        %li.list-group-item.list-group-item-secondary You are not currently involved in any modules
-      - else
-        - current_monday = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
-        - @student_teams.each do |student_team|
-          - badge_class = ""
-          - badge_text = ""
-          - if student_team.team.uni_module.has_filled_in_log?(current_user, current_monday)
-            - badge_class = "badge-success"
-            - badge_text = "Filled in"
-          - else
-            - badge_class = "badge-warning"
-            - badge_text = "Pending"
-          %li.list-group-item
-            - #  = link_to "#{student_team.team.uni_module.title} - Team #{student_team.team_id}", student_team
-            %span{class: "badge #{badge_class}"}= badge_text
+  -# .col6#worklogInfo
+  -#   %h3 Work logs this week
+  -#   %ul.list-group
+  -#     - if @student_teams.length == 0
+  -#       %li.list-group-item.list-group-item-secondary You are not currently involved in any modules
+  -#     - else
+  -#       - current_monday = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
+  -#       - @student_teams.each do |student_team|
+  -#         - badge_class = ""
+  -#         - badge_text = ""
+  -#         - if student_team.team.uni_module.has_filled_in_log?(current_user, current_monday)
+  -#           - badge_class = "badge-success"
+  -#           - badge_text = "Filled in"
+  -#         - else
+  -#           - badge_class = "badge-warning"
+  -#           - badge_text = "Pending"
+  -#         %li.list-group-item
+  -#           - #  = link_to "#{student_team.team.uni_module.title} - Team #{student_team.team_id}", student_team
+  -#           %span{class: "badge #{badge_class}"}= badge_text

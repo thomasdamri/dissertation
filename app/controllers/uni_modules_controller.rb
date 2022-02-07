@@ -157,7 +157,7 @@ class UniModulesController < ApplicationController
       username = team_attr[0]
 
       # Find user
-      u = User.find_by_username(team_attr[0])
+      u = User.find_by(username: team_attr[0])
       # Find team, or create it if it doesnt already exist
       t = Team.find_or_create_by(uni_module: mod, team_number: team_attr[1])
       # Attach student to the team

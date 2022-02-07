@@ -1,0 +1,26 @@
+-# 
+  Index View for task 
+  Allows admin to view all tasks and create new ones
+- content_for :title, "[Student] Team Homepage"
+
+.d-flex.m-4{:style => "height: 80vh; overflow: visible;"}
+  #tasks-panel.card.m-2.w-100.h-100
+    //Header including title and search form
+    .card-header.d-flex.justify-content-between.align-items-center
+      %h5.m-0 Student Tasks
+
+      -# .d-flex
+      -#   //Search form, allowing user to query tasks. Also includes a reset button
+      -#   = simple_form_for :search, url: search_tasks_path, method: :post, defaults: {input_html: {class: 'form-control'}},remote: true do |f|
+      -#     = f.input_field :task_title, as: :string, input_html: {"aria-describedby": "basic-addon-taskname", "aria-label": "Task name"}, 
+      -#       placeholder: "Task name"
+      -#     = f.button :submit, 'Search', class: 'btn btn-outline-primary'
+      -#     = link_to 'Reset', admin_tasks_path
+    .card-body.p-0.d-flex
+      //Left side of page, displaying the tasks_list, with pagination at the bottom
+      .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
+        #task-list-panel
+          = render partial: 'student_tasks_list', locals: {team_tasks: @student_team.student_tasks}
+
+        -# .justify-content-center
+        -#   = pagy_bootstrap_nav(@pagy).html_safe
