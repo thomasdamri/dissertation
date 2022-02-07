@@ -56,7 +56,7 @@ class HomeController < ApplicationController
   def swap_staff_student_status
     @my_account = User.find_by(username: 'aca19td')
     staff_value = @my_account.staff
-    if (staff_value==0)
+    if (staff_value==false)
       @my_account.staff = 1
       puts 'Swapping to staff'
     else
