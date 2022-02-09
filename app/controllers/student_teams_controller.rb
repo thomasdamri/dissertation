@@ -4,7 +4,7 @@ class StudentTeamsController < ApplicationController
 
   def index 
     @student_team = StudentTeam.find_by(params[:id])
-    
+    @task = StudentTask.new
   end
 
   

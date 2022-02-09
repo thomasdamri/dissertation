@@ -17,6 +17,9 @@
       -#     = f.button :submit, 'Search', class: 'btn btn-outline-primary'
       -#     = link_to 'Reset', admin_tasks_path
     .card-body.p-0.d-flex
+      .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
+        = render partial: 'student_tasks/form', locals: {task: @task}
+
       //Left side of page, displaying the tasks_list, with pagination at the bottom
       .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
         #task-list-panel
