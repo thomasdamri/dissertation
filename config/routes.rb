@@ -89,8 +89,14 @@ Rails.application.routes.draw do
   post 'worklogs/process_override/:id', to: 'worklogs#process_override', as: 'process_override'
   post 'worklogs/process_uphold/:id', to: 'worklogs#process_uphold', as: 'process_uphold'
 
-  resources :student_tasks
-  resources :student_teams
+
+  get 'student_teams/:student_team_id', to: 'student_teams#index', as: 'student_team_dashboard'
+  post 'student_teams/:student_team_id/student_tasks_new',  to: 'student_tasks#create', as: 'student_task_create'
+
+  # resources :student_tasks
+  # resources :student_teams do
+  #   resources :student_tasks
+  # end
 
   
 

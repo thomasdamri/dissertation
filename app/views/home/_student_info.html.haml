@@ -10,7 +10,7 @@
           %li.list-group-item
             = "#{module_info.title} - Team #{student_team.team_id}"
             %br
-            %span= link_to "Enter Team Home", student_teams_path, class: 'btn btn-sm btn-primary'
+            %span= link_to "Enter Team Home", student_team_dashboard_path(student_team.id), class: 'btn btn-sm btn-primary'
             %span.btn.btn-sm.btn-info{"data-toggle": "collapse", href: "#collapse_#{module_info.id}", role: "button", "aria-expanded": "false", "aria-controls": "collapse_#{module_info.id}"} Show Assessments
             .collapse{id: "collapse_#{module_info.id}"}
               %ul.list-group

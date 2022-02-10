@@ -27,16 +27,14 @@ class StudentTasksController < ApplicationController
   # POST /uni_modules
   def create
     @student_task = StudentTask.new(student_task_params)
-
-    # # Text for the submit button if module is not valid
-    # @btn_text = "Create"
-
-    # if @uni_module.save
-    #   @uni_module.ensure_mondays
-    #   redirect_to @uni_module, notice: 'Module was successfully created.'
-    # else
-    #   render :new
-    # end
+    @student_task.student_team_id = params[:student_team_id]
+    @student_team = StudentTeam.find_by(params[:student_team_id])
+    if @student_task.save
+      redirect_to student_team_dashboard_path(@student_team.id), notice: 'Task was successfully created'
+    else
+      #Need to add something to notify of error
+      redirect_to student_team_dashboard_path(@student_team.id), notice: 'Task was successfully created'
+    end
   end
 
   # PATCH/PUT /uni_modules/1
@@ -60,10 +58,9 @@ class StudentTasksController < ApplicationController
     #   @uni_module = UniModule.find(params[:id])
     # end
 
-    # Only allow a list of trusted parameters through.
-    # def uni_module_params
-    #   params.require(:student_task).permit(:name, :code, :start_date, :end_date,
-    #                                      staff_modules_attributes: [:id, :user_id, :_destroy])
-    # end
+    #Only allow a list of trusted parameters through.
+    def student_task_params
+      params.require(:student_task).permit(:task_objective, :task_difficulty, :task_target_date, :student_team_id)
+    end
 
 end
