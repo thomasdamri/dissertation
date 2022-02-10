@@ -317,7 +317,7 @@ class AssessmentsController < ApplicationController
       line = h line
       grade_attr = line.split(",")
       # Find team
-      t = Team.where(uni_module: mod, number: grade_attr[0]).first
+      t = Team.where(uni_module: mod, team_number: grade_attr[0]).first
       # Attach grade to the team
       t.team_grades.create(team_id: t.id, assessment_id: assessment.id, grade: grade_attr[1])
     end

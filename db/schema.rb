@@ -10,17 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_16_202850) do
+ActiveRecord::Schema.define(version: 2021_11_17_185633) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "author_id"
     t.bigint "target_id"
-    t.bigint "criterium_id"
+    t.bigint "criteria_id"
     t.string "value"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.bigint "student_weightings_id"
     t.index ["author_id"], name: "index_assessment_results_on_author_id"
-    t.index ["criterium_id"], name: "index_assessment_results_on_criterium_id"
+    t.index ["criteria_id"], name: "index_assessment_results_on_criteria_id"
+    t.index ["student_weightings_id"], name: "fk_rails_0ec8355172"
     t.index ["target_id"], name: "index_assessment_results_on_target_id"
   end
 
@@ -41,8 +41,6 @@ ActiveRecord::Schema.define(version: 2021_11_16_202850) do
     t.string "min_value"
     t.string "max_value"
     t.bigint "assessment_id"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.boolean "assessed"
     t.integer "weighting"
     t.boolean "single"
@@ -64,16 +62,14 @@ ActiveRecord::Schema.define(version: 2021_11_16_202850) do
   end
 
   create_table "student_weightings", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.bigint "user_id"
     t.bigint "assessment_id"
     t.float "weighting"
     t.integer "results_at_last_check"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
     t.boolean "manual_set", default: false
     t.string "reason"
+    t.bigint "student_team_id"
     t.index ["assessment_id"], name: "index_student_weightings_on_assessment_id"
-    t.index ["user_id"], name: "index_student_weightings_on_user_id"
+    t.index ["student_team_id"], name: "fk_rails_44e9fda95c"
   end
 
   create_table "team_grades", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -148,13 +144,18 @@ ActiveRecord::Schema.define(version: 2021_11_16_202850) do
     t.index ["author_id"], name: "index_worklogs_on_author_id"
   end
 
+  add_foreign_key "assessment_results", "criteria", column: "criteria_id", on_delete: :cascade
+  add_foreign_key "assessment_results", "student_weightings", column: "student_weightings_id", on_delete: :cascade
   add_foreign_key "assessment_results", "users", column: "author_id"
   add_foreign_key "assessment_results", "users", column: "target_id"
   add_foreign_key "assessments", "uni_modules", on_delete: :cascade
+  add_foreign_key "criteria", "assessments", on_delete: :cascade
   add_foreign_key "staff_modules", "uni_modules", on_delete: :cascade
   add_foreign_key "staff_modules", "users", on_delete: :cascade
   add_foreign_key "student_teams", "teams", on_delete: :cascade
   add_foreign_key "student_teams", "users", on_delete: :cascade
+  add_foreign_key "student_weightings", "assessments"
+  add_foreign_key "student_weightings", "student_teams", on_delete: :cascade
   add_foreign_key "teams", "uni_modules", on_delete: :cascade
   add_foreign_key "worklogs", "users", column: "author_id"
 end

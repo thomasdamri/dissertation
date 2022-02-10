@@ -17,9 +17,11 @@ class AssessmentResult < ApplicationRecord
   end
 
   belongs_to :criterium
-  has_one :assessment, through: :criterium
+  #has_one :assessment, through: :criterium
   belongs_to :author, class_name: 'User', foreign_key: 'author_id'
   belongs_to :target, class_name: 'User', foreign_key: 'target_id', optional: true
+
+  belongs_to :student_weightings
 
   # Must have an associated criterium + an author. Target is optional (for non-team criteria)
   validates :criterium_id, presence: true

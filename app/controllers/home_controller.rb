@@ -7,7 +7,8 @@ class HomeController < ApplicationController
 
   def student_home
     @title = "Dashboard"
-    @teams = current_user.teams
+    @student_teams = current_user.student_teams
+    #@teams = current_user.teams
   end
 
   def staff_home
@@ -49,6 +50,20 @@ class HomeController < ApplicationController
     respond_to do |format|
       format.js { render layout: false }
     end
+  end
+
+  # Displays the change name form
+  def swap_staff_student_status
+    @my_account = User.find_by(username: 'aca19td')
+    staff_value = @my_account.staff
+    if (staff_value==false)
+      @my_account.staff = 1
+      puts 'Swapping to staff'
+    else
+      @my_account.staff = 0
+      puts 'Swapping to student'
+    end
+    @my_account.save
   end
 
   # Processes the change name form

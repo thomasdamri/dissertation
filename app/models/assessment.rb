@@ -18,7 +18,7 @@ class Assessment < ApplicationRecord
 
   # Destroy all dependent criteria when removing object
   has_many :criteria, dependent: :destroy
-  has_many :assessment_results, through: :criteria
+  #has_many :assessment_results, through: :criteria
   belongs_to :uni_module
   has_many :student_weightings, dependent: :destroy
   has_many :team_grades, dependent: :destroy

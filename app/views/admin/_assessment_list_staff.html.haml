@@ -10,7 +10,7 @@
   - @assessments.each do |assess|
     %tr
       %td= assess.name
-      %td= "#{assess.num_completed @team} / #{@team.users.count}"
+      - # %td= "#{assess.num_completed @team} / #{@team.users.count}"
       %td= assess.date_opened
       %td= assess.date_closed
       %td= link_to "View Individual Responses", get_ind_responses_path(assess, @team), remote: true, class: 'btn btn-info'

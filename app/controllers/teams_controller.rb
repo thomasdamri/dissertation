@@ -5,7 +5,7 @@ class TeamsController < ApplicationController
 
   # GET /teams/1
   def show
-    @title = "Team #{@team.number}"
+    @title = "Team #{@team.team_number}"
     @users = @team.users
     @assessments = @team.uni_module.assessments
     @team_grades = TeamGrade.where(team: @team)

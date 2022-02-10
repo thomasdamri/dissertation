@@ -14,8 +14,12 @@
 #
 class StudentWeighting < ApplicationRecord
 
-  belongs_to :user
+  #belongs_to :user
   belongs_to :assessment
+
+  belongs_to :student_teams
+
+  has_many :assessment_results
 
   validates :weighting, presence: true
   validates :results_at_last_check, presence: true

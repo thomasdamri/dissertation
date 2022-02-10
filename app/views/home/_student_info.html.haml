@@ -2,29 +2,29 @@
   .col6#modInfo
     %h3 My Teams
     %ul.list-group
-      - if @teams.length == 0
+      - if @student_teams.length == 0
         %li.list-group-item.list-group-item-secondary You are not currently involved in any modules
       - else
-        - @teams.each do |team|
-          - mod = team.uni_module
+        - @student_teams.each do |student_team|
+          - module_info = student_team.team.uni_module
           %li.list-group-item
-            = "#{mod.title} - Team #{team.number}"
+            = "#{module_info.title} - Team #{student_team.team_id}"
             %br
-            %span= link_to "View Team", team, class: 'btn btn-sm btn-primary'
-            %span.btn.btn-sm.btn-info{"data-toggle": "collapse", href: "#collapse_#{mod.id}", role: "button", "aria-expanded": "false", "aria-controls": "collapse_#{mod.id}"} Show Assessments
-            .collapse{id: "collapse_#{mod.id}"}
+            %span= link_to "Enter Team Home", student_team_dashboard_path(student_team.id), class: 'btn btn-sm btn-primary'
+            %span.btn.btn-sm.btn-info{"data-toggle": "collapse", href: "#collapse_#{module_info.id}", role: "button", "aria-expanded": "false", "aria-controls": "collapse_#{module_info.id}"} Show Assessments
+            .collapse{id: "collapse_#{module_info.id}"}
               %ul.list-group
-                - if mod.assessments.length == 0
+                - if module_info.assessments.length == 0
                   %li.list-group-item.list-group-item-secondary This module has no assessments
                 - else
-                  - mod.assessments.each do |assess|
+                  - module_info.assessments.each do |assess|
                     %li.list-group-item
                       - # Calculating which colour the badge should be
                       - if assess.date_opened.past? or assess.date_opened.today?
                         - if assess.date_closed.past?
                           - if assess.show_results
-                            - team = current_user.teams.where(uni_module: assess.uni_module).first
-                            = link_to assess.name, team
+                            - student_team = current_user.teams.where(uni_module: assess.uni_module).first
+                            = link_to assess.name, student_team
                             - badge_class = "badge-primary"
                             - badge_text = "Results Ready"
                           - else
@@ -45,22 +45,22 @@
                         - badge_class = "badge-secondary"
                         - badge_text = "Not Open"
                       %span{class: "badge #{badge_class}"}= badge_text
-  .col6#worklogInfo
-    %h3 Work logs this week
-    %ul.list-group
-      - if @teams.length == 0
-        %li.list-group-item.list-group-item-secondary You are not currently involved in any modules
-      - else
-        - current_monday = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
-        - @teams.each do |team|
-          - badge_class = ""
-          - badge_text = ""
-          - if team.uni_module.has_filled_in_log?(current_user, current_monday)
-            - badge_class = "badge-success"
-            - badge_text = "Filled in"
-          - else
-            - badge_class = "badge-warning"
-            - badge_text = "Pending"
-          %li.list-group-item
-            = link_to "#{team.uni_module.title} - Team #{team.number}", team
-            %span{class: "badge #{badge_class}"}= badge_text
+  -# .col6#worklogInfo
+  -#   %h3 Work logs this week
+  -#   %ul.list-group
+  -#     - if @student_teams.length == 0
+  -#       %li.list-group-item.list-group-item-secondary You are not currently involved in any modules
+  -#     - else
+  -#       - current_monday = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
+  -#       - @student_teams.each do |student_team|
+  -#         - badge_class = ""
+  -#         - badge_text = ""
+  -#         - if student_team.team.uni_module.has_filled_in_log?(current_user, current_monday)
+  -#           - badge_class = "badge-success"
+  -#           - badge_text = "Filled in"
+  -#         - else
+  -#           - badge_class = "badge-warning"
+  -#           - badge_text = "Pending"
+  -#         %li.list-group-item
+  -#           - #  = link_to "#{student_team.team.uni_module.title} - Team #{student_team.team_id}", student_team
+  -#           %span{class: "badge #{badge_class}"}= badge_text
