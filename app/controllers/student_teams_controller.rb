@@ -3,7 +3,7 @@ class StudentTeamsController < ApplicationController
   load_and_authorize_resource
 
   def index 
-    @student_team = StudentTeam.find_by(params[:student_team_id])
+    @student_team = StudentTeam.find_by(id: params[:student_team_id])
     @task = StudentTask.new
   end
 
