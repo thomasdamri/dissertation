@@ -93,10 +93,12 @@ Rails.application.routes.draw do
   get 'student_teams/:student_team_id', to: 'student_teams#index', as: 'student_team_dashboard'
   post 'student_teams/:student_team_id/student_tasks_new',  to: 'student_tasks#create', as: 'student_task_create'
 
-  # resources :student_tasks
-  # resources :student_teams do
-  #   resources :student_tasks
-  # end
+  get 'fetch_student_task', to: 'student_tasks#select'
+
+
+  resources :student_teams do
+    resources :student_tasks
+  end
 
   
 

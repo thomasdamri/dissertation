@@ -23,7 +23,7 @@
       //Left side of page, displaying the tasks_list, with pagination at the bottom
       .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
         #task-list-panel
-          = render partial: 'student_tasks_list', locals: {team_tasks: @student_team.student_tasks}
+          = render partial: 'student_tasks_list', locals: {student_team_id: @student_team.id, team_tasks: @student_team.student_tasks}
 
         -# .justify-content-center
         -#   = pagy_bootstrap_nav(@pagy).html_safe

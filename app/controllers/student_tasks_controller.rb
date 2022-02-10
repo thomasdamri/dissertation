@@ -28,7 +28,7 @@ class StudentTasksController < ApplicationController
   def create
     @student_task = StudentTask.new(student_task_params)
     @student_task.student_team_id = params[:student_team_id]
-    @student_team = StudentTeam.find_by(params[:student_team_id])
+    @student_team = StudentTeam.find_by(id: params[:student_team_id])
     if @student_task.save
       redirect_to student_team_dashboard_path(@student_team.id), notice: 'Task was successfully created'
     else
