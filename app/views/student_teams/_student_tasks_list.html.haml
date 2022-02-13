@@ -9,6 +9,6 @@
             .card-text 
               =task.task_objective
             .card-subtitle.text-muted 
-              = StudentTask.difficulty_int_to_string(task.task_difficulty)
+              = task.task_target_date
   - else
     No tasks available

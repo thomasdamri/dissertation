@@ -2,6 +2,8 @@ class StudentTask < ApplicationRecord
   belongs_to :student_team
   has_many :student_task_edits
 
+  validates :task_objective, length: { in: 10..300}
+
   #Takes int input and returns the string version(because its stored as int in the db)
   def self.difficulty_int_to_string(integer_input)
     case integer_input
@@ -45,6 +47,14 @@ class StudentTask < ApplicationRecord
     else
       return "border-left: 5px solid yellow;"
     end
+  end
+
+  #Returns list of students working on the task
+  def get_linked_students()
+    test_team = StudentTeam.find_by(id: self.student_team_id)
+    user_leader = User.find_by(id: (test_team.user_id))
+    student_name = user_leader.real_display_name()
+    return student_name
   end
 
 

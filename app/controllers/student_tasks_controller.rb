@@ -35,7 +35,7 @@ class StudentTasksController < ApplicationController
       redirect_to student_team_dashboard_path(params[:student_team_id]), notice: 'Task was successfully created'
     else
       #Need to add something to notify of error
-      redirect_to student_team_dashboard_path(params[:student_team_id]), notice: 'Task was successfully created'
+      redirect_to student_team_dashboard_path(params[:student_team_id]), notice: 'Task creation failed'
     end
   end
 
