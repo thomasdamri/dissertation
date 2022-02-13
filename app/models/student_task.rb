@@ -14,5 +14,39 @@ class StudentTask < ApplicationRecord
     end
   end
 
+  def self.difficulty_string_to_int(string_input)
+    case string_input
+    when "Easy"
+      return 0
+    when "Hard"
+      return 2
+    else
+      return 1
+    end
+  end
+
+  def self.difficulty_int_to_colour(integer_input)
+    case integer_input
+    when 0
+      return "green"
+    when 2
+      return "red"
+    else
+      return "yellow"
+    end
+  end
+
+  def self.difficulty_int_to_style(integer_input)
+    case integer_input
+    when 0
+      return "border-left: 5px solid green;"
+    when 2
+      return "border-left: 5px solid red;"
+    else
+      return "border-left: 5px solid yellow;"
+    end
+  end
+
+
 
 end

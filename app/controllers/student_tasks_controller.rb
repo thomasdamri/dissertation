@@ -5,7 +5,7 @@ class StudentTasksController < ApplicationController
 
   # GET /uni_modules/1
   def show
-
+    @student_task = StudentTask.find_by(params[:id])
   end
 
   def index
@@ -28,12 +28,14 @@ class StudentTasksController < ApplicationController
   def create
     @student_task = StudentTask.new(student_task_params)
     @student_task.student_team_id = params[:student_team_id]
-    @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    @student_task.task_difficulty = StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty])
+    
+    #@student_team = StudentTeam.find_by(id: params[:student_team_id])
     if @student_task.save
-      redirect_to student_team_dashboard_path(@student_team.id), notice: 'Task was successfully created'
+      redirect_to student_team_dashboard_path(params[:student_team_id]), notice: 'Task was successfully created'
     else
       #Need to add something to notify of error
-      redirect_to student_team_dashboard_path(@student_team.id), notice: 'Task was successfully created'
+      redirect_to student_team_dashboard_path(params[:student_team_id]), notice: 'Task was successfully created'
     end
   end
 

@@ -9,7 +9,7 @@
     = f.input_field :task_objective, required: true, as: :string, placeholder: "Whats the objective?"
 
     .input-group 
-      = f.input_field :task_difficulty, as: :select, collection: ["Easy", "Medium", "Hard"], input_html: {multiple: false}, label: false, prompt: "Difficulty"
+      = f.input_field :task_difficulty, as: :select, collection: ["Easy", "Medium", "Hard"], input_html: {multiple: false}, prompt: "Difficulty"
 
     .input-group 
     = f.input :task_target_date, start_year: Date.today.year, label: "Target Date:"
