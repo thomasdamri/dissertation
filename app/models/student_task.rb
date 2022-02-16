@@ -1,6 +1,7 @@
 class StudentTask < ApplicationRecord
   belongs_to :student_team
   has_many :student_task_edits
+  has_many :student_task_comments
 
   validates :task_objective, length: { in: 10..300}
 

@@ -1,0 +1,13 @@
+.list-group.overflow-auto.p-1
+  //If statement checks if there are any tasks to display
+  - if comments != nil 
+    //Loops through each task, creating a link which will fetch the selected task when clicked
+    - comments.each do |c|
+      .card
+        .card-body
+          .card-text 
+            =c.comment
+          .card-subtitle.text-muted 
+            = c.user_id
+  - else
+    No comments

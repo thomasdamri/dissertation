@@ -6,7 +6,7 @@ class StudentTasksController < ApplicationController
   # GET /uni_modules/1
   def show
     @student_task = StudentTask.find_by(id: params[:id])
-
+    @student_task_comment = StudentTaskComment.new
   end
 
   def index
@@ -61,6 +61,20 @@ class StudentTasksController < ApplicationController
 
   end
 
+  # DELETE /uni_modules/1
+  def comment
+    @comment = StudentTaskComment.new(comment_params)
+    @comment.user_id = current_user.id
+    @comment.student_task_id = params[:student_task_id]
+    puts(@comment.inspect)
+    @student_task = StudentTask.find_by(id: params[:student_task_id])
+    if @comment.save
+      redirect_to student_team_student_task_path(@student_task.student_team.id, @student_task.id), notice: 'Comment posted'
+    else
+      #Need to add something to notify of error
+      redirect_to student_team_student_task_path(@student_task.student_team.id, @student_task.id), notice: 'Comment failed'
+    end
+  end
 
 
 
@@ -72,6 +86,11 @@ class StudentTasksController < ApplicationController
     #Only allow a list of trusted parameters through.
     def student_task_params
       params.require(:student_task).permit(:task_objective, :task_difficulty, :task_target_date, :student_team_id)
+    end
+
+    #Only allow a list of trusted parameters through.
+    def comment_params
+      params.require(:student_task_comment).permit(:comment)
     end
 
 
