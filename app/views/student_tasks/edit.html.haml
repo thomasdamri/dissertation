@@ -1,2 +1,17 @@
+-# 
+  Modal View to edit the selected task
 .modal-dialog
   .modal-content
+    = simple_form_for @student_task, remote: true, url: student_team_student_task_path(params[:student_team_id], @student_task.id)  do |f|
+
+      %h5 New Task
+      = f.button :submit, 'Update', class: 'btn btn-primary' 
+
+      .input-group 
+      = f.input_field :task_objective, required: true, as: :string, placeholder: "Whats the objective?"
+
+      .input-group 
+      = f.input_field :task_difficulty, as: :select, collection: ["Easy", "Medium", "Hard"], input_html: {multiple: false}, prompt: "Difficulty"
+
+      .input-group 
+      = f.input :task_target_date, start_year: Date.today.year, label: "Target Date:"

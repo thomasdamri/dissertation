@@ -1,11 +1,12 @@
 class StudentTasksController < ApplicationController
-  #before_action :set_uni_module, only: [:show, :edit, :update, :destroy]
+
   before_action :authenticate_user!
   load_and_authorize_resource
 
   # GET /uni_modules/1
   def show
-    @student_task = StudentTask.find_by(params[:id])
+    @student_task = StudentTask.find_by(id: params[:id])
+
   end
 
   def index
@@ -22,6 +23,8 @@ class StudentTasksController < ApplicationController
   # GET /uni_modules/1/edit
   def edit
     @title = "Editing Task"
+    @student_task = StudentTask.find(params[:id])
+    # render layout: false
   end
 
   # POST /uni_modules
@@ -29,6 +32,7 @@ class StudentTasksController < ApplicationController
     @student_task = StudentTask.new(student_task_params)
     @student_task.student_team_id = params[:student_team_id]
     @student_task.task_difficulty = StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty])
+    
     
     #@student_team = StudentTeam.find_by(id: params[:student_team_id])
     if @student_task.save
@@ -41,13 +45,20 @@ class StudentTasksController < ApplicationController
 
   # PATCH/PUT /uni_modules/1
   def update
+    @student_task = StudentTask.find_by(id:params[:id])
 
+    if(@student_task.update(student_task_params))
+      @student_task.update_attribute(:task_difficulty, StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty]))
+      redirect_to student_team_student_task_path(params[:student_team_id], @student_task.id), notice: 'Task was updated created'
+    else
+      #Need to add something to notify of error
+      redirect_to student_team_student_task_path(params[:student_team_id], @student_task.id), notice: 'Task update failed'
+    end
   end
 
   # DELETE /uni_modules/1
   def destroy
-    # @student_task.destroy
-    # redirect_to home_staff_home_path, notice: 'Uni module was successfully destroyed.'
+
   end
 
 
@@ -56,13 +67,13 @@ class StudentTasksController < ApplicationController
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    # def set_uni_module
-    #   @uni_module = UniModule.find(params[:id])
-    # end
+
 
     #Only allow a list of trusted parameters through.
     def student_task_params
       params.require(:student_task).permit(:task_objective, :task_difficulty, :task_target_date, :student_team_id)
     end
+
+
 
 end
