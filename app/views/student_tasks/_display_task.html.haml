@@ -1,5 +1,7 @@
-.card 
-  .card-body 
-    .card-subtitle.mb-2.text-muted= task.
-    %p.card-text
-     
+.container
+  = link_to student_team_student_task_path(student_team_id, task), class: 'student_task_box',data: {remote: true} do
+    .row
+      .card-text 
+        =task.task_objective
+      .card-subtitle.text-muted 
+        = StudentTask.difficulty_int_to_string(task.task_difficulty)

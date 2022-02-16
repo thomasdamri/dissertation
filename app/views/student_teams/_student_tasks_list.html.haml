@@ -3,8 +3,12 @@
   - if team_tasks != nil 
     //Loops through each task, creating a link which will fetch the selected task when clicked
     - team_tasks.each do |task|
-      =task.task_objective
-      //= link_to task.task_objective, fetch_task_path(task_id: task.id), remote: true, class: "list-group-item list-group-item-action", type: "button" 
+      .card{:style => StudentTask.difficulty_int_to_style(task.task_difficulty)}
+        = link_to student_team_student_task_path(params[:student_team_id], task.id), class: 'student_task_box' do
+          .card-body
+            .card-text 
+              =task.task_objective
+            .card-subtitle.text-muted 
+              = task.task_target_date
   - else
     No tasks available
-    

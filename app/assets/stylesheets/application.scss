@@ -1,3 +1,6 @@
+/*
+*= require bootstrap-datepicker
+*/
 @import "bootstrap/scss/bootstrap";
 @import 'assessment';
 
@@ -9,4 +12,11 @@
 /* Makes material design icons at same vertical level as text */
 .material-icons {
   vertical-align: text-bottom;
+}
+
+.student_task_box {
+  &:hover {
+    text-decoration: none;
+    background-color: #9e9e9e;
+  }
 }

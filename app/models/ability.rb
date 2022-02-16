@@ -65,6 +65,10 @@ class Ability
           user.teams.pluck(:uni_module_id).include? wl.uni_module.id
         end
 
+        can [:edit, :destroy, :update], StudentTask do |st|
+          user.student_teams.pluck(:id).include? st.student_team_id
+        end
+
       end
     end
   end
