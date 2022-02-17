@@ -95,14 +95,19 @@ Rails.application.routes.draw do
 
   get 'fetch_student_task', to: 'student_tasks#select'
 
+  delete 'delete_comment/:id', to: 'student_tasks#delete_comment', as: 'delete_comment'
+
 
   #Dont need to double nest because the student task can derive the student team id, so change this when i can be bothered
   resources :student_teams do
     resources :student_tasks
   end
 
+
   resources :student_tasks do
     post 'comment', to: 'student_tasks#comment'
   end
+
+
 
 end
