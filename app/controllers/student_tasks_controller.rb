@@ -24,6 +24,7 @@ class StudentTasksController < ApplicationController
   def edit
     @title = "Editing Task"
     @student_task = StudentTask.find(params[:id])
+    @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
     # render layout: false
   end
 
@@ -46,9 +47,17 @@ class StudentTasksController < ApplicationController
   # PATCH/PUT /uni_modules/1
   def update
     @student_task = StudentTask.find_by(id:params[:id])
-
-    if(@student_task.update(student_task_params))
-      @student_task.update_attribute(:task_difficulty, StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty]))
+    puts(student_task_edit_params[:student_task][:student_task_edit][:edit_reason])
+    # edit_reason = student_task_edit_params[:student_task_edits][:edit_reason]
+    @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
+    #@student_task.student_task_edits.build
+    # @task_edit = @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
+    # @student_task.task_target_date = student_task_params[:task_target_date]
+    # @student_task.task_objective = student_task_params[:task_objective]
+    # @student_task.task_difficulty = StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty])
+    if(@student_task.update(student_task_edit_params))
+      # @task_edit.edit_reason = student_task_params[:student_task_edit_attributes][:edit_reason]
+      # @task_edit.save
       redirect_to student_task_path(@student_task), notice: 'Task was updated created'
     else
       #Need to add something to notify of error
@@ -77,11 +86,24 @@ class StudentTasksController < ApplicationController
   end
 
   def delete_comment
-    puts("WTF")
     @comment = StudentTaskComment.find_by(id: params[:id])
     @student_task = StudentTask.find_by(id: @comment.student_task_id)
     @comment.destroy
     redirect_to student_task_path(@student_task), notice: 'Comment posted'
+  end
+
+  # DELETE /uni_modules/1
+  def like_task
+    if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:student_task_id]).exists?)
+      @like = StudentTaskLike.find_by(user_id: current_user.id ,student_task_id: params[:student_task_id])
+      puts(@like.inspect)
+      @like.destroy
+      puts("UNLIKED")
+    else
+      @like = StudentTaskLike.create(user_id: current_user.id, student_task_id: params[:student_task_id])
+      puts("LIKED")
+    end
+    redirect_to student_task_path(params[:student_task_id])
   end
 
 
@@ -94,6 +116,10 @@ class StudentTasksController < ApplicationController
     #Only allow a list of trusted parameters through.
     def student_task_params
       params.require(:student_task).permit(:task_objective, :task_difficulty, :task_target_date, :student_team_id)
+    end
+
+    def student_task_edit_params
+      params.require(:student_task).permit(:task_objective, :task_difficulty, :task_target_date, :student_team_id, student_task_edits_attributes: [:id, :edit_reason, :_destroy])
     end
 
     #Only allow a list of trusted parameters through.
