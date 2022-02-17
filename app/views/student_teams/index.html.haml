@@ -11,10 +11,12 @@
     .card-body.p-0.d-flex
       .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
         = render partial: 'student_tasks/form', locals: {task: @task, student_team_id: @student_team.id}
-
+        %h1 My Tasks
+        = render partial: 'student_tasks_list', locals: {student_team_id: @student_team.id, team_tasks: @student_team.student_tasks.where(student_team_id: @student_team.id)}
       //Left side of page, displaying the tasks_list, with pagination at the bottom
       .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
         #task-list-panel
+          %h1 Team Tasks
           = render partial: 'student_tasks_list', locals: {student_team_id: @student_team.id, team_tasks: @student_team.student_tasks}
 
         -# .justify-content-center
