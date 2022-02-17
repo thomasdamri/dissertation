@@ -1,7 +1,7 @@
 .container
   .row 
     .col-sm
-      =link_to 'Back', student_team_dashboard_path(), class: "btn"
+      =link_to 'Back', student_team_dashboard_path(@student_task.student_team_id), class: "btn"
     .col-xl 
       Student Tasks
   .row
@@ -14,8 +14,8 @@
 = @student_task.task_target_date
 
 -if can?(:edit, StudentTask)
-  =link_to 'Edit', edit_student_team_student_task_path(params[:student_team_id], @student_task.id)
-  =link_to 'Complete', student_team_dashboard_path(params[:student_team_id]), class: "btn"
+  =link_to 'Edit', edit_student_task_path(@student_task)
+  =link_to 'Complete', student_team_dashboard_path(@student_task.student_team_id), class: "btn"
 
 %br 
 %br

@@ -2,7 +2,7 @@
   Modal View to edit the selected task
 .modal-dialog
   .modal-content
-    = simple_form_for @student_task, remote: true, url: student_team_student_task_path(params[:student_team_id], @student_task.id)  do |f|
+    = simple_form_for @student_task, remote: true, url: student_task_path(@student_task)  do |f|
 
       %h5 New Task
       = f.button :submit, 'Update', class: 'btn btn-primary' 

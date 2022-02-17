@@ -1,7 +1,7 @@
 class StudentTasksController < ApplicationController
 
   before_action :authenticate_user!
-  load_and_authorize_resource
+  authorize_resource
 
   # GET /uni_modules/1
   def show
@@ -36,10 +36,10 @@ class StudentTasksController < ApplicationController
     
     #@student_team = StudentTeam.find_by(id: params[:student_team_id])
     if @student_task.save
-      redirect_to student_team_dashboard_path(params[:student_team_id]), notice: 'Task was successfully created'
+      redirect_to student_team_dashboard_path(@student_task.student_team_id), notice: 'Task was successfully created'
     else
       #Need to add something to notify of error
-      redirect_to student_team_dashboard_path(params[:student_team_id]), notice: 'Task creation failed'
+      redirect_to student_team_dashboard_path(@student_task.student_team_id), notice: 'Task creation failed'
     end
   end
 
@@ -49,10 +49,10 @@ class StudentTasksController < ApplicationController
 
     if(@student_task.update(student_task_params))
       @student_task.update_attribute(:task_difficulty, StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty]))
-      redirect_to student_team_student_task_path(params[:student_team_id], @student_task.id), notice: 'Task was updated created'
+      redirect_to student_task_path(@student_task), notice: 'Task was updated created'
     else
       #Need to add something to notify of error
-      redirect_to student_team_student_task_path(params[:student_team_id], @student_task.id), notice: 'Task update failed'
+      redirect_to student_task_path(@student_task), notice: 'Task update failed'
     end
   end
 
@@ -69,11 +69,19 @@ class StudentTasksController < ApplicationController
     puts(@comment.inspect)
     @student_task = StudentTask.find_by(id: params[:student_task_id])
     if @comment.save
-      redirect_to student_team_student_task_path(@student_task.student_team.id, @student_task.id), notice: 'Comment posted'
+      redirect_to student_task_path(@student_task), notice: 'Comment posted'
     else
       #Need to add something to notify of error
-      redirect_to student_team_student_task_path(@student_task.student_team.id, @student_task.id), notice: 'Comment failed'
+      redirect_to student_task_path(@student_task), notice: 'Comment failed'
     end
+  end
+
+  def delete_comment
+    puts("WTF")
+    @comment = StudentTaskComment.find_by(id: params[:id])
+    @student_task = StudentTask.find_by(id: @comment.student_task_id)
+    @comment.destroy
+    redirect_to student_task_path(@student_task), notice: 'Comment posted'
   end
 
 
