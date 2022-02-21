@@ -11,8 +11,14 @@ export default class extends Controller {
     let selected = this.reportingSelectTarget.value
     let target = this.formCollectionTarget.id
 
-    get(`/student_reports/get_list?target=${target}&selected=${selected}`, {
-      responseKind: "turbo-stream"
-    })
+    if(selected=="Team"){
+      this.formCollectionTarget.disabled = true
+    }
+    else{
+      this.formCollectionTarget.disabled = false
+      get(`/student_reports/get_list?target=${target}&selected=${selected}`, {
+        responseKind: "turbo-stream"
+      })
+    }
   }
 }

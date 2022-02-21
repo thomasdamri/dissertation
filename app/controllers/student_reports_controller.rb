@@ -13,14 +13,18 @@ class StudentReportsController < ApplicationController
   def get_list
     @target = params[:target]
     @selected = params[:selected]
+
+    @student = StudentTeam.find_by(id: 2)
+    @team_id = @student.team.id
+
     if @selected == "User" 
-      @item_list = ["1", "2", "3"]
+      @item_list = StudentTeam.where(student_teams:{team_id: @team_id}).select(:id)
     elsif @selected == "Grade" 
-      @item_list = ["4", "5", "6"]
+      @item_list = ["grade"]
     elsif @selected == "Task" 
-      @item_list = ["7", "8", "9"]
+      @item_list = StudentTask.joins(:student_team).where("student_teams.team_id = ?", @team_id).select(:id, :task_objective)
     else
-      @item_list = ["10", "11", "12"]
+      @item_list = []
     end
     puts(@item_list.inspect)
     respond_to do |format|
