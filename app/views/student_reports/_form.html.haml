@@ -6,11 +6,13 @@
   %div{ 'data-controller': "report"}
     .input-group 
     = f.label :report_object, "What are you reporting?"
-    = f.select :report_object, ["User", "Grade", "Task", "Team"], {prompt: "What are you reporting?"}, { class: 'form-select', data: { action: "change->report#change"}}
+    = f.select :report_object, ["User", "Grade", "Task", "Team"], {prompt: "What are you reporting?"}, { class: 'form-select', data: { action: "change->report#change"}, "data-report-target": "reportingSelect", include_blank: false }
 
-  .input-group 
-  = f.label :report_object_id, "Object to report:"
-  = f.input_field :report_object_id, as: :select, collection: ["User", "Grade", "Task", "Team"], class: 'testing_coffee' ,input_html: {multiple: false}, prompt: "What are you reporting?"
+    .input-group 
+    = f.label :report_object_id, "Please select report object:"
+    = f.select :report_object_id, [], {}, { class: 'form-select', "data-report-target": "formCollection"}
+
+
 
   .input-group 
   = f.label :report_object, "Reason for report:"

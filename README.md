@@ -25,3 +25,6 @@ This project used Material Design Icons from Google, licensed under the Apache L
 ###
 Used this to install stimulus
 https://betterprogramming.pub/how-to-add-stimulus-js-to-a-rails-6-application-4201837785f9
+
+Need @rails/request.js
+yarn add @rails/request.js

@@ -10,7 +10,7 @@ import { Application } from "stimulus"
 import { autoload } from "stimulus/webpack-helpers"
 
 require("@rails/ujs").start()
-require("turbolinks").start()
+require("@hotwired/turbo")
 require("@rails/activestorage").start()
 require("channels")
 

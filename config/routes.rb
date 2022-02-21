@@ -99,7 +99,9 @@ Rails.application.routes.draw do
 
   delete 'delete_comment/:id', to: 'student_tasks#delete_comment', as: 'delete_comment'
 
-  resources :student_reports
+  resources :student_reports do
+    get 'get_list', on: :collection
+  end
 
   resources :student_tasks do
     post 'comment', to: 'student_tasks#comment'
