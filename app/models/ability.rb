@@ -69,6 +69,10 @@ class Ability
           user.student_teams.pluck(:id).include? st.student_team_id
         end
 
+        # can [:delete_comment], StudentTaskComment do |c|
+        #   user.id == (c.user_id)
+        # end
+        can [:delete_comment], StudentTaskComment, user_id: user.id
       end
     end
   end

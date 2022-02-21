@@ -93,9 +93,13 @@ Rails.application.routes.draw do
   get 'student_teams/:student_team_id', to: 'student_teams#index', as: 'student_team_dashboard'
   post 'student_teams/:student_team_id/student_tasks_new',  to: 'student_tasks#create', as: 'student_task_create'
 
+  get 'student_teams/:student_team_id/new_report', to: 'student_reports#new', as: 'new_report'
+
   get 'fetch_student_task', to: 'student_tasks#select'
 
   delete 'delete_comment/:id', to: 'student_tasks#delete_comment', as: 'delete_comment'
+
+  resources :student_reports
 
   resources :student_tasks do
     post 'comment', to: 'student_tasks#comment'

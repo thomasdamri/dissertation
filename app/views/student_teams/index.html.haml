@@ -8,6 +8,7 @@
     //Header including title and search form
     .card-header.d-flex.justify-content-between.align-items-center
       %h5.m-0 Student Tasks
+      =link_to 'report', new_report_path(@student_team.id)
     .card-body.p-0.d-flex
       .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
         = render partial: 'student_tasks/form', locals: {task: @task, student_team_id: @student_team.id}
