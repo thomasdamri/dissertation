@@ -72,8 +72,6 @@ gem 'simple_form'
 # Provides easy interaction with TSV files (for CEIS output uploading)
 gem 'tsv'
 
-# Integrates a datepicker 
-gem 'bootstrap-datepicker-rails'
 
 
 
