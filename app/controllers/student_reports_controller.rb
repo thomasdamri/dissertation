@@ -16,13 +16,20 @@ class StudentReportsController < ApplicationController
 
     @student = StudentTeam.find_by(id: 2)
     @team_id = @student.team.id
-
+    @item_list = []
     if @selected == "User" 
-      @item_list = StudentTeam.where(student_teams:{team_id: @team_id}).select(:id)
+      @users = StudentTeam.where(student_teams:{team_id: @team_id}).select(:id)
+      for u in @users do
+        @item_list.push([u.id, u.id])
+      end
     elsif @selected == "Grade" 
-      @item_list = ["grade"]
+      @grade = ["Grade Substitute", 0]
+      @item_list = @item_list.push(@grade)
     elsif @selected == "Task" 
-      @item_list = StudentTask.joins(:student_team).where("student_teams.team_id = ?", @team_id).select(:id, :task_objective)
+      @tasks = StudentTask.joins(:student_team).where("student_teams.team_id = ?", @team_id).select(:task_objective, :id)
+      for t in @tasks do
+        @item_list.push([t.task_objective, t.id])
+      end
     else
       @item_list = []
     end

@@ -13,6 +13,7 @@ export default class extends Controller {
 
     if(selected=="Team"){
       this.formCollectionTarget.disabled = true
+      this.formCollectionTarget.value = null
     }
     else{
       this.formCollectionTarget.disabled = false
