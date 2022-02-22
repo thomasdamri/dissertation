@@ -11,7 +11,7 @@ export default class extends Controller {
     let selected = this.reportingSelectTarget.value
     let target = this.formCollectionTarget.id
 
-    if(selected=="Team"){
+    if(selected==3){
       this.formCollectionTarget.disabled = true
       this.formCollectionTarget.value = null
     }

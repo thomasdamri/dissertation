@@ -10,33 +10,57 @@ class StudentReportsController < ApplicationController
     @student_report = StudentReport.new
   end
 
+  def create
+    @student_report = StudentReport.new(student_report_params)
+    @student_report.report_date = Date.today
+    #Need team id
+    puts(@student_report.inspect)
+    if @student_report.save
+      redirect_to new_report_path(2), notice: 'Thank You, Report Submitted'
+    else
+      redirect_to new_report_path(2), notice: 'Sorry, Report Failed'
+    end
+  end
+
   def get_list
     @target = params[:target]
-    @selected = params[:selected]
+    @selected = params[:selected].to_i
 
+    #Need it so correct student is used
     @student = StudentTeam.find_by(id: 2)
     @team_id = @student.team.id
     @item_list = []
-    if @selected == "User" 
+    puts(@selected == 2)
+    if @selected == 0 
       @users = StudentTeam.where(student_teams:{team_id: @team_id}).select(:id)
       for u in @users do
         @item_list.push([u.id, u.id])
       end
-    elsif @selected == "Grade" 
+    elsif @selected == 1 
       @grade = ["Grade Substitute", 0]
       @item_list = @item_list.push(@grade)
-    elsif @selected == "Task" 
+    elsif @selected == 2 
       @tasks = StudentTask.joins(:student_team).where("student_teams.team_id = ?", @team_id).select(:task_objective, :id)
       for t in @tasks do
         @item_list.push([t.task_objective, t.id])
       end
     else
-      @item_list = []
+      @team = ["My Team", @team_id]
+      @item_list.push(@team)
     end
-    puts(@item_list.inspect)
     respond_to do |format|
       format.turbo_stream
     end
+  end
+
+
+  private
+  # Use callbacks to share common setup or constraints between actions.
+
+
+  #Only allow a list of trusted parameters through.
+  def student_report_params
+    params.require(:student_report).permit(:report_object, :report_object_id, :report_reason)
   end
 
 end
