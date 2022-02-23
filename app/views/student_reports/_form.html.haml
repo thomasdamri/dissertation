@@ -1,4 +1,4 @@
-= simple_form_for @student_report, url: student_reports_path() do |f|
+= simple_form_for @student_report, url: create_report_path(params[:student_team_id]) do |f|
 
   %h5 New Task
   = f.button :submit, 'Submit Report', class: 'btn btn-primary' 
@@ -6,11 +6,11 @@
   %div{ 'data-controller': "report"}
     .input-group 
     = f.label :report_object, "What are you reporting?"
-    = f.select :report_object, [["User", 0], ["Grade", 1], ["Task", 2], ["Team", 3]], {prompt: "What are you reporting?"}, { class: 'form-select', data: { action: "change->report#change"}, "data-report-target": "reportingSelect", include_blank: false }
+    = f.select :report_object, [["User", 0], ["Grade", 1], ["Task", 2], ["Team", 3]], {}, { class: 'form-select', data: { action: "change->report#change"}, "data-report-target": "reportingSelect", include_blank: false }
 
     .input-group 
     = f.label :report_object_id, "Please select report object:"
-    = f.select :report_object_id, [], {}, { class: 'form-select', "data-report-target": "formCollection"}
+    = f.select :report_object_id, @item_list, {}, { class: 'form-select', "data-report-target": "formCollection"}
 
 
 

@@ -94,6 +94,7 @@ Rails.application.routes.draw do
   post 'student_teams/:student_team_id/student_tasks_new',  to: 'student_tasks#create', as: 'student_task_create'
 
   get 'student_teams/:student_team_id/new_report', to: 'student_reports#new', as: 'new_report'
+  post 'student_teams/:student_team_id/create', to: 'student_reports#create', as: 'create_report'
 
   get 'fetch_student_task', to: 'student_tasks#select'
 

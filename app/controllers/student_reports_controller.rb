@@ -8,17 +8,22 @@ class StudentReportsController < ApplicationController
   def new
     @title = "Creating Report"
     @student_report = StudentReport.new
+    @team_id = StudentTeam.find_by(id: params[:student_team_id]).team.id
+    @item_list = []
+    @users = StudentTeam.where(student_teams:{team_id: @team_id}).select(:id)
+    for u in @users do
+      @item_list.push([u.id, u.id])
+    end
   end
 
   def create
     @student_report = StudentReport.new(student_report_params)
     @student_report.report_date = Date.today
-    #Need team id
-    puts(@student_report.inspect)
+    @student_report.student_team_id = params[:student_team_id]
     if @student_report.save
-      redirect_to new_report_path(2), notice: 'Thank You, Report Submitted'
+      redirect_to new_report_path(params[:student_team_id]), notice: 'Thank You, Report Submitted'
     else
-      redirect_to new_report_path(2), notice: 'Sorry, Report Failed'
+      redirect_to new_report_path(params[:student_team_id]), notice: 'Sorry, Report Failed'
     end
   end
 
