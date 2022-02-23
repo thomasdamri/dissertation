@@ -7,6 +7,11 @@ class StudentTasksController < ApplicationController
   def show
     @student_task = StudentTask.find_by(id: params[:id])
     @student_task_comment = StudentTaskComment.new
+    if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:id]).exists?)
+      @like_outcome = "UNLIKE"
+    else
+      @like_outcome = "LIKE"
+    end
     respond_to do |format|
       format.js
     end
@@ -78,13 +83,17 @@ class StudentTasksController < ApplicationController
     @comment = StudentTaskComment.new(comment_params)
     @comment.user_id = current_user.id
     @comment.student_task_id = params[:student_task_id]
-    puts(@comment.inspect)
     @student_task = StudentTask.find_by(id: params[:student_task_id])
     if @comment.save
+      @comment_outcome = "Comment posted"
       redirect_to student_task_path(@student_task), notice: 'Comment posted'
     else
       #Need to add something to notify of error
+      @comment_outcome = "Comment failed to post"
       redirect_to student_task_path(@student_task), notice: 'Comment failed'
+    end
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -92,21 +101,25 @@ class StudentTasksController < ApplicationController
     @comment = StudentTaskComment.find_by(id: params[:id])
     @student_task = StudentTask.find_by(id: @comment.student_task_id)
     @comment.destroy
-    redirect_to student_task_path(@student_task), notice: 'Comment posted'
+    respond_to do |format|
+      format.js
+    end
   end
 
   # DELETE /uni_modules/1
   def like_task
+    @student_task = StudentTask.find_by(params[:student_task_id])
     if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:student_task_id]).exists?)
       @like = StudentTaskLike.find_by(user_id: current_user.id ,student_task_id: params[:student_task_id])
-      puts(@like.inspect)
       @like.destroy
-      puts("UNLIKED")
+      @like_outcome = "LIKE"
     else
       @like = StudentTaskLike.create(user_id: current_user.id, student_task_id: params[:student_task_id])
-      puts("LIKED")
+      @like_outcome = "UNLIKE"
     end
-    redirect_to student_task_path(params[:student_task_id])
+    respond_to do |format|
+      format.js
+    end
   end
 
   def return_task_list
