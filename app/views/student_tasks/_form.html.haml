@@ -6,10 +6,13 @@
   = f.button :submit, 'Save', class: 'btn btn-primary' 
 
   .input-group 
+  = f.label :task_objective, "Whats the objective?"
   = f.input_field :task_objective, required: true, as: :string, placeholder: "Whats the objective?"
 
   .input-group 
+  = f.label :task_difficulty, "How difficult?"
   = f.input_field :task_difficulty, as: :select, collection: ["Easy", "Medium", "Hard"], input_html: {multiple: false}, prompt: "Difficulty"
 
   .input-group 
-  = f.input :task_target_date, start_year: Date.today.year, label: "Target Date:"
+  = f.label :task_target_date, "Target date?"
+  = f.input :task_target_date, start_year: Date.today.year, lable: false

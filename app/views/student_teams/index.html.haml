@@ -16,8 +16,8 @@
         = render partial: 'student_tasks_list', locals: {student_team_id: @student_team.id, team_tasks: @student_team.student_tasks.where(student_team_id: @student_team.id)}
       //Left side of page, displaying the tasks_list, with pagination at the bottom
       .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
+        %h1 Team Tasks
         #task-list-panel
-          %h1 Team Tasks
           = render partial: 'student_tasks_list', locals: {student_team_id: @student_team.id, team_tasks: @student_team.student_tasks}
 
         -# .justify-content-center

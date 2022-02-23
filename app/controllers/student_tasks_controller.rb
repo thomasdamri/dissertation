@@ -7,6 +7,9 @@ class StudentTasksController < ApplicationController
   def show
     @student_task = StudentTask.find_by(id: params[:id])
     @student_task_comment = StudentTaskComment.new
+    respond_to do |format|
+      format.js
+    end
   end
 
   def index
@@ -104,6 +107,14 @@ class StudentTasksController < ApplicationController
       puts("LIKED")
     end
     redirect_to student_task_path(params[:student_task_id])
+  end
+
+  def return_task_list
+
+    @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    respond_to do |format|
+      format.js
+    end
   end
 
 

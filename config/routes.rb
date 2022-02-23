@@ -100,6 +100,8 @@ Rails.application.routes.draw do
 
   delete 'delete_comment/:id', to: 'student_tasks#delete_comment', as: 'delete_comment'
 
+  get 'return_student_task_list/:student_team_id', to: 'student_tasks#return_task_list', as: 'return_task_list'
+
   resources :student_reports do
     get 'get_list', on: :collection
   end

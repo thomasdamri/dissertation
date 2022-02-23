@@ -1,4 +1,4 @@
-= simple_form_for @student_report, url: create_report_path(params[:student_team_id]) do |f|
+= simple_form_for @student_report, url: create_report_path(params[:student_team_id]), defaults: {input_html: {class: 'form-control'}} do |f|
 
   %h5 New Task
   = f.button :submit, 'Submit Report', class: 'btn btn-primary' 
@@ -14,6 +14,6 @@
 
 
 
-  .input-group 
-  = f.label :report_reason, "Reason for report:"
-  = f.input_field :report_reason, required: true, as: :string, placeholder: "Report Reason...", label: "Reason for report?"
+    .input-group 
+    = f.label :report_reason, "Reason for report:"
+    = f.input_field :report_reason, required: true, as: :string, placeholder: "Report Reason...", label: "Reason for report?"

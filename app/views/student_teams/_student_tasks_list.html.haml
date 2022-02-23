@@ -4,7 +4,7 @@
     //Loops through each task, creating a link which will fetch the selected task when clicked
     - team_tasks.each do |task|
       .card{:style => StudentTask.difficulty_int_to_style(task.task_difficulty)}
-        = link_to student_task_path(task), class: 'student_task_box' do
+        = link_to student_task_path(task), class: 'student_task_box', remote: true do
           .card-body
             .card-text 
               =task.task_objective
