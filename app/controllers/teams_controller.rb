@@ -8,6 +8,8 @@ class TeamsController < ApplicationController
     @title = "Team #{@team.team_number}"
     @users = @team.users
     @assessments = @team.uni_module.assessments
+    @reports = @team.student_reports
+    puts(@reports.inspect)
     @team_grades = TeamGrade.where(team: @team)
   end
 

@@ -1,0 +1,17 @@
+%table.table.table-bordered.table-striped.table-hover
+  %thead
+    %tr
+      %th Reporter:
+      %th Reporting:
+      %th Reason:
+      %th Date:
+
+  %tbody
+    - @reports.each do |report|
+      %tr
+        %td= report.user.real_display_name
+        %td= report.reporting_int_to_string
+        %td= report.report_reason
+        %td= report.report_date
+        %td= link_to 'View', student_report_path(report)
+

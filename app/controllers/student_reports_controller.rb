@@ -27,6 +27,13 @@ class StudentReportsController < ApplicationController
     end
   end
 
+  # GET /uni_modules/new
+  def show
+    @title = "Viewing Report"
+    @student_report = StudentReport.find(params[:id])
+    
+  end
+
   def get_list
     @target = params[:target]
     @selected = params[:selected].to_i
