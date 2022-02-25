@@ -13,12 +13,12 @@
       .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
         = render partial: 'student_tasks/form', locals: {task: @task, student_team_id: @student_team.id}
         %h1 My Tasks
-        = render partial: 'student_tasks_list', locals: {student_team_id: @student_team.id, team_tasks: @student_team.student_tasks.where(student_team_id: @student_team.id)}
+        = render partial: 'student_tasks_list', locals: {student_team_id: @student_team.id, team_tasks: @student_team.student_tasks}
       //Left side of page, displaying the tasks_list, with pagination at the bottom
       .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
         %h1 Team Tasks
         #task-list-panel
-          = render partial: 'student_tasks_list', locals: {student_team_id: @student_team.id, team_tasks: @student_team.student_tasks}
+          = render partial: 'student_tasks_list', locals: {student_team_id: @student_team.id, team_tasks: @student_team.team.student_tasks}
 
         -# .justify-content-center
         -#   = pagy_bootstrap_nav(@pagy).html_safe

@@ -9,8 +9,11 @@
     .col-xl
       Username: 
       = student_team.user.username
+    
 
-  .row
-    %h1 Tasks:
-      #task-list-panel
-        = render partial: 'student_tasks_list', locals: {student_team_id: @student_team.id, team_tasks: @student_team.student_tasks}
+
+
+
+%h1 Tasks:
+#task-list-panel
+  = render partial: 'student_teams/student_tasks_list', locals: {student_team_id: student_team.id, team_tasks: student_team.student_tasks}

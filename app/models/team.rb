@@ -14,6 +14,7 @@ class Team < ApplicationRecord
   has_many :users, through: :student_teams
   has_many :team_grades, dependent: :destroy
   has_many :student_reports, through: :student_teams
+  has_many :student_tasks, through: :student_teams
   belongs_to :uni_module
 
   validates :team_number, presence: true, uniqueness: {scope: :uni_module}

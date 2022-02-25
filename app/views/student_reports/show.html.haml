@@ -22,7 +22,7 @@
 
   - object = @student_report.report_object
   - if object == 0
-    test 
+    = render partial:'user_report', locals: {student_team: @student_report.get_report_object}
   -elsif object == 1
     swag 
   - elsif object == 2
