@@ -8,12 +8,16 @@
     = f.label :report_object, "What are you reporting?"
     = f.select :report_object, [["User", 0], ["Grade", 1], ["Task", 2], ["Team", 3]], {}, { class: 'form-select', data: { action: "change->report#change"}, "data-report-target": "reportingSelect", include_blank: false }
 
-    .input-group 
-    = f.label :report_object_id, "Please select report object:"
-    = f.select :report_object_id, @item_list, {}, { class: 'form-select', "data-report-target": "formCollection"}
+
+    = link_to_add_association "Add another item to the report", f, :report_objects, data: {association_insertion_node: '.report_objects', association_insertion_method: :append }
+    .report_objects
+      = f.simple_fields_for :report_objects do |reportee|
+        = render 'report_object_fields', f: reportee
+    -# = f.label :report_object_id, "Please select report object:"
+    -# = f.select :report_object_id, @item_list, {}, { multiple: true, class: 'form-select', "data-report-target": "formCollection"}
 
 
 
-    .input-group 
-    = f.label :report_reason, "Reason for report:"
-    = f.input_field :report_reason, required: true, as: :string, placeholder: "Report Reason...", label: "Reason for report?"
+    -# .input-group 
+    -# = f.label :report_reason, "Reason for report:"
+    -# = f.input_field :report_reason, required: true, as: :string, placeholder: "Report Reason...", label: "Reason for report?"

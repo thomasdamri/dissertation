@@ -8,6 +8,7 @@ class StudentReportsController < ApplicationController
   def new
     @title = "Creating Report"
     @student_report = StudentReport.new
+    @student_report.report_objects.build
     @team_id = StudentTeam.find_by(id: params[:student_team_id]).team.id
     @item_list = []
     @users = StudentTeam.where(student_teams:{team_id: @team_id})

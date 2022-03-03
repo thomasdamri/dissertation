@@ -2,7 +2,9 @@ class StudentReport < ApplicationRecord
 
   belongs_to :student_team
   has_one :user, through: :student_team
+  has_many :report_objects
 
+  accepts_nested_attributes_for :report_objects, allow_destroy: true
 
   def gets_collection(type, student_team_id)
     student = StudentTeam.find_by(id: student_team_id)

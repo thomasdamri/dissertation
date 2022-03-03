@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_02_235952) do
+ActiveRecord::Schema.define(version: 2022_03_03_212419) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "author_id"
@@ -47,6 +47,15 @@ ActiveRecord::Schema.define(version: 2022_03_02_235952) do
     t.index ["assessment_id"], name: "index_criteria_on_assessment_id"
   end
 
+  create_table "report_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "student_report_id"
+    t.string "reportee_response"
+    t.string "emailed", default: "0", null: false
+    t.bigint "report_object_id", null: false
+    t.string "report_reason", null: false
+    t.index ["student_report_id"], name: "fk_rails_7395fc1714"
+  end
+
   create_table "staff_modules", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "uni_module_id"
@@ -57,11 +66,8 @@ ActiveRecord::Schema.define(version: 2022_03_02_235952) do
   create_table "student_reports", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_team_id"
     t.integer "report_object", null: false, comment: "0 if user, 1 if grade, 2 if task, 3 if team"
-    t.bigint "report_object_id", null: false, comment: "depending on report object type, object id will link to correct object"
-    t.string "report_reason", null: false
     t.date "report_date", null: false
     t.string "reporter_response"
-    t.string "reportee_response"
     t.boolean "complete", default: false
     t.index ["student_team_id"], name: "fk_rails_273f11fcde"
   end
@@ -70,7 +76,7 @@ ActiveRecord::Schema.define(version: 2022_03_02_235952) do
     t.string "comment", null: false
     t.date "posted_on"
     t.bigint "user_id"
-    t.boolean "deleted"
+    t.boolean "deleted", default: false, null: false
     t.bigint "student_task_id"
     t.index ["student_task_id"], name: "fk_rails_f69fb66277"
   end
@@ -96,7 +102,7 @@ ActiveRecord::Schema.define(version: 2022_03_02_235952) do
     t.string "task_objective", null: false
     t.integer "task_difficulty", default: 0, null: false
     t.integer "task_progress", default: 0, null: false
-    t.date "task_start_date", default: "2022-02-03"
+    t.date "task_start_date"
     t.date "task_target_date", null: false
     t.date "task_complete_date"
     t.boolean "hidden", default: false
@@ -199,6 +205,7 @@ ActiveRecord::Schema.define(version: 2022_03_02_235952) do
   add_foreign_key "assessment_results", "users", column: "target_id"
   add_foreign_key "assessments", "uni_modules", on_delete: :cascade
   add_foreign_key "criteria", "assessments", on_delete: :cascade
+  add_foreign_key "report_objects", "student_reports", on_delete: :cascade
   add_foreign_key "staff_modules", "uni_modules", on_delete: :cascade
   add_foreign_key "staff_modules", "users", on_delete: :cascade
   add_foreign_key "student_reports", "student_teams", on_delete: :cascade
