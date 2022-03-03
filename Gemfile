@@ -17,6 +17,8 @@ gem 'airbrake', github: 'epigenesys/airbrake', branch: 'airbrake-v4'
 gem 'rubycas-client', gitlab: 'gems/rubycas-client'
 gem 'epi_js'
 
+gem 'cocoon'
+
 
 # Production gems (Ensure commented out in development env)
 
