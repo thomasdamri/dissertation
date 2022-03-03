@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_02_18_144931) do
+ActiveRecord::Schema.define(version: 2022_03_02_235952) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "author_id"
@@ -60,6 +60,9 @@ ActiveRecord::Schema.define(version: 2022_02_18_144931) do
     t.bigint "report_object_id", null: false, comment: "depending on report object type, object id will link to correct object"
     t.string "report_reason", null: false
     t.date "report_date", null: false
+    t.string "reporter_response"
+    t.string "reportee_response"
+    t.boolean "complete", default: false
     t.index ["student_team_id"], name: "fk_rails_273f11fcde"
   end
 
@@ -96,6 +99,7 @@ ActiveRecord::Schema.define(version: 2022_02_18_144931) do
     t.date "task_start_date", default: "2022-02-03"
     t.date "task_target_date", null: false
     t.date "task_complete_date"
+    t.boolean "hidden", default: false
     t.index ["student_team_id"], name: "fk_rails_fa29fb9ccd"
   end
 

@@ -8,10 +8,18 @@
 
   %tbody
     - @reports.each do |report|
-      %tr
-        %td= report.user.real_display_name
-        %td= report.reporting_int_to_string
-        %td= report.report_reason
-        %td= report.report_date
-        %td= link_to 'View', student_report_path(report)
+      -if report.complete
+        %tr.table-success
+          %td= report.user.real_display_name
+          %td= report.reporting_int_to_string
+          %td= report.report_reason
+          %td= report.report_date
+          %td= link_to 'View', student_report_path(report)
+      -else 
+        %tr.table-danger
+          %td= report.user.real_display_name
+          %td= report.reporting_int_to_string
+          %td= report.report_reason
+          %td= report.report_date
+          %td= link_to 'View', student_report_path(report)
 

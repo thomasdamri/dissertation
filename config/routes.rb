@@ -102,7 +102,10 @@ Rails.application.routes.draw do
 
   get 'return_student_task_list/:student_team_id', to: 'student_tasks#return_task_list', as: 'return_task_list'
 
+  patch 'submit_report_resolution/:id', to: 'student_reports#report_resolution', as: 'submit_report_resolution'
+
   resources :student_reports do
+    post 'report_response', to: 'student_reports#report_response'
     get 'get_list', on: :collection
   end
 

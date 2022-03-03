@@ -1,0 +1,38 @@
+- if !student_report.complete
+  = simple_form_for student_report, url: submit_report_resolution_path(student_report.id), remote: true do |f|
+
+    %h5 Report Solution/ Next step:
+    = f.button :submit, 'Submit', class: 'btn btn-primary' 
+
+    .input-group 
+    = f.label :reporter_response, "Response to reporter:"
+    = f.input_field :reporter_response, required: true, as: :string, placeholder: "Enter response to reporter ..."
+
+    - if (student_report.report_object == 0 || student_report.report_object==3)
+      //Give staff text box to message reportee
+      .input-group 
+      - if(student_report.report_object==0)
+        = f.label :reportee_response, "Response to reportee:"
+      - else 
+        = f.label :reportee_response, "Response to team:"
+      = f.input_field :reportee_response, required: true, as: :string, placeholder: "Enter response to reportee ..."
+      %br
+      = f.label :notify_reportee, "Notify Reportee?"
+      = f.check_box :notify_reportee
+    - if (student_report.report_object == 1)
+      //Give staff int input to change grade
+      CHANGE GRADE PLEASE
+    - if (student_report.report_object == 2)
+      //Give staff option to delete task
+      = f.label :delete_reported_task, "Delete Task?"
+      = f.check_box :delete_reported_task
+
+     
+    %h5 Responses will be automatically emailed to students
+- else 
+  %h5 This report has been closed, responses submitted are:
+  Reponse submitted to reporter:
+  = student_report.reporter_response 
+  - if (student_report.report_object == 0)
+    Reponse submitted to reportee:
+    = student_report.reportee_response 

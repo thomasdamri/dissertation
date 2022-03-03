@@ -123,7 +123,6 @@ class StudentTasksController < ApplicationController
   end
 
   def return_task_list
-
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
     respond_to do |format|
       format.js
