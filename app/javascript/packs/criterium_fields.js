@@ -21,7 +21,7 @@ function disableWeightBox(formElement){
 }
 
 // Dynamically enabled and disables the min/max values for the criteria fields
-$(document).on('turbolinks:load', function(){
+$(document).on('turbo:load', function(){
 
     // Check all single + assessed checkboxes on page load (for editing)
     $('.single').each(function(){

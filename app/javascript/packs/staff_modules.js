@@ -19,7 +19,7 @@ function disableWeightBox(formElement){
     }
 }
 
-$(document).on('turbolinks:load', function(){
+$(document).on('turbo:load', function(){
 
     // For removing staff members from modules
     $('form').on('click', '.remove_fields', function(event){
