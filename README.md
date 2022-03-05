@@ -28,3 +28,7 @@ https://betterprogramming.pub/how-to-add-stimulus-js-to-a-rails-6-application-42
 
 Need @rails/request.js
 yarn add @rails/request.js
+
+yarn add @nathanvda/cocoon
+
+yarn add select2

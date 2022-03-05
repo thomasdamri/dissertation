@@ -19,6 +19,7 @@ gem 'epi_js'
 
 gem 'cocoon'
 
+gem 'select2-rails'
 
 # Production gems (Ensure commented out in development env)
 
@@ -76,6 +77,8 @@ gem 'tsv'
 
 gem 'requestjs-rails'
 
+gem 'jquery-rails'
+gem 'jquery'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

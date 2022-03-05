@@ -2,7 +2,7 @@ class StudentReport < ApplicationRecord
 
   belongs_to :student_team
   has_one :user, through: :student_team
-  has_many :report_objects
+  has_many :report_objects,  dependent: :destroy
 
   accepts_nested_attributes_for :report_objects, allow_destroy: true
 

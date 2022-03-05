@@ -13,10 +13,20 @@ require("@rails/ujs").start()
 require("@hotwired/turbo")
 require("@rails/activestorage").start()
 require("channels")
+require("select2")
+
+
+
+
 
 import JQuery from 'jquery';
 window.$ = window.JQuery = JQuery;
 
+$(document).on("turbo:load", function(){
+  $('.select_two').select2({
+    width: '100%'
+  });
+});
 
 
 // // Look for controllers inside app/javascripts/packs/controllers/

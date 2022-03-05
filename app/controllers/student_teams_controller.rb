@@ -5,6 +5,14 @@ class StudentTeamsController < ApplicationController
   def index 
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
     @task = StudentTask.new
+    @student_report = StudentReport.new
+    @student_report.report_objects.build
+    @team_id = StudentTeam.find_by(id: params[:student_team_id]).team.id
+    @item_list = []
+    @users = StudentTeam.where(student_teams:{team_id: @team_id})
+    for u in @users do
+      @item_list.push([u.user.real_display_name, u.id])
+    end
   end
 
   

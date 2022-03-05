@@ -1,23 +1,27 @@
-= simple_form_for @student_report, url: create_report_path(params[:student_team_id]), defaults: {input_html: {class: 'form-control'}} do |f|
+.modal.fade#reportModal
+  .modal-dialog
+    = simple_form_for @student_report, url: create_report_path(params[:student_team_id]), remote: true, defaults: {input_html: {class: 'form-control'}} do |f|
 
-  %h5 New Task
-  = f.button :submit, 'Submit Report', class: 'btn btn-primary' 
+      .modal-content
+        .modal-header
+          %h5.modal-title New Report
+          %button.close{type: :button, data: {dismiss: :modal}}
+            %span &times;
 
-  %div{ 'data-controller': "report"}
-    .input-group 
-    = f.label :report_object, "What are you reporting?"
-    = f.select :report_object, [["User", 0], ["Grade", 1], ["Task", 2], ["Team", 3]], {}, { class: 'form-select', data: { action: "change->report#change"}, "data-report-target": "reportingSelect", include_blank: false }
+        %div.modal-body{ 'data-controller': "report"}
+          .mb-3
+            = f.label :object_type, "Reporting a:", {class: 'form-label'}
+            = f.select :object_type, [["User", 0], ["Grade", 1], ["Task", 2], ["Team", 3]], {}, { class: 'form-select form-control', data: { action: "change->report#change"}, "data-report-target": "reportingSelect", include_blank: false }
 
+          .report_objects.mb-3
+            = f.simple_fields_for :report_objects do |reportee|
+              = reportee.label :report_object_id, "Items:", class: 'form-label'
+              = reportee.select :report_object_id, @item_list, {}, { multiple: true, class: 'form-select form-control select_two', "data-report-target": "formCollection"}
 
-    = link_to_add_association "Add another item to the report", f, :report_objects, data: {association_insertion_node: '.report_objects', association_insertion_method: :append }
-    .report_objects
-      = f.simple_fields_for :report_objects do |reportee|
-        = render 'report_object_fields', f: reportee
-    -# = f.label :report_object_id, "Please select report object:"
-    -# = f.select :report_object_id, @item_list, {}, { multiple: true, class: 'form-select', "data-report-target": "formCollection"}
+          .mb-3
+            -# = f.label :report_reason, "Detail why you are reporting, giving specific reasons for each item:", {class: 'form-label'}
+            = f.text_area :report_reason, class: 'form-control', rows: '6', placeholder: "Please enter report details:"
+        .modal-footer 
+          = f.button :submit, 'Submit Report', class: 'btn btn-primary' 
 
-
-
-    -# .input-group 
-    -# = f.label :report_reason, "Reason for report:"
-    -# = f.input_field :report_reason, required: true, as: :string, placeholder: "Report Reason...", label: "Reason for report?"
+        

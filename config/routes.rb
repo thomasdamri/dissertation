@@ -107,6 +107,7 @@ Rails.application.routes.draw do
   resources :student_reports do
     post 'report_response', to: 'student_reports#report_response'
     get 'get_list', on: :collection
+
   end
 
   resources :student_tasks do

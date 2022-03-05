@@ -8,7 +8,8 @@
     //Header including title and search form
     .card-header.d-flex.justify-content-between.align-items-center
       %h5.m-0 Student Tasks
-      =link_to 'report', new_report_path(@student_team.id)
+      %button{data: {toggle: 'modal', target: '#reportModal'}}
+      -# =link_to 'Report', new_report_path(@student_team.id), class: "btn btn-outline-danger ajax-modal", type: "button", data: {toggle: 'modal', target: '#reportModal'}
     .card-body.p-0.d-flex
       .w-50.p-3.d-flex.flex-column.justify-content-between.border-right
         = render partial: 'student_tasks/form', locals: {task: @task, student_team_id: @student_team.id}
@@ -23,3 +24,5 @@
         -# .justify-content-center
         -#   = pagy_bootstrap_nav(@pagy).html_safe
 
+
+= render 'student_reports/form', locals: {initial_items: @item_list}

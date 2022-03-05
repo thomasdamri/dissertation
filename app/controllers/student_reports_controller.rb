@@ -15,13 +15,25 @@ class StudentReportsController < ApplicationController
     for u in @users do
       @item_list.push([u.user.real_display_name, u.id])
     end
+    render layout: false
   end
 
   def create
-    @student_report = StudentReport.new(student_report_params)
+    @student_report = StudentReport.new
+    @student_report.report_reason = student_report_params[:report_reason]
+    @student_report.object_type = student_report_params[:object_type]
     @student_report.report_date = Date.today
     @student_report.student_team_id = params[:student_team_id]
     if @student_report.save
+      @latest_id = StudentReport.order(:id).last.id
+      if params[:student_report][:report_objects_attributes] != nil 
+        params[:student_report][:report_objects_attributes].each_value do |value|
+          value[:report_object_id].drop(1).each do |v| 
+            @object = ReportObject.new(student_report_id: @latest_id, report_object_id: v)
+            @object.save
+          end
+        end
+      end
       redirect_to new_report_path(params[:student_team_id]), notice: 'Thank You, Report Submitted'
     else
       redirect_to new_report_path(params[:student_team_id]), notice: 'Sorry, Report Failed'
@@ -63,7 +75,14 @@ class StudentReportsController < ApplicationController
       @item_list.push(@team)
     end
     respond_to do |format|
-      format.turbo_stream
+      format.turbo_stream 
+    end
+  end
+
+  def refresh_report_objects
+    puts("TEST")
+    respond_to do |format|
+      format.js 
     end
   end
 
@@ -93,7 +112,7 @@ class StudentReportsController < ApplicationController
 
   #Only allow a list of trusted parameters through.
   def student_report_params
-    params.require(:student_report).permit(:report_object, :report_object_id, :report_reason)
+    params.require(:student_report).permit(:object_type, :report_reason, report_objects_attributes: [:report_object_id])
   end
 
   def user_report_resolution_params
