@@ -1,4 +1,6 @@
 class ApplicationController < ActionController::Base
+  include Pagy::Backend
+
   # Ensure all pages (unless manually skipped) are authorized via CanCanCan
   # Do not authorize on devise pages, as they deal with logging in
   check_authorization unless: :devise_controller?

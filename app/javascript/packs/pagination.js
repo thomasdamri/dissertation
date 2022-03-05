@@ -1,4 +1,4 @@
-$(document).on('turbolinks:load', function(){
+$(document).on('turbo:load', function(){
     $('.pagination > span').addClass('page-item');
     $('.pagination > a').addClass('page-item');
     $('.pagination > a').addClass('page-link');

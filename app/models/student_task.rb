@@ -1,7 +1,10 @@
 class StudentTask < ApplicationRecord
   belongs_to :student_team
-  has_many :student_task_edits
-  has_many :student_task_comments
+  has_many :student_task_edits, :dependent => :destroy
+  has_many :student_task_comments, :dependent => :destroy
+  has_many :student_task_likes, :dependent => :destroy
+
+  accepts_nested_attributes_for :student_task_edits, allow_destroy: true
 
   validates :task_objective, length: { in: 10..300}
 

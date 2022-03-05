@@ -1,12 +1,20 @@
 class StudentTasksController < ApplicationController
 
   before_action :authenticate_user!
-  load_and_authorize_resource
+  authorize_resource
 
   # GET /uni_modules/1
   def show
     @student_task = StudentTask.find_by(id: params[:id])
     @student_task_comment = StudentTaskComment.new
+    if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:id]).exists?)
+      @like_outcome = "UNLIKE"
+    else
+      @like_outcome = "LIKE"
+    end
+    respond_to do |format|
+      format.js
+    end
   end
 
   def index
@@ -24,6 +32,7 @@ class StudentTasksController < ApplicationController
   def edit
     @title = "Editing Task"
     @student_task = StudentTask.find(params[:id])
+    @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
     # render layout: false
   end
 
@@ -36,23 +45,31 @@ class StudentTasksController < ApplicationController
     
     #@student_team = StudentTeam.find_by(id: params[:student_team_id])
     if @student_task.save
-      redirect_to student_team_dashboard_path(params[:student_team_id]), notice: 'Task was successfully created'
+      redirect_to student_team_dashboard_path(@student_task.student_team_id), notice: 'Task was successfully created'
     else
       #Need to add something to notify of error
-      redirect_to student_team_dashboard_path(params[:student_team_id]), notice: 'Task creation failed'
+      redirect_to student_team_dashboard_path(@student_task.student_team_id), notice: 'Task creation failed'
     end
   end
 
   # PATCH/PUT /uni_modules/1
   def update
     @student_task = StudentTask.find_by(id:params[:id])
-
-    if(@student_task.update(student_task_params))
-      @student_task.update_attribute(:task_difficulty, StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty]))
-      redirect_to student_team_student_task_path(params[:student_team_id], @student_task.id), notice: 'Task was updated created'
+    puts(student_task_edit_params[:student_task][:student_task_edit][:edit_reason])
+    # edit_reason = student_task_edit_params[:student_task_edits][:edit_reason]
+    @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
+    #@student_task.student_task_edits.build
+    # @task_edit = @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
+    # @student_task.task_target_date = student_task_params[:task_target_date]
+    # @student_task.task_objective = student_task_params[:task_objective]
+    # @student_task.task_difficulty = StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty])
+    if(@student_task.update(student_task_edit_params))
+      # @task_edit.edit_reason = student_task_params[:student_task_edit_attributes][:edit_reason]
+      # @task_edit.save
+      redirect_to student_task_path(@student_task), notice: 'Task was updated created'
     else
       #Need to add something to notify of error
-      redirect_to student_team_student_task_path(params[:student_team_id], @student_task.id), notice: 'Task update failed'
+      redirect_to student_task_path(@student_task), notice: 'Task update failed'
     end
   end
 
@@ -66,13 +83,49 @@ class StudentTasksController < ApplicationController
     @comment = StudentTaskComment.new(comment_params)
     @comment.user_id = current_user.id
     @comment.student_task_id = params[:student_task_id]
-    puts(@comment.inspect)
     @student_task = StudentTask.find_by(id: params[:student_task_id])
     if @comment.save
-      redirect_to student_team_student_task_path(@student_task.student_team.id, @student_task.id), notice: 'Comment posted'
+      @comment_outcome = "Comment posted"
+      redirect_to student_task_path(@student_task), notice: 'Comment posted'
     else
       #Need to add something to notify of error
-      redirect_to student_team_student_task_path(@student_task.student_team.id, @student_task.id), notice: 'Comment failed'
+      @comment_outcome = "Comment failed to post"
+      redirect_to student_task_path(@student_task), notice: 'Comment failed'
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def delete_comment
+    @comment = StudentTaskComment.find_by(id: params[:id])
+    @student_task = StudentTask.find_by(id: @comment.student_task_id)
+    @comment.destroy
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  # DELETE /uni_modules/1
+  def like_task
+    @student_task = StudentTask.find_by(params[:student_task_id])
+    if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:student_task_id]).exists?)
+      @like = StudentTaskLike.find_by(user_id: current_user.id ,student_task_id: params[:student_task_id])
+      @like.destroy
+      @like_outcome = "LIKE"
+    else
+      @like = StudentTaskLike.create(user_id: current_user.id, student_task_id: params[:student_task_id])
+      @like_outcome = "UNLIKE"
+    end
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def return_task_list
+    @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    respond_to do |format|
+      format.js
     end
   end
 
@@ -86,6 +139,10 @@ class StudentTasksController < ApplicationController
     #Only allow a list of trusted parameters through.
     def student_task_params
       params.require(:student_task).permit(:task_objective, :task_difficulty, :task_target_date, :student_team_id)
+    end
+
+    def student_task_edit_params
+      params.require(:student_task).permit(:task_objective, :task_difficulty, :task_target_date, :student_team_id, student_task_edits_attributes: [:id, :edit_reason, :_destroy])
     end
 
     #Only allow a list of trusted parameters through.

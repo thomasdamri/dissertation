@@ -1,0 +1,2 @@
+$('#like_button').html("#{escape_javascript(button_to @like_outcome, student_task_like_task_path(@student_task), class: "btn", remote: true)}  "); 
+$('#like_count').html("#{escape_javascript( @student_task.student_task_likes.count)}  "); 

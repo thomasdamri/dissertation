@@ -1,0 +1,4 @@
+.container.mt-4
+  = render partial: 'reporter_details', locals: {student_report: @student_report, reporter: @reporter}
+
+  = render 'user_report_object', locals: {report_objects: @report_objects, pagy: @pagy}

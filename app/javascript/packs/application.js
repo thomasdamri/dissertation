@@ -4,15 +4,31 @@
 // that code so it'll be compiled.
 
 import 'bootstrap';
+import 'controllers';
+
+import { Application } from "stimulus"
+import { autoload } from "stimulus/webpack-helpers"
 
 require("@rails/ujs").start()
-require("turbolinks").start()
+require("@hotwired/turbo")
 require("@rails/activestorage").start()
 require("channels")
+require("select2")
 
 import JQuery from 'jquery';
 window.$ = window.JQuery = JQuery;
 
+$(document).on("turbo:load", function(){
+  $('.select_two').select2({
+    width: '100%'
+  });
+});
+
+
+// // Look for controllers inside app/javascripts/packs/controllers/
+// const application = Application.start()
+// const controllers = require.context("./controllers", true, /\.js$/)
+// autoload(controllers, application)
 
 // Uncomment to copy all static images under ../images to the output folder and reference
 // them with the image_pack_tag helper in views (e.g <%= image_pack_tag 'rails.png' %>)

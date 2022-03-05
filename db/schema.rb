@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_17_185633) do
+ActiveRecord::Schema.define(version: 2022_03_05_135625) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "author_id"
@@ -47,11 +47,67 @@ ActiveRecord::Schema.define(version: 2021_11_17_185633) do
     t.index ["assessment_id"], name: "index_criteria_on_assessment_id"
   end
 
+  create_table "report_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "student_report_id"
+    t.string "reportee_response"
+    t.string "action_taken", default: "0", null: false
+    t.bigint "report_object_id", null: false
+    t.index ["student_report_id"], name: "fk_rails_7395fc1714"
+  end
+
   create_table "staff_modules", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "user_id"
     t.bigint "uni_module_id"
     t.index ["uni_module_id"], name: "index_staff_modules_on_uni_module_id"
     t.index ["user_id"], name: "index_staff_modules_on_user_id"
+  end
+
+  create_table "student_reports", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "student_team_id"
+    t.integer "object_type", null: false
+    t.date "report_date", null: false
+    t.string "reporter_response"
+    t.boolean "complete", default: false
+    t.string "report_reason", null: false
+    t.bigint "handled_by"
+    t.index ["student_team_id"], name: "fk_rails_273f11fcde"
+  end
+
+  create_table "student_task_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.string "comment", null: false
+    t.date "posted_on"
+    t.bigint "user_id"
+    t.boolean "deleted", default: false, null: false
+    t.bigint "student_task_id"
+    t.index ["student_task_id"], name: "fk_rails_f69fb66277"
+  end
+
+  create_table "student_task_edits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "student_task_id"
+    t.string "edit_reason", null: false
+    t.date "previous_target_date", null: false
+    t.integer "user_id", null: false
+    t.datetime "edit_date", null: false
+    t.index ["student_task_id"], name: "fk_rails_15e536b427"
+  end
+
+  create_table "student_task_likes", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "user_id"
+    t.bigint "student_task_id"
+    t.index ["student_task_id"], name: "fk_rails_085df01f3e"
+  end
+
+  create_table "student_tasks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "student_team_id"
+    t.string "task_title"
+    t.string "task_objective", null: false
+    t.integer "task_difficulty", default: 0, null: false
+    t.integer "task_progress", default: 0, null: false
+    t.date "task_start_date"
+    t.date "task_target_date", null: false
+    t.date "task_complete_date"
+    t.boolean "hidden", default: false
+    t.index ["student_team_id"], name: "fk_rails_fa29fb9ccd"
   end
 
   create_table "student_teams", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -144,14 +200,16 @@ ActiveRecord::Schema.define(version: 2021_11_17_185633) do
     t.index ["author_id"], name: "index_worklogs_on_author_id"
   end
 
-  add_foreign_key "assessment_results", "criteria", column: "criteria_id", on_delete: :cascade
-  add_foreign_key "assessment_results", "student_weightings", column: "student_weightings_id", on_delete: :cascade
-  add_foreign_key "assessment_results", "users", column: "author_id"
-  add_foreign_key "assessment_results", "users", column: "target_id"
   add_foreign_key "assessments", "uni_modules", on_delete: :cascade
   add_foreign_key "criteria", "assessments", on_delete: :cascade
+  add_foreign_key "report_objects", "student_reports", on_delete: :cascade
   add_foreign_key "staff_modules", "uni_modules", on_delete: :cascade
   add_foreign_key "staff_modules", "users", on_delete: :cascade
+  add_foreign_key "student_reports", "student_teams", on_delete: :cascade
+  add_foreign_key "student_task_comments", "student_tasks", on_delete: :cascade
+  add_foreign_key "student_task_edits", "student_tasks", on_delete: :cascade
+  add_foreign_key "student_task_likes", "student_tasks", on_delete: :cascade
+  add_foreign_key "student_tasks", "student_teams", on_delete: :cascade
   add_foreign_key "student_teams", "teams", on_delete: :cascade
   add_foreign_key "student_teams", "users", on_delete: :cascade
   add_foreign_key "student_weightings", "assessments"

@@ -17,6 +17,9 @@ gem 'airbrake', github: 'epigenesys/airbrake', branch: 'airbrake-v4'
 gem 'rubycas-client', gitlab: 'gems/rubycas-client'
 gem 'epi_js'
 
+gem 'cocoon'
+
+gem 'select2-rails'
 
 # Production gems (Ensure commented out in development env)
 
@@ -38,8 +41,8 @@ gem 'puma', '~> 4.1'
 gem 'sass-rails', '>= 6'
 # Transpile app-like JavaScript. Read more: https://github.com/rails/webpacker
 gem 'webpacker', '~> 4.0'
-# Turbolinks makes navigating your web application faster. Read more: https://github.com/turbolinks/turbolinks
-gem 'turbolinks', '~> 5'
+
+gem 'hotwire-rails'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.7'
 #gem 'arel'
@@ -71,11 +74,12 @@ gem 'haml-rails', '~> 2.0'
 gem 'simple_form'
 # Provides easy interaction with TSV files (for CEIS output uploading)
 gem 'tsv'
+gem 'font-awesome-rails'
+gem 'requestjs-rails'
 
-# Integrates a datepicker 
-gem 'bootstrap-datepicker-rails'
-
-
+gem 'jquery-rails'
+gem 'jquery'
+gem 'pagy', '~> 5.10'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

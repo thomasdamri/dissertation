@@ -1,4 +1,5 @@
 module ApplicationHelper
+  include Pagy::Frontend
 
   def link_to_add_fields(name, f, association, field_partial)
     new_object = f.object.send(association).klass.new

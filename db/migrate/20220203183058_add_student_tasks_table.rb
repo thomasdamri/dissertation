@@ -10,7 +10,7 @@ class AddStudentTasksTable < ActiveRecord::Migration[6.0]
       t.integer :task_difficulty, default: 0, null: false
       t.integer :task_progress, default: 0, null: false
 
-      t.date :task_start_date, default: { 'CURRENT_DATE' }
+      t.date :task_start_date
       t.date :task_target_date, null: false
       t.date :task_complete_date
 

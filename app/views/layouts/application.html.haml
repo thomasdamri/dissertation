@@ -5,14 +5,14 @@
     %title= @title.nil? ? "TeamPlayerPlus" : "#{@title} | TeamPlayerPlus"
     = csrf_meta_tags
     = csp_meta_tag
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag 'application', media: 'all', 'data-turbo-track': 'reload'
     %link{"rel": "stylesheet", "href": "https://fonts.googleapis.com/icon?family=Material+Icons"}
-    = javascript_pack_tag 'application', 'data-turbolinks-track': 'reload'
-    = javascript_pack_tag 'staff_modules', 'data-turbolinks-track': 'reload'
-    = javascript_pack_tag 'criterium_fields', 'data-turbolinks-track': 'reload'
-    = javascript_pack_tag 'enable_tooltips', 'data-turbolinks-track': 'reload'
-    = javascript_pack_tag 'pagination', 'data-turbolinks-track': 'reload'
-    = javascript_pack_tag 'clipboard', 'data-turbolinks-track': 'reload'
+    = javascript_pack_tag 'application', 'data-turbo-track': 'reload'
+    = javascript_pack_tag 'staff_modules', 'data-turbo-track': 'reload'
+    = javascript_pack_tag 'criterium_fields', 'data-turbo-track': 'reload'
+    = javascript_pack_tag 'enable_tooltips', 'data-turbo-track': 'reload'
+    = javascript_pack_tag 'pagination', 'data-turbo-track': 'reload'
+    = javascript_pack_tag 'clipboard', 'data-turbo-track': 'reload'
   %body
     .container
       = render 'layouts/navbar'

@@ -1,0 +1,1 @@
+$('#task-list-panel').html("#{escape_javascript(render partial: 'student_teams/student_tasks_list', locals: { student_team_id: @student_team.id, team_tasks: @student_team.student_tasks } )}  "); 

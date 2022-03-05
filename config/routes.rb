@@ -93,16 +93,28 @@ Rails.application.routes.draw do
   get 'student_teams/:student_team_id', to: 'student_teams#index', as: 'student_team_dashboard'
   post 'student_teams/:student_team_id/student_tasks_new',  to: 'student_tasks#create', as: 'student_task_create'
 
+  get 'student_teams/:student_team_id/new_report', to: 'student_reports#new', as: 'new_report'
+  post 'student_teams/:student_team_id/create', to: 'student_reports#create', as: 'create_report'
+
   get 'fetch_student_task', to: 'student_tasks#select'
 
+  delete 'delete_comment/:id', to: 'student_tasks#delete_comment', as: 'delete_comment'
 
-  #Dont need to double nest because the student task can derive the student team id, so change this when i can be bothered
-  resources :student_teams do
-    resources :student_tasks
+  get 'return_student_task_list/:student_team_id', to: 'student_tasks#return_task_list', as: 'return_task_list'
+
+  patch 'submit_report_resolution/:id', to: 'student_reports#report_resolution', as: 'submit_report_resolution'
+
+  resources :student_reports do
+    post 'report_response', to: 'student_reports#report_response'
+    get 'get_list', on: :collection
+
   end
 
   resources :student_tasks do
     post 'comment', to: 'student_tasks#comment'
+    post 'like_task', to: 'student_tasks#like_task'
   end
+
+
 
 end
