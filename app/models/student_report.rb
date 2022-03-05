@@ -22,7 +22,7 @@ class StudentReport < ApplicationRecord
   end
 
   def reporting_int_to_string
-    case report_object
+    case object_type
     when 0
       return "User"
     when 1
@@ -35,7 +35,7 @@ class StudentReport < ApplicationRecord
   end
 
   def get_report_object
-    case report_object
+    case object_type
     when 0
       return StudentTeam.find(report_object_id)
     when 1

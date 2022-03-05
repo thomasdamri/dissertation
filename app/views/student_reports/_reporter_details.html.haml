@@ -1,0 +1,20 @@
+.row.mb-3.border-bottom.border-primary.pb-3
+  .col-auto
+    =link_to fa_icon("chevron-left", text: 'Go Back'), team_path(@student_report.student_team) 
+  .float-right
+    = ("Report #"+ @student_report.id.to_s)
+.row.mt-3.mb-1
+  .col-auto 
+    Reported By: 
+  .col 
+    = @reporter.real_display_name + " / " + @reporter.email
+.row.mt-1.mb-1
+  .col-auto 
+    Report Type: 
+  .col 
+    = @student_report.reporting_int_to_string
+.row.mt-1.mb-3.border-bottom.border-primary.pb-3
+  .col-auto 
+    Report Description: 
+  .col
+    = @student_report.report_reason

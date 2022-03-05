@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_03_212419) do
+ActiveRecord::Schema.define(version: 2022_03_05_135625) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "author_id"
@@ -50,9 +50,8 @@ ActiveRecord::Schema.define(version: 2022_03_03_212419) do
   create_table "report_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_report_id"
     t.string "reportee_response"
-    t.string "emailed", default: "0", null: false
+    t.string "action_taken", default: "0", null: false
     t.bigint "report_object_id", null: false
-    t.string "report_reason", null: false
     t.index ["student_report_id"], name: "fk_rails_7395fc1714"
   end
 
@@ -65,10 +64,12 @@ ActiveRecord::Schema.define(version: 2022_03_03_212419) do
 
   create_table "student_reports", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_team_id"
-    t.integer "report_object", null: false, comment: "0 if user, 1 if grade, 2 if task, 3 if team"
+    t.integer "object_type", null: false
     t.date "report_date", null: false
     t.string "reporter_response"
     t.boolean "complete", default: false
+    t.string "report_reason", null: false
+    t.bigint "handled_by"
     t.index ["student_team_id"], name: "fk_rails_273f11fcde"
   end
 
@@ -199,10 +200,6 @@ ActiveRecord::Schema.define(version: 2022_03_03_212419) do
     t.index ["author_id"], name: "index_worklogs_on_author_id"
   end
 
-  add_foreign_key "assessment_results", "criteria", column: "criteria_id", on_delete: :cascade
-  add_foreign_key "assessment_results", "student_weightings", column: "student_weightings_id", on_delete: :cascade
-  add_foreign_key "assessment_results", "users", column: "author_id"
-  add_foreign_key "assessment_results", "users", column: "target_id"
   add_foreign_key "assessments", "uni_modules", on_delete: :cascade
   add_foreign_key "criteria", "assessments", on_delete: :cascade
   add_foreign_key "report_objects", "student_reports", on_delete: :cascade

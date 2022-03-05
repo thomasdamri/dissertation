@@ -1,35 +1,4 @@
-.container
-  .row 
-    .col-sm
-      =link_to 'Back', team_path(@student_report.student_team), class: "btn"
-    .col-xl 
-      Viewing Report
-  .row
-    .col-xl
-      Reported By: 
-      = @student_report.user.real_display_name
-    .col-xl
-      On: 
-      = @student_report.report_date
-  .row
-    .col-xl
-      Reporting a:
-      = @student_report.reporting_int_to_string
-  .row
-    .col-xl
-      Reason for report:
-      = @student_report.report_reason
+.container.mt-4
+  = render partial: 'reporter_details', locals: {student_report: @student_report, reporter: @reporter}
 
-  %br
-  #complete_or_not
-    = render partial: 'staff_form', locals: {student_report: @student_report}
-
-  - object = @student_report.report_object
-  - if object == 0
-    = render partial:'user_report', locals: {student_team: @student_report.get_report_object}
-  -elsif object == 1
-    swag 
-  - elsif object == 2
-    = render partial:'student_tasks/show_task', locals: {student_task: @student_report.get_report_object, student_task_comment: StudentTaskComment.new}
-  -else 
-    jsidasd 
+  = render 'user_report_object', locals: {report_objects: @report_objects, pagy: @pagy}

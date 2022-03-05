@@ -74,11 +74,12 @@ gem 'haml-rails', '~> 2.0'
 gem 'simple_form'
 # Provides easy interaction with TSV files (for CEIS output uploading)
 gem 'tsv'
-
+gem 'font-awesome-rails'
 gem 'requestjs-rails'
 
 gem 'jquery-rails'
 gem 'jquery'
+gem 'pagy', '~> 5.10'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

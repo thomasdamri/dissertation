@@ -159,6 +159,8 @@ GEM
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
     ffi (1.15.4)
+    font-awesome-rails (4.7.0.8)
+      railties (>= 3.2, < 8.0)
     globalid (0.5.2)
       activesupport (>= 5.0)
     haml (5.2.2)
@@ -217,6 +219,8 @@ GEM
       mini_portile2 (~> 2.6.1)
       racc (~> 1.4)
     orm_adapter (0.5.0)
+    pagy (5.10.1)
+      activesupport
     public_suffix (4.0.6)
     puma (4.3.10)
       nio4r (~> 2.0)
@@ -378,6 +382,7 @@ DEPENDENCIES
   epi_cas!
   epi_js
   factory_bot_rails
+  font-awesome-rails
   haml-rails (~> 2.0)
   hotwire-rails
   jbuilder (~> 2.7)
@@ -387,6 +392,7 @@ DEPENDENCIES
   listen (~> 3.2)
   mysql2 (~> 0.4.10)
   nokogiri (>= 1.11.0)
+  pagy (~> 5.10)
   puma (~> 4.1)
   rails (~> 6.0.3, >= 6.0.3.3)
   requestjs-rails

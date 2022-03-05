@@ -8,7 +8,7 @@
     //Header including title and search form
     .card-header.d-flex.justify-content-between.align-items-center
       %h5.m-0 Student Tasks
-      %button{data: {toggle: 'modal', target: '#reportModal'}}
+      %button{data: {toggle: 'modal', target: '#reportModal'}, class: "btn btn-outline-danger "}Report
       -# =link_to 'Report', new_report_path(@student_team.id), class: "btn btn-outline-danger ajax-modal", type: "button", data: {toggle: 'modal', target: '#reportModal'}
     .card-body.p-0.d-flex
       .w-50.p-3.d-flex.flex-column.justify-content-between.border-right

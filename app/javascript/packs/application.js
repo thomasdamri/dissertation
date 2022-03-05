@@ -15,10 +15,6 @@ require("@rails/activestorage").start()
 require("channels")
 require("select2")
 
-
-
-
-
 import JQuery from 'jquery';
 window.$ = window.JQuery = JQuery;
 

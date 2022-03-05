@@ -1,8 +1,0 @@
-.nested-fields 
-  = f.label :report_object_id, "Please select report object:"
-  = f.select :report_object_id, @item_list, {}, { multiple: true, class: 'form-select', "data-report-target": "formCollection"}
-
-  = f.label :report_reason, "Reasons for report:"
-  = f.input_field :report_reason, required: true, as: :string, placeholder: "Report Reason...", label: "Reason for report?"
-
-  = link_to_remove_association "Remove Reportee", f, class: 'btn btn-outline-danger btn-xs'

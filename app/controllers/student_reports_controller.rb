@@ -34,9 +34,9 @@ class StudentReportsController < ApplicationController
           end
         end
       end
-      redirect_to new_report_path(params[:student_team_id]), notice: 'Thank You, Report Submitted'
+      render 'report_creation_success'
     else
-      redirect_to new_report_path(params[:student_team_id]), notice: 'Sorry, Report Failed'
+      render 'report_creation_failure'
     end
   end
 
@@ -44,7 +44,8 @@ class StudentReportsController < ApplicationController
   def show
     @title = "Viewing Report"
     @student_report = StudentReport.find(params[:id])
-
+    @reporter = @student_report.user
+    @pagy, @report_objects = pagy(@student_report.report_objects, items: 1)
   end
 
   def get_list
@@ -79,12 +80,7 @@ class StudentReportsController < ApplicationController
     end
   end
 
-  def refresh_report_objects
-    puts("TEST")
-    respond_to do |format|
-      format.js 
-    end
-  end
+
 
   def report_resolution
     @student_report = StudentReport.find_by(id: params[:id])
