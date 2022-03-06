@@ -12,12 +12,18 @@
         - if @show_all and can? :show_all_staff, @uni_module
           %li.list-group-item.list-group-item-info= link_to "Show All Staff", show_all_staff_path(@uni_module), remote: true
     .col-6
-      %h3 Work Log Info
+      -# %h3 Student Reports
+      -#   %ul.list-group
+      -#     -# %li.list-group-item= "First work log week: " + @uni_module.start_date.to_formatted_s(:long_ordinal)
+      -#     -# %li.list-group-item= "Last work log week: " + @uni_module.end_date.to_formatted_s(:long_ordinal)
+      -#     - if can? :view_disputes, @uni_module
+      -#       %li.list-group-item= link_to "View Disputes", view_disputes_path(@uni_module)
+      %h3 Student Reports
       %ul.list-group
-        %li.list-group-item= "First work log week: " + @uni_module.start_date.to_formatted_s(:long_ordinal)
-        %li.list-group-item= "Last work log week: " + @uni_module.end_date.to_formatted_s(:long_ordinal)
+        -# %li.list-group-item= "First work log week: " + @uni_module.start_date.to_formatted_s(:long_ordinal)
+        -# %li.list-group-item= "Last work log week: " + @uni_module.end_date.to_formatted_s(:long_ordinal)
         - if can? :view_disputes, @uni_module
-          %li.list-group-item= link_to "View Disputes", view_disputes_path(@uni_module)
+          %li.list-group-item= link_to "View Reports", student_reports_path(@uni_module)
       %h3 Student Info
       %ul.list-group
         %li.list-group-item= "Students enrolled: " + @students.to_s

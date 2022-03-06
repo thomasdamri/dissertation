@@ -1,0 +1,3 @@
+-# 
+  Javascript file used to replace and render tasks list, after successfully creating a new task
+$('#task-list-panel').html("#{escape_javascript(render partial: 'student_tasks_list', locals: { team_tasks: @student_team.student_tasks } )}  ");

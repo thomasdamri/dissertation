@@ -1,0 +1,10 @@
+// Place all the styles related to the Student Teams controller here.
+// They will automatically be included in application.scss.
+// You can use Sass (SCSS) here: https://sass-lang.com/
+
+.student_task_box {
+  &:hover {
+    text-decoration: none;
+    background-color: #9e9e9e;
+  }
+}
