@@ -12,7 +12,7 @@
         .col
           = task_local.task_objective
     .row.justify-content-between
-      .col-4#thumbs_up_feed
-        =link_to fa_icon("thumbs-up", text: task_local.student_task_likes.count), team_path(1) 
+      .col-4#like_button
+        =link_to fa_icon("thumbs-up", text: task_local.student_task_likes.count), student_task_like_task_path(task_local), remote: true, method: :post
       .col-4#thumbs_up_comment
-        =link_to fa_icon("comment", text: task_local.student_task_comments.count), team_path(1) 
+        =link_to fa_icon("comment", text: task_local.student_task_comments.count)

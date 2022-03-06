@@ -83,6 +83,7 @@ class StudentTasksController < ApplicationController
     @comment = StudentTaskComment.new(comment_params)
     @comment.user_id = current_user.id
     @comment.student_task_id = params[:student_task_id]
+    @comment.posted_on = Date.today
     @student_task = StudentTask.find_by(id: params[:student_task_id])
     if @comment.save
       @comment_outcome = "Comment posted"
@@ -124,6 +125,7 @@ class StudentTasksController < ApplicationController
 
   def return_task_list
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    @task = StudentTask.new
     respond_to do |format|
       format.js
     end
