@@ -1,15 +1,26 @@
-.list-group.overflow-auto.p-1
-  //If statement checks if there are any tasks to display
-  - if comments != nil 
-    //Loops through each task, creating a link which will fetch the selected task when clicked
+.col
+  - if comments.count > 0
     - comments.each do |c|
-      .card
-        .card-body
-          .card-text 
-            =c.comment
-          .card-subtitle.text-muted 
-            = c.user_id
-          -if current_user.id == (c.user_id)
-            = button_to 'Delete', delete_comment_path(c), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure?" }, remote: true
-  - else
-    No comments
+      .row 
+        .col-auto
+          = c.user.real_display_name + " - " + c.posted_on.to_s
+      .row.border-bottom
+        .col 
+          = c.comment
+
+
+-# .list-group.overflow-auto.p-1
+-#   //If statement checks if there are any tasks to display
+-#   - if comments.count > 0
+-#     //Loops through each task, creating a link which will fetch the selected task when clicked
+-#     - comments.each do |c|
+-#       .card
+-#         .card-body
+-#           .card-text 
+-#             =c.comment
+-#           .card-subtitle.text-muted 
+-#             = c.user_id
+-#           -if current_user.id == (c.user_id)
+-#             = button_to 'Delete', delete_comment_path(c), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure?" }, remote: true
+-#   - else
+-#     No comments

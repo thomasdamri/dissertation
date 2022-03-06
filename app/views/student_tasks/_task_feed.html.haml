@@ -1,0 +1,9 @@
+.col.border-top.px-1
+  - @tasks = @student_team.team.student_tasks
+  - if @tasks.count > 0
+    - @tasks.each do |task|
+      
+      = render partial: 'student_tasks/task_feed_container', locals: {task_local: task}
+
+  - else 
+    NO STUDENT TASKS

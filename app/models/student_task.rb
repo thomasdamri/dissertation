@@ -61,6 +61,12 @@ class StudentTask < ApplicationRecord
     return student_name
   end
 
+  def self.hide_task(task_id)
+    task = StudentTask.find_by(id: task_id)
+    task.hidden = true
+    task.save
+  end
+
 
 
 end

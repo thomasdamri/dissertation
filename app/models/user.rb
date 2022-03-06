@@ -36,7 +36,7 @@ class User < ApplicationRecord
   # Can manage many modules
   has_many :staff_modules, dependent: :destroy
   has_many :uni_modules, through: :staff_modules
-  has_many :student_Task_comment
+  has_many :student_task_comments, dependent: :destroy
   # Has many AssessmentResults written by the user
   #has_many :author_results, foreign_key: 'author_id', class_name: 'AssessmentResult', dependent: :destroy
   # Has many AssessmentResults written about the user

@@ -1,0 +1,18 @@
+%div.border-bottom{:style => StudentTask.difficulty_int_to_style(task_local.task_difficulty)}
+  = link_to student_task_path(task_local), class: 'student_task_box', remote: true do
+    .px-1
+      .row.justify-content-between
+        .col-auto
+          = task_local.student_team.user.real_display_name
+        .col
+          .float-right
+            = task_local.task_target_date
+
+      .row 
+        .col
+          = task_local.task_objective
+    .row.justify-content-between
+      .col-4#like_button
+        =link_to fa_icon("thumbs-up", text: task_local.student_task_likes.count), student_task_like_task_path(task_local), remote: true, method: :post
+      .col-4#thumbs_up_comment
+        =link_to fa_icon("comment", text: task_local.student_task_comments.count)

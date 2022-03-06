@@ -1,2 +1,1 @@
-$('#like_button').html("#{escape_javascript(button_to @like_outcome, student_task_like_task_path(@student_task), class: "btn", remote: true)}  "); 
-$('#like_count').html("#{escape_javascript( @student_task.student_task_likes.count)}  "); 
+$('#like_button').html("#{escape_javascript( link_to fa_icon("thumbs-up", text: @student_task.student_task_likes.count), student_task_like_task_path(@student_task), remote: true, method: :post, class: 'float-right')}");

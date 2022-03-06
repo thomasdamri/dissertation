@@ -1,0 +1,20 @@
+.col
+  %ul.nav.flex-column
+    %li.nav-item
+      = link_to fa_icon("list-check", text: 'Home'), team_path(1) , class: "nav-link active"
+  %ul.nav.flex-column
+    %li.nav-item
+      = link_to fa_icon("list-check", text: 'My Tasks'), team_path(1) , class: "nav-link disabled"
+  %ul.nav.flex-column
+    %li.nav-item
+      = link_to fa_icon("presentation-screen", text: 'Previous Meetings'), team_path(1) , class: "nav-link disabled"
+  %ul.nav.flex-column
+    %li.nav-item
+      = link_to fa_icon("chart-pie", text: 'Team Data'), team_path(1) , class: "nav-link disabled"
+  %ul.nav.flex-column
+    %li.nav-item
+      = link_to fa_icon("list-ol", text: 'Assessments'), team_path(1) , class: "nav-link disabled"
+  %ul.nav.flex-column
+    %li.nav-item
+      = link_to fa_icon("flag", text: 'Report'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#reportModal'
+  
