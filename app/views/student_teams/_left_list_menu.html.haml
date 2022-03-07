@@ -10,7 +10,7 @@
       = link_to fa_icon("presentation-screen", text: 'Previous Meetings'), team_path(1) , class: "nav-link disabled"
   %ul.nav.flex-column
     %li.nav-item
-      = link_to fa_icon("chart-pie", text: 'Team Data'), team_path(1) , class: "nav-link disabled"
+      = link_to fa_icon("chart-pie", text: 'Team Data'), team_data_index_path(params[:student_team_id]), remote: true, class: "nav-link"
   %ul.nav.flex-column
     %li.nav-item
       = link_to fa_icon("list-ol", text: 'Assessments'), team_path(1) , class: "nav-link disabled"

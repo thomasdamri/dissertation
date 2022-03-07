@@ -104,6 +104,10 @@ Rails.application.routes.draw do
 
   patch 'submit_report_resolution/:id', to: 'student_reports#report_resolution', as: 'submit_report_resolution'
 
+  get 'student_teams/:student_team_id/team_data_index', to: 'student_teams#team_data_index', as: 'team_data_index'
+  get 'student_teams/:student_team_id/team_data', to: 'student_teams#team_data', as: 'team_data'
+  get 'student_teams/:student_team_id/individual_data', to: 'student_teams#individual_data', as: 'individual_data'
+
   resources :student_reports do
     post 'report_response', to: 'student_reports#report_response'
     get 'get_list', on: :collection

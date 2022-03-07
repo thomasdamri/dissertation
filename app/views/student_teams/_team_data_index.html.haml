@@ -1,0 +1,10 @@
+.row 
+  .col 
+    Team Data:
+  .col{'data-controller': "infographic"} 
+    = simple_form_for @test, url: team_data_path(params[:student_team_id]), remote: true, html: {"data-infographic-target": "dropdownForm"}, method: :get do |f|
+      = f.select :user_id, selection_options, {}, { class: 'form-select form-control', data: { action: "change->infographic#change"}, "data-report-target": "graphSelect", include_blank: false }
+
+#graph-panel
+  = render partial: 'team_panel', locals: {data: data1}
+

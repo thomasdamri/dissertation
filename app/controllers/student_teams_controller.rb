@@ -1,6 +1,6 @@
 class StudentTeamsController < ApplicationController
   before_action :authenticate_user!
-  load_and_authorize_resource
+  authorize_resource
 
   def index 
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
@@ -15,8 +15,38 @@ class StudentTeamsController < ApplicationController
     end
   end
 
-  
+  def team_data_index
+    @test = StudentTeam.new
+    @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    @select_options = [["Team", -1]]
+    users = StudentTeam.where(student_teams:{team_id: @student_team.team_id})
+    for u in users do
+      @select_options.push([u.user.real_display_name, u.id])
+    end
+    @data1 = @student_team.teamTaskCountComparison()
+    respond_to do |format|
+      format.js
+    end
+  end
 
+  def team_data 
+    @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    selected = params[:student_team][:user_id].to_i
+    if(selected < 0)
+      @student_team = StudentTeam.find_by(id: params[:student_team_id])
+      @data1 = @student_team.teamTaskCountComparison()
+      respond_to do |format|
+        format.js 
+      end
+    else
+      @student_team = StudentTeam.find_by(id: selected)
+      @data1 = @student_team.uniqueStudentTaskCount()
+      puts(@data1.inspect)
+      respond_to do |format|
+        format.js {render 'individual_data'}
+      end
+    end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
