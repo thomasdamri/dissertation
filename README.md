@@ -32,3 +32,10 @@ yarn add @rails/request.js
 yarn add @nathanvda/cocoon
 
 yarn add select2
+
+https://chartkick.com/#rails-6-webpacker
+yarn add chartkick chart.js
+
+For groupdate gem, you need to install TIME ZONE SUPPORT for the mysql server
+Run with 'mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql'
+If done correctly, 'SELECT CONVERT_TZ(NOW(), '+00:00', 'Pacific/Honolulu');' will return you the correct time, not NULL

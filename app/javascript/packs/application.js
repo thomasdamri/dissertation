@@ -14,6 +14,7 @@ require("@hotwired/turbo")
 require("@rails/activestorage").start()
 require("channels")
 require("select2")
+require('chartkick/chart.js')
 
 import JQuery from 'jquery';
 window.$ = window.JQuery = JQuery;
