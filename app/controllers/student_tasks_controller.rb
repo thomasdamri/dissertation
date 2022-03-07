@@ -41,7 +41,7 @@ class StudentTasksController < ApplicationController
     @student_task = StudentTask.new(student_task_params)
     @student_task.student_team_id = params[:student_team_id]
     @student_task.task_difficulty = StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty])
-    
+    @student_task.task_start_date = DateTime.now
     
     #@student_team = StudentTeam.find_by(id: params[:student_team_id])
     if @student_task.save
@@ -83,7 +83,7 @@ class StudentTasksController < ApplicationController
     @comment = StudentTaskComment.new(comment_params)
     @comment.user_id = current_user.id
     @comment.student_task_id = params[:student_task_id]
-    @comment.posted_on = Date.today
+    @comment.posted_on = DateTime.now
     @student_task = StudentTask.find_by(id: params[:student_task_id])
     if @comment.save
       @comment_outcome = "Comment posted"

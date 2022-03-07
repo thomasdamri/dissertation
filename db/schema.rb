@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_05_135625) do
+ActiveRecord::Schema.define(version: 2022_03_07_134928) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "author_id"
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 2022_03_05_135625) do
   create_table "student_reports", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_team_id"
     t.integer "object_type", null: false
-    t.date "report_date", null: false
+    t.datetime "report_date", null: false
     t.string "reporter_response"
     t.boolean "complete", default: false
     t.string "report_reason", null: false
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 2022_03_05_135625) do
 
   create_table "student_task_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "comment", null: false
-    t.date "posted_on"
+    t.datetime "posted_on"
     t.bigint "user_id"
     t.boolean "deleted", default: false, null: false
     t.bigint "student_task_id"
@@ -85,7 +85,7 @@ ActiveRecord::Schema.define(version: 2022_03_05_135625) do
   create_table "student_task_edits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_task_id"
     t.string "edit_reason", null: false
-    t.date "previous_target_date", null: false
+    t.datetime "previous_target_date", null: false
     t.integer "user_id", null: false
     t.datetime "edit_date", null: false
     t.index ["student_task_id"], name: "fk_rails_15e536b427"
@@ -103,9 +103,9 @@ ActiveRecord::Schema.define(version: 2022_03_05_135625) do
     t.string "task_objective", null: false
     t.integer "task_difficulty", default: 0, null: false
     t.integer "task_progress", default: 0, null: false
-    t.date "task_start_date"
-    t.date "task_target_date", null: false
-    t.date "task_complete_date"
+    t.datetime "task_start_date"
+    t.datetime "task_target_date", null: false
+    t.datetime "task_complete_date"
     t.boolean "hidden", default: false
     t.index ["student_team_id"], name: "fk_rails_fa29fb9ccd"
   end

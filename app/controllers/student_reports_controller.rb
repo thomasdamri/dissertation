@@ -22,7 +22,7 @@ class StudentReportsController < ApplicationController
     @student_report = StudentReport.new
     @student_report.report_reason = student_report_params[:report_reason]
     @student_report.object_type = student_report_params[:object_type]
-    @student_report.report_date = Date.today
+    @student_report.report_date = DateTime.now
     @student_report.student_team_id = params[:student_team_id]
     if @student_report.save
       @latest_id = StudentReport.order(:id).last.id
