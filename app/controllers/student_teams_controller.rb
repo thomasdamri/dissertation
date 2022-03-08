@@ -23,7 +23,7 @@ class StudentTeamsController < ApplicationController
     for u in users do
       @select_options.push([u.user.real_display_name, u.id])
     end
-    @data1 = @student_team.teamTaskCountComparison()
+    @table2_data = @student_team.getTaskCountPerStudent()
     respond_to do |format|
       format.js
     end
@@ -34,7 +34,7 @@ class StudentTeamsController < ApplicationController
     selected = params[:student_team][:user_id].to_i
     if(selected < 0)
       @student_team = StudentTeam.find_by(id: params[:student_team_id])
-      @data1 = @student_team.teamTaskCountComparison()
+      @table2_data = @student_team.getTaskCountPerStudent()
       respond_to do |format|
         format.js 
       end
