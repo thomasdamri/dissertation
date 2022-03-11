@@ -3,7 +3,7 @@
   Allows admin to view all tasks and create new ones
 - content_for :title, "[Student] Team Homepage"
 
-.container.mt-4#main-team-home-page-container
+.col.mt-4#main-team-home-page-container
   .row.border
     .col-3.border
       = render partial: 'left_menu_panel', locals: {my_tasks: @student_team.student_tasks}

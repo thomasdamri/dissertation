@@ -1,10 +1,12 @@
-.row 
-  .col 
-    Team Data:
+.row.justify-content-between
+  .col-auto
+    Currently Showing Data for: 
   .col{'data-controller': "infographic"} 
     = simple_form_for @test, url: team_data_path(params[:student_team_id]), remote: true, html: {"data-infographic-target": "dropdownForm"}, method: :get do |f|
       = f.select :user_id, selection_options, {}, { class: 'form-select form-control', data: { action: "change->infographic#change"}, "data-report-target": "graphSelect", include_blank: false }
 
 #graph-panel
-  = render partial: 'team_panel', locals: {table2_data: table2}
+  - if tables.count > 0
+    - tables.each do |table|
+      = render partial: 'data_panel', locals: {table_data: table}
 

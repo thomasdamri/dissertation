@@ -38,13 +38,19 @@ class StudentTeam < ApplicationRecord
 
   #Use with line graph
   def teamTaskCountComparison()
-    graph_title = "Student Tasks Created Weekly"
-    y_axis = "Task Creation Count"
-    x_axis = "Week Start Date"
+
     data = team.student_teams.map { | team_member|{
       name: team_member.user.real_display_name, data: team_member.student_tasks.group_by_week(:task_start_date).count
     }}
-    return data
+
+    table_data = {}
+    table_data["graph_type"] = 0
+    table_data["graph_title"] = "Task Creation Counts per Week"
+    table_data["data"] = data
+    table_data["xtitle"] = "Date"
+    table_data["ytitle"] = "Task Creation Count"
+
+    return table_data
   end
 
   def getTaskCountPerStudent()
@@ -64,8 +70,8 @@ class StudentTeam < ApplicationRecord
     table_data = {}
     #2 means its a pie chart
     table_data["graph_type"] = 2
+    table_data["graph_title"] = "Tasks Posted per Student"
     table_data["data"] = data
-    table_data["graph_title"] = table_data[graph_title] 
     table_data["statements"] = statements
     return table_data
   end
@@ -74,7 +80,7 @@ class StudentTeam < ApplicationRecord
     statements = []
     #Check if no posts have been created
     if data_hash.values.max == 0
-      statements.append("Currently no tasks have been posted.")
+      statements.append("Currently no tasks have been posted")
       return statements
     end
     statements.append(StudentTeam.getAverageTasksPosted(data_hash))
@@ -92,12 +98,12 @@ class StudentTeam < ApplicationRecord
     statement = ""
     if ( max_students.count == 1 )
       student = max_students.first
-      statement += (student.to_s + " has created the most tasks, with " + data_hash[student].to_s + " tasks posted.")
+      statement += (student.to_s + " has created the most tasks, with " + data_hash[student].to_s + " tasks posted")
     else
       max_students.each do |student|
         statement += (student.to_s + ", ")
       end
-      statement += ("have created the most tasks, with "+ data_hash[max_students.first].to_s + " tasks posted.")
+      statement += ("have created the most tasks, with "+ data_hash[max_students.first].to_s + " tasks posted")
     end
     return statement
   end
@@ -111,12 +117,12 @@ class StudentTeam < ApplicationRecord
     statement = ""
     if ( min_students.count == 1 )
       student = min_students.first
-      statement += (student.to_s + " has created the least tasks, with " + data_hash[student].to_s + " tasks posted.")
+      statement += (student.to_s + " has created the least tasks, with " + data_hash[student].to_s + " tasks posted")
     else
       min_students.each do |student|
         statement += (student.to_s + ", ")
       end
-      statement += ("have created the least tasks, with "+ data_hash[min_students.first].to_s + " tasks posted.")
+      statement += ("have created the least tasks, with "+ data_hash[min_students.first].to_s + " tasks posted")
     end
     return statement
   end
@@ -125,7 +131,7 @@ class StudentTeam < ApplicationRecord
     total = 0
     data_hash.each { |k, v| total+=v}
     total = total / data_hash.count
-    statement = ("Mean tasks posted are "+ total.to_s + " per student.")
+    statement = ("Mean tasks posted are "+ total.to_s + " per student")
     return statement
   end
 

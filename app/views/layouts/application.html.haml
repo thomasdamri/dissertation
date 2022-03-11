@@ -14,7 +14,7 @@
     = javascript_pack_tag 'pagination', 'data-turbo-track': 'reload'
     = javascript_pack_tag 'clipboard', 'data-turbo-track': 'reload'
   %body
-    .container
+    .container-fluid
       = render 'layouts/navbar'
       - if notice
         %p.notice.alert.alert-primary= notice

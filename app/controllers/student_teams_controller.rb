@@ -23,7 +23,10 @@ class StudentTeamsController < ApplicationController
     for u in users do
       @select_options.push([u.user.real_display_name, u.id])
     end
-    @table2_data = @student_team.getTaskCountPerStudent()
+    @tables = []
+    @tables.append(@student_team.teamTaskCountComparison())
+    @tables.append(@student_team.getTaskCountPerStudent())
+
     respond_to do |format|
       format.js
     end
