@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_07_134928) do
+ActiveRecord::Schema.define(version: 2022_03_10_231851) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "author_id"
@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 2022_03_07_134928) do
 
   create_table "report_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_report_id"
-    t.string "reportee_response"
+    t.text "reportee_response"
     t.string "action_taken", default: "0", null: false
     t.bigint "report_object_id", null: false
     t.index ["student_report_id"], name: "fk_rails_7395fc1714"
@@ -66,15 +66,15 @@ ActiveRecord::Schema.define(version: 2022_03_07_134928) do
     t.bigint "student_team_id"
     t.integer "object_type", null: false
     t.datetime "report_date", null: false
-    t.string "reporter_response"
+    t.text "reporter_response"
     t.boolean "complete", default: false
-    t.string "report_reason", null: false
+    t.text "report_reason", null: false
     t.bigint "handled_by"
     t.index ["student_team_id"], name: "fk_rails_273f11fcde"
   end
 
   create_table "student_task_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.string "comment", null: false
+    t.text "comment", null: false
     t.datetime "posted_on"
     t.bigint "user_id"
     t.boolean "deleted", default: false, null: false
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(version: 2022_03_07_134928) do
 
   create_table "student_task_edits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_task_id"
-    t.string "edit_reason", null: false
+    t.text "edit_reason", null: false
     t.datetime "previous_target_date", null: false
     t.integer "user_id", null: false
     t.datetime "edit_date", null: false
@@ -99,14 +99,15 @@ ActiveRecord::Schema.define(version: 2022_03_07_134928) do
 
   create_table "student_tasks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_team_id"
-    t.string "task_title"
-    t.string "task_objective", null: false
+    t.text "task_objective", null: false
     t.integer "task_difficulty", default: 0, null: false
     t.integer "task_progress", default: 0, null: false
     t.datetime "task_start_date"
-    t.datetime "task_target_date", null: false
+    t.date "task_target_date", null: false
     t.datetime "task_complete_date"
     t.boolean "hidden", default: false
+    t.integer "hours"
+    t.text "task_completed_summary"
     t.index ["student_team_id"], name: "fk_rails_fa29fb9ccd"
   end
 
