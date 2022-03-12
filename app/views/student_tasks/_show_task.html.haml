@@ -1,16 +1,33 @@
 .col.py-2
-  .row 
-    .col
+  .row.justify-content-between
+    .col-auto
       =link_to fa_icon("chevron-left", text: 'Go Back'), return_task_list_path(student_task.student_team_id), remote: true
+
+    .col
+      .float-right
+        - if student_task.student_team.user.id == current_user.id && student_task.task_complete_date == nil
+          = link_to fa_icon("check", text: 'Complete'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#completeTaskModal'
+        - elsif student_task.task_complete_date != nil
+          Task Complete
+
   .row.justify-content-between
     .col-auto
       = student_task.get_linked_students()
     .col 
       .float-right
         = "Due Date: " + student_task.task_target_date.to_s
+  - if student_task.task_complete_date != nil
+    .row
+      .col
+        .float-right
+          = "Completed on: " + student_task.task_complete_date.to_s
   .row 
     .col 
       = student_task.task_objective
+  - if student_task.task_complete_date != nil
+    .row 
+      .col 
+        = "Completion Summary: " + student_task.task_completed_summary.to_s
   .row 
     .col#like_button.float-right
       =link_to fa_icon("thumbs-up", text: student_task.student_task_likes.count), student_task_like_task_path(student_task), remote: true, method: :post, class: 'float-right'
@@ -26,3 +43,4 @@
 
 
 
+= render partial: 'student_tasks/complete_task_form', locals: {student_task: student_task}

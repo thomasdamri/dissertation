@@ -131,6 +131,24 @@ class StudentTasksController < ApplicationController
     end
   end
 
+  def complete
+    @student_task = StudentTask.find_by(id: params[:student_task_id])
+    puts(complete_params[:hours])
+    puts(complete_params[:task_completed_summary])
+    @student_task.hours = complete_params[:hours].to_i
+    @student_task.task_completed_summary = complete_params[:task_completed_summary]
+    puts(@student_task.inspect)
+    if(@student_task.update(complete_params))
+      @student_task.task_complete_date = DateTime.now
+      @student_task.save
+      puts("Success!!!")
+      render 'task_complete_success'
+    else
+      puts(@student_task.errors.full_messages)
+      render 'task_complete_failure'
+    end
+  end
+
 
 
 
@@ -150,6 +168,11 @@ class StudentTasksController < ApplicationController
     #Only allow a list of trusted parameters through.
     def comment_params
       params.require(:student_task_comment).permit(:comment)
+    end
+
+    #Only allow a list of trusted parameters through.
+    def complete_params
+      params.require(:student_task).permit(:hours, :task_completed_summary)
     end
 
 

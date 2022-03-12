@@ -108,6 +108,11 @@ Rails.application.routes.draw do
   get 'student_teams/:student_team_id/team_data', to: 'student_teams#team_data', as: 'team_data'
   get 'student_teams/:student_team_id/individual_data', to: 'student_teams#individual_data', as: 'individual_data'
 
+  # get 'student_teams/:student_team_id/get_user', to: 'student_teams#individual_data', as: 'individual_data'
+
+  get 'get_user_tasks/:student_team_id', to: 'student_teams#get_task_list', as: 'get_task_list'
+
+
   resources :student_reports do
     post 'report_response', to: 'student_reports#report_response'
     get 'get_list', on: :collection
@@ -115,6 +120,7 @@ Rails.application.routes.draw do
   end
 
   resources :student_tasks do
+    patch 'complete_task', to: 'student_tasks#complete'
     post 'comment', to: 'student_tasks#comment'
     post 'like_task', to: 'student_tasks#like_task'
   end
