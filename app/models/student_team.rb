@@ -135,4 +135,19 @@ class StudentTeam < ApplicationRecord
     return statement
   end
 
+  def getWeeklyTeamHours()
+    data = team.student_teams.map { | team_member|{
+      name: team_member.user.real_display_name, data: team_member.student_tasks.where.not(task_complete_date: nil).group_by_week(:task_complete_date).sum("hours")
+    }}
+
+    table_data = {}
+    table_data["graph_type"] = 0
+    table_data["graph_title"] = "Hours Logged per Week"
+    table_data["data"] = data
+    table_data["xtitle"] = "Date"
+    table_data["ytitle"] = "Hours Logged"
+
+    return table_data
+  end
+
 end
