@@ -23,6 +23,8 @@ class UniModule < ApplicationRecord
   # Many students will submit many worklogs for this module
   has_many :worklogs, dependent: :destroy
 
+  has_many :student_teams, through: :teams
+
   # Each module must have a unique name and code
   validates :name, presence: true, uniqueness: true
   validates :code, presence: true, uniqueness: true

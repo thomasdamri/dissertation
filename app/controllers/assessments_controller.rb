@@ -104,15 +104,18 @@ class AssessmentsController < ApplicationController
     @team = current_user.teams.where(uni_module_id: @assessment.uni_module.id).first
 
     # Check user has not already filled in the form
-    if @assessment.completed_by? current_user
-      redirect_to @team, notice: "You have already filled in this assessment"
-    end
+    # if @assessment.completed_by? current_user
+    #   redirect_to @team, notice: "You have already filled in this assessment"
+    # end
 
-    # Check if assessment close date has expired
-    unless @assessment.within_fill_dates?
-      redirect_to @team, notice: "This assessment can no longer be filled in"
-    end
+    # # Check if assessment close date has expired
+    # unless @assessment.within_fill_dates?
+    #   redirect_to @team, notice: "This assessment can no longer be filled in"
+    # end
 
+    respond_to do |format|
+      format.js 
+    end
   end
 
   # Processes the form for students filling in the assessment

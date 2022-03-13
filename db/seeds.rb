@@ -26,6 +26,7 @@ m1 = UniModule.create(name: "The Intelligent Web", code: "COM3504", created_at: 
 
 
 sm = StaffModule.create(user_id: u.id, uni_module_id: m1.id)
+sm2 = StaffModule.create(user_id: u1.id, uni_module_id: m1.id)
 # sm.save
 
 #TEAM 1

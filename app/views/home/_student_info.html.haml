@@ -11,40 +11,40 @@
             = "#{module_info.title} - Team #{student_team.team_id}"
             %br
             %span= link_to "Enter Team Home", student_team_dashboard_path(student_team.id), class: 'btn btn-sm btn-primary'
-            %span.btn.btn-sm.btn-info{"data-toggle": "collapse", href: "#collapse_#{module_info.id}", role: "button", "aria-expanded": "false", "aria-controls": "collapse_#{module_info.id}"} Show Assessments
-            .collapse{id: "collapse_#{module_info.id}"}
-              %ul.list-group
-                - if module_info.assessments.length == 0
-                  %li.list-group-item.list-group-item-secondary This module has no assessments
-                - else
-                  - module_info.assessments.each do |assess|
-                    %li.list-group-item
-                      - # Calculating which colour the badge should be
-                      - if assess.date_opened.past? or assess.date_opened.today?
-                        - if assess.date_closed.past?
-                          - if assess.show_results
-                            - student_team = current_user.teams.where(uni_module: assess.uni_module).first
-                            = link_to assess.name, student_team
-                            - badge_class = "badge-primary"
-                            - badge_text = "Results Ready"
-                          - else
-                            = assess.name
-                            - badge_class = "badge-secondary"
-                            - badge_text = "Awaiting Results"
-                        - else
-                          - if assess.completed_by? current_user
-                            = assess.name
-                            - badge_class = "badge-success"
-                            - badge_text = "Completed"
-                          - else
-                            = link_to assess.name, fillin_assessment_path(assess)
-                            - badge_class = "badge-warning"
-                            - badge_text = "Open"
-                      - else
-                        = assess.name
-                        - badge_class = "badge-secondary"
-                        - badge_text = "Not Open"
-                      %span{class: "badge #{badge_class}"}= badge_text
+            -# %span.btn.btn-sm.btn-info{"data-toggle": "collapse", href: "#collapse_#{module_info.id}", role: "button", "aria-expanded": "false", "aria-controls": "collapse_#{module_info.id}"} Show Assessments
+            -# .collapse{id: "collapse_#{module_info.id}"}
+            -#   %ul.list-group
+            -#     - if module_info.assessments.length == 0
+            -#       %li.list-group-item.list-group-item-secondary This module has no assessments
+            -#     - else
+            -#       - module_info.assessments.each do |assess|
+            -#         %li.list-group-item
+            -#           - # Calculating which colour the badge should be
+            -#           - if assess.date_opened.past? or assess.date_opened.today?
+            -#             - if assess.date_closed.past?
+            -#               - if assess.show_results
+            -#                 - student_team = current_user.teams.where(uni_module: assess.uni_module).first
+            -#                 = link_to assess.name, student_team
+            -#                 - badge_class = "badge-primary"
+            -#                 - badge_text = "Results Ready"
+            -#               - else
+            -#                 = assess.name
+            -#                 - badge_class = "badge-secondary"
+            -#                 - badge_text = "Awaiting Results"
+            -#             - else
+            -#               - if assess.completed_by? current_user
+            -#                 = assess.name
+            -#                 - badge_class = "badge-success"
+            -#                 - badge_text = "Completed"
+            -#               - else
+            -#                 = link_to assess.name, fillin_assessment_path(assess)
+            -#                 - badge_class = "badge-warning"
+            -#                 - badge_text = "Open"
+            -#           - else
+            -#             = assess.name
+            -#             - badge_class = "badge-secondary"
+            -#             - badge_text = "Not Open"
+            -#           %span{class: "badge #{badge_class}"}= badge_text
   -# .col6#worklogInfo
   -#   %h3 Work logs this week
   -#   %ul.list-group

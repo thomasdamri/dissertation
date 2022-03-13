@@ -13,6 +13,23 @@ class StudentTeamsController < ApplicationController
     for u in @users do
       @item_list.push([u.user.real_display_name, u.id])
     end
+    @select_options = [["My Tasks", @student_team.id]]
+    users = StudentTeam.where(student_teams:{team_id: @student_team.team_id})
+    for u in users do
+      if u.id.to_i != params[:student_team_id].to_i 
+        puts(u.id)
+        puts(params[:student_team_id])
+        @select_options.push([u.user.real_display_name, u.id])
+      end
+    end
+  end
+
+  def get_task_list
+    selected = params[:student_team][:user_id].to_i
+    @tasks = StudentTeam.find_by(id: selected).student_tasks
+    respond_to do |format|
+      format.js
+    end
   end
 
   def team_data_index
@@ -26,6 +43,7 @@ class StudentTeamsController < ApplicationController
     @tables = []
     @tables.append(@student_team.teamTaskCountComparison())
     @tables.append(@student_team.getTaskCountPerStudent())
+    @tables.append(@student_team.getWeeklyTeamHours())
 
     respond_to do |format|
       format.js
@@ -50,6 +68,39 @@ class StudentTeamsController < ApplicationController
       end
     end
   end
+
+  def swap_to_assessments
+    @assessments = StudentTeam.find_by(id: params[:student_team_id]).team.uni_module.assessments
+    puts(@assessments.inspect)
+    respond_to do |format|
+      format.js 
+    end
+  end
+
+  def swap_to_tasks
+    @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    @select_options = [["My Tasks", @student_team.id]]
+    users = StudentTeam.where(student_teams:{team_id: @student_team.team_id})
+    for u in users do
+      if u.id.to_i != params[:student_team_id].to_i 
+        puts(u.id)
+        puts(params[:student_team_id])
+        @select_options.push([u.user.real_display_name, u.id])
+      end
+    end
+    respond_to do |format|
+      format.js 
+    end
+  end
+
+  def get_assessment
+    @assessment = Assessment.find_by(id: params[:assessment_id])
+    puts(@assessment.inspect)
+    respond_to do |format|
+      format.js { render 'student_assessments/show_assessment'}
+    end
+  end
+
 
   private
     # Use callbacks to share common setup or constraints between actions.

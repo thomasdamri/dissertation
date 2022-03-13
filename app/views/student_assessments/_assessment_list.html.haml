@@ -1,0 +1,14 @@
+.col
+  - if assessments.count > 0
+    - assessments.each do |a|
+      = link_to fillin_assessment_path(a), class: 'student_task_box', remote: true do
+        .row.border-top
+          .col
+            = a.name
+        .row
+          .col-auto
+            Closing on: 
+          .col
+            = a.date_closed.to_date
+  - else 
+    No Assessments

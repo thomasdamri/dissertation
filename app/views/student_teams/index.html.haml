@@ -5,12 +5,12 @@
 
 .col.mt-4#main-team-home-page-container
   .row.border
-    .col-3.border
-      = render partial: 'left_menu_panel', locals: {my_tasks: @student_team.student_tasks}
-    .col-6.border
+    .col-2.border
+      = render partial: 'left_menu_panel', locals: {student_team: @student_team , users: @users}
+    .col-5.border
       
       = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id}
-    .col-3.border
+    .col-5.border#right-panel
       = render 'right_chat_panel'
 
 = render 'student_reports/form', locals: {initial_items: @item_list}
