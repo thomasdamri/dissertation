@@ -1,15 +1,9 @@
-.col 
-  My Tasks:
-  - if my_tasks.count > 0
-    - my_tasks.each do |my_task|
-      %div{:style => StudentTask.difficulty_int_to_style(my_task.task_difficulty)}
-        = link_to student_task_path(my_task), class: 'student_task_box', remote: true do
-          .row 
-            .col
-              = my_task.task_objective
-
-          .row
-            .col
-              = my_task.task_target_date
-  - else 
-    You have no tasks
+.row.justify-content-between
+  .col-auto
+    Tasks By: 
+  .col{'data-controller': "infographic"} 
+    = simple_form_for StudentTeam.new, url: get_task_list_path(params[:student_team_id]), remote: true, html: {"data-infographic-target": "taskListForm"}, method: :get do |f|
+      - puts(select_options.inspect)
+      = f.select :user_id, select_options, {}, { class: 'form-select form-control', data: { action: "change->infographic#change_task_list"}, include_blank: false }
+.row#task-list
+  = render partial: "student_tasks/task_list", locals: {student_tasks: @student_team.student_tasks}
