@@ -1,0 +1,11 @@
+.col
+  - if messages.count > 0
+    - messages.each do |m|
+      = render partial: 'student_chats/message_container', locals: {message: m}
+  - else 
+    .row
+      No Current Messages
+  .row 
+    = simple_form_for StudentChat.new , url: post_chat_path(params[:student_team_id]) do |f|
+      = f.text_field :chat_message, class: 'form-control', rows: '6', placeholder: "Send a message..."
+      = f.button :submit, "Post"

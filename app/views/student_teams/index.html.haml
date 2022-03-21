@@ -11,6 +11,6 @@
       
       = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id}
     .col-5.border#right-panel
-      = render 'right_chat_panel'
+      = render partial: 'student_chats/right_chat_panel', locals: {messages: @messages}
 
 = render 'student_reports/form', locals: {initial_items: @item_list}

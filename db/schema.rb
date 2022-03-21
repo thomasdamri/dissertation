@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_10_231851) do
+ActiveRecord::Schema.define(version: 2022_03_14_195527) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "author_id"
@@ -60,6 +60,13 @@ ActiveRecord::Schema.define(version: 2022_03_10_231851) do
     t.bigint "uni_module_id"
     t.index ["uni_module_id"], name: "index_staff_modules_on_uni_module_id"
     t.index ["user_id"], name: "index_staff_modules_on_user_id"
+  end
+
+  create_table "student_chats", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+    t.bigint "student_team_id"
+    t.text "chat_message", null: false
+    t.datetime "posted", null: false
+    t.index ["student_team_id"], name: "fk_rails_e4c0cfab5f"
   end
 
   create_table "student_reports", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -206,6 +213,7 @@ ActiveRecord::Schema.define(version: 2022_03_10_231851) do
   add_foreign_key "report_objects", "student_reports", on_delete: :cascade
   add_foreign_key "staff_modules", "uni_modules", on_delete: :cascade
   add_foreign_key "staff_modules", "users", on_delete: :cascade
+  add_foreign_key "student_chats", "student_teams", on_delete: :cascade
   add_foreign_key "student_reports", "student_teams", on_delete: :cascade
   add_foreign_key "student_task_comments", "student_tasks", on_delete: :cascade
   add_foreign_key "student_task_edits", "student_tasks", on_delete: :cascade

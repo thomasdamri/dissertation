@@ -1,0 +1,8 @@
+-if message.student_team_id.to_i == params[:student_team_id].to_i
+  .row.justify-content-end
+    .col.rounded-pill.bg-info.align-self-end.shadow.px-3.py-2.my-2.bg-body.col-auto
+      = message.chat_message
+-else
+  .row
+    .col.rounded-pill.bg-light.float-start.shadow.px-3.py-2.mb-5.bg-body.align-self-start.col-auto
+      = message.chat_message

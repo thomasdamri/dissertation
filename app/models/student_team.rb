@@ -15,6 +15,7 @@ class StudentTeam < ApplicationRecord
   has_many :student_weightings
   has_many :student_tasks
   has_many :student_reports
+  has_many :student_chats
 
   # A user can only be added to a team once
   validates :user, uniqueness: {scope: :team}
