@@ -9,6 +9,18 @@
 @import 'assessment';
 @import "font-awesome";
 
+* {
+  font-family: 'Noto Sans Mono', monospace;
+}
+
+.logo-image{
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-top: -6px;
+}
+
 
 /* Used to keep material design icons on same line as the text next to it */
 .glyphRow > * {
@@ -50,4 +62,8 @@
 
 .bold{
   font-weight: bold;
+}
+
+#main-team-home-page-container{
+  background-color: #e9ecef;
 }

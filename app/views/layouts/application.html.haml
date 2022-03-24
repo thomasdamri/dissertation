@@ -13,8 +13,12 @@
     = javascript_pack_tag 'enable_tooltips', 'data-turbo-track': 'reload'
     = javascript_pack_tag 'pagination', 'data-turbo-track': 'reload'
     = javascript_pack_tag 'clipboard', 'data-turbo-track': 'reload'
+    = favicon_link_tag asset_path('TPlusSmallIcon.png')
+    %link{"rel": "preconnect" ,"href": "https://fonts.googleapis.com"} 
+    %link{ "rel": "preconnect", "href": "https://fonts.gstatic.com"}
+    %link{"href": "https://fonts.googleapis.com/css2?family=Noto+Sans+Mono&display=swap" ,"rel": "stylesheet"}
   %body
-    .container-fluid
+    .container-fluid.px-0
       = render 'layouts/navbar'
       - if notice
         %p.notice.alert.alert-primary= notice
