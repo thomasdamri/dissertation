@@ -1,5 +1,7 @@
-%nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
-  %a.navbar-brand{:href => root_path} TeamPlayerPlus
+%nav.navbar.navbar-expand-lg.navbar-dark.bg-dark.py-1
+  %a.navbar-brand.mx-1{:href => root_path} 
+    .logo-image 
+      %img.img-fluid{src: asset_path('TPlusSmallIconWhite.png')}
   %button.navbar-toggler{"aria-controls" => "navbarText", "aria-expanded" => "false", "aria-label" => "Toggle navigation", "data-target" => "#navbarText", "data-toggle" => "collapse", :type => "button"}
     %span.navbar-toggler-icon
   #navbarText.collapse.navbar-collapse
@@ -12,10 +14,21 @@
           %li.nav-item.active
             %a.nav-link{:href => home_staff_home_url} Dashboard
         -else
-          %li.nav-item.active
-            %a.nav-link{:href => home_student_home_url} Dashboard
+          - @student_teams = current_user.student_teams
+          - if @student_teams.count > 0 
+            .nav-item.dropdown
+              %a#navbarDropdownMenuLink.nav-link.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#"}
+                .navbar-text My Teams
+              .dropdown-menu{"aria-labelledby" => "navbarDropdownMenuLink"}
+                - @student_teams.each do |student_team|
+                  - module_info = student_team.team.uni_module
+                  = link_to ("#{module_info.title} - Team #{student_team.team_id}"), student_team_dashboard_path(student_team.id), class: 'dropdown-item'
+
+
           -# %li.nav-item.active
-          -#   %a.nav-link{:href => new_student_task_path} Tasks
+          -#   %a.nav-link{:href => home_student_home_url} Dashboard
+          -# -# %li.nav-item.active
+          -# -#   %a.nav-link{:href => new_student_task_path} Tasks
         - if current_user.admin
           %li.nav-item.active
             %a.nav-link{:href => admin_dashboard_path} Admin Dashboard

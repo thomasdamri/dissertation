@@ -2,4 +2,4 @@
   .row
     = render 'student_tasks/form', locals: {new_task: new_task, student_team_id: @student_team.id}
   .row 
-    =render 'student_tasks/task_feed', locals: {student_team_id: @student_team.id, team_tasks: @student_team.team.student_tasks}
+    =render 'student_tasks/task_feed', locals: {student_team_id: @student_team.id, team_tasks: @student_team.team.student_tasks.order(task_start_date: :desc)}

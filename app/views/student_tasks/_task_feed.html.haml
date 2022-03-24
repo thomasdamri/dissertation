@@ -1,5 +1,5 @@
 .col.border-top.px-1
-  - @tasks = @student_team.team.student_tasks
+  - @tasks = @student_team.team.student_tasks.order(task_start_date: :asc)
   - if @tasks.count > 0
     - @tasks.each do |task|
       
