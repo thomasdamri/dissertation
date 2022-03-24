@@ -11,6 +11,7 @@ import { autoload } from "stimulus/webpack-helpers"
 
 require("@rails/ujs").start()
 require("@hotwired/turbo")
+require("@hotwired/turbo-rails")
 require("@rails/activestorage").start()
 require("channels")
 require("select2")

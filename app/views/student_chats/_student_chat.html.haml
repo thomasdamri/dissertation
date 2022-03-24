@@ -1,0 +1,4 @@
+-if student_chat.get_user_id().to_i == user_id
+  = render partial: 'student_chats/self_message_container', locals: {message: student_chat}
+- else 
+  = render partial: 'student_chats/message_container', locals: {message: student_chat}

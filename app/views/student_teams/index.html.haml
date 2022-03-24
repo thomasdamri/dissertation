@@ -3,7 +3,7 @@
   Allows admin to view all tasks and create new ones
 - content_for :title, "[Student] Team Homepage"
 
-.col.mt-4#main-team-home-page-container
+.col.mt-0#main-team-home-page-container
   .row.border
     .col-2.border
       = render partial: 'left_menu_panel', locals: {student_team: @student_team , users: @users}
@@ -11,6 +11,6 @@
       
       = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id}
     .col-5.border#right-panel
-      = render partial: 'student_chats/right_chat_panel', locals: {messages: @messages}
+      = render partial: 'student_chats/right_chat_panel', locals: {messages: @messages, student_team: @student_team}
 
 = render 'student_reports/form', locals: {initial_items: @item_list}

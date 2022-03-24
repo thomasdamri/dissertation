@@ -22,7 +22,7 @@ class StudentTeamsController < ApplicationController
         @select_options.push([u.user.real_display_name, u.id])
       end
     end
-    @messages = @student_team.team.student_chats
+    @messages = @student_team.team.student_chats.order(posted: :asc)
   end
 
   def get_task_list

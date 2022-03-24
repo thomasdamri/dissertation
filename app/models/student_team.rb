@@ -10,7 +10,7 @@ class StudentTeam < ApplicationRecord
 
   belongs_to :user
   belongs_to :team
-  belongs_to :uni_module
+
 
   has_many :student_weightings
   has_many :student_tasks

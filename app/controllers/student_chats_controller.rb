@@ -12,6 +12,7 @@ class StudentChatsController < ApplicationController
     else
     end
 
+
   end
 
   #Only allow a list of trusted parameters through.
