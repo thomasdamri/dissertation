@@ -65,5 +65,52 @@
 }
 
 #main-team-home-page-container{
-  background-color: #e9ecef;
+  background-color: #587792;
+  // background-color: #e9ecef;
 }
+
+.navbar-black{
+  background-color: #161b22;
+}
+
+.navbar-text{
+  color: #f0f6fc;
+  font-weight: bold;
+}
+
+.dropdown-toggle::after {
+  color: #f0f6fc;
+}
+
+.task-options-container{
+  background-color: #e9ecef;
+  border-radius: 25px;
+  padding: 5px 15px 5px 15px;
+  margin-top: 10px;
+}
+
+.task-container{
+  background-color: #e9ecef;
+  border-radius: 25px;
+  padding: 5px 15px 5px 5px;
+  // padding-left: 5px;
+  // padding-right: 15px;
+  // padding-top: 5px;
+  // padding-bottom: 5px;
+  margin-top: 10px;
+}
+
+
+// #main-task-feed{
+//   overflow-y: scroll;
+// }
+
+// .navbar-fixed{
+//   top:0;
+//   width: 100%;
+//   position: fixed;
+// }
+
+// .main{
+//   margin-top: 30px;
+// }
