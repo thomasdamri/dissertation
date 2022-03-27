@@ -45,11 +45,11 @@ class StudentTask < ApplicationRecord
   def self.difficulty_int_to_style(integer_input)
     case integer_input
     when 0
-      return "border-left: 5px solid green;"
+      return "border-bottom: 7px solid green;"
     when 2
-      return "border-left: 5px solid red;"
+      return "border-bottom: 7px solid red;"
     else
-      return "border-left: 5px solid yellow;"
+      return "border-bottom: 7px solid yellow;"
     end
   end
 
@@ -67,6 +67,47 @@ class StudentTask < ApplicationRecord
     task.save
   end
 
+  def self.selectTasks(which_student, what_filter)
+    case what_filter
+    when 1
+      return StudentTeam.find_by(id: which_student).student_tasks.where.not(task_complete_date: nil)
+    when 2
+      return StudentTeam.find_by(id: which_student).student_tasks.where("task_target_date < ? and task_complete_date IS ? ", Date.today, nil)
+    when 3
+      return StudentTeam.find_by(id: which_student).student_tasks.order("student_task_likes_count DESC")
+    when 4
+      return StudentTeam.find_by(id: which_student).student_tasks.order("student_task_comments_count DESC")
+    when 5
+      return StudentTeam.find_by(id: which_student).student_tasks.where(task_difficulty: 2)
+    when 6
+      return StudentTeam.find_by(id: which_student).student_tasks.where(task_difficulty: 1)
+    when 7
+      return StudentTeam.find_by(id: which_student).student_tasks.where(task_difficulty: 0)
+    else
+      return StudentTeam.find_by(id: which_student).student_tasks
+    end
+  end
+
+  def self.selectTeamTasks(which_student, what_filter)
+    case what_filter
+    when 1
+      return StudentTask.where.not(task_complete_date: nil)
+    when 2
+      return StudentTask.where("task_target_date < ? and task_complete_date IS ? ", Date.today, nil)
+    when 3
+      return StudentTask.order("student_task_likes_count DESC")
+    when 4
+      return StudentTask.order("student_task_comments_count DESC")
+    when 5
+      return StudentTask.where(task_difficulty: 2)
+    when 6
+      return StudentTask.where(task_difficulty: 1)
+    when 7
+      return StudentTask.where(task_difficulty: 0)
+    else
+      return StudentTask.all
+    end
+  end
 
 
 end

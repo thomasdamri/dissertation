@@ -1,1 +1,1 @@
-$('#task-list').html("#{escape_javascript(render partial: 'student_tasks/task_list', locals: {student_tasks: @tasks} )}  "); 
+$('#task-list').html("#{escape_javascript(render partial: 'student_tasks/task_feed', locals: {tasks: @tasks} )}  "); 

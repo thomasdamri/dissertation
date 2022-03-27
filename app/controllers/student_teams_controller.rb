@@ -13,21 +13,18 @@ class StudentTeamsController < ApplicationController
     for u in @users do
       @item_list.push([u.user.real_display_name, u.id])
     end
-    @select_options = [["My Tasks", @student_team.id]]
-    users = StudentTeam.where(student_teams:{team_id: @student_team.team_id})
-    for u in users do
-      if u.id.to_i != params[:student_team_id].to_i 
-        puts(u.id)
-        puts(params[:student_team_id])
-        @select_options.push([u.user.real_display_name, u.id])
-      end
-    end
+    @select_options = StudentTeam.createTeamArray(params[:student_team_id], @team_id)
     @messages = @student_team.team.student_chats.order(posted: :asc)
   end
 
   def get_task_list
     selected = params[:student_team][:user_id].to_i
-    @tasks = StudentTeam.find_by(id: selected).student_tasks
+    filter = params[:student_team][:team_id].to_i
+    if(selected==-1)
+      @tasks = StudentTask.selectTeamTasks(selected, filter)
+    else
+      @tasks = StudentTask.selectTasks(selected, filter)
+    end
     respond_to do |format|
       format.js
     end

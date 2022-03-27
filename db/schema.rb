@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_03_14_195527) do
+ActiveRecord::Schema.define(version: 2022_03_27_181611) do
 
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "author_id"
@@ -115,6 +115,8 @@ ActiveRecord::Schema.define(version: 2022_03_14_195527) do
     t.boolean "hidden", default: false
     t.integer "hours"
     t.text "task_completed_summary"
+    t.bigint "student_task_likes_count"
+    t.bigint "student_task_comments_count"
     t.index ["student_team_id"], name: "fk_rails_fa29fb9ccd"
   end
 

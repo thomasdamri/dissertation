@@ -1,7 +1,6 @@
-.col.border-top.px-1
-  - @tasks = @student_team.team.student_tasks.order(task_start_date: :asc)
-  - if @tasks.count > 0
-    - @tasks.each do |task|
+.col.px-1
+  - if tasks.count > 0
+    - tasks.each do |task|
       
       = render partial: 'student_tasks/task_feed_container', locals: {task_local: task}
 

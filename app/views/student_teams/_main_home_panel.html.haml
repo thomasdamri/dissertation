@@ -1,5 +1,7 @@
 #task-main-feed
   .row
-    = render 'student_tasks/form', locals: {new_task: new_task, student_team_id: @student_team.id}
+    = render 'student_tasks/form', locals: {new_task: new_task, student_team_id: student_team_id}
   .row 
-    =render 'student_tasks/task_feed', locals: {student_team_id: @student_team.id, team_tasks: @student_team.team.student_tasks.order(task_start_date: :desc)}
+    = render partial: 'student_tasks/task_filtering', locals: {select_options: select_options}
+  .row#task-list
+    =render partial: 'student_tasks/task_feed', locals: {tasks: @student_team.team.student_tasks.order(task_start_date: :desc)}

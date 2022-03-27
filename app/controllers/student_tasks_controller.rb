@@ -126,6 +126,7 @@ class StudentTasksController < ApplicationController
   def return_task_list
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
     @task = StudentTask.new
+    @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team_id)
     respond_to do |format|
       format.js
     end

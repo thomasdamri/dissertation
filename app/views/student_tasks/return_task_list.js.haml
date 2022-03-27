@@ -1,1 +1,1 @@
-$('#task-main-feed').html("#{escape_javascript(render partial: 'student_teams/main_home_panel', locals: { student_team_id: @student_team.id, new_task: @task} )}  "); 
+$('#task-main-feed').html("#{escape_javascript(render partial: 'student_teams/main_home_panel', locals: { student_team_id: @student_team.id, new_task: @task, select_options: @select_options} )}  "); 
