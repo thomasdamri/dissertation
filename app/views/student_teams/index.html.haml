@@ -7,7 +7,11 @@
   .row.justify-content-center
     .col-5.pr-4
       = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id, select_options: @select_options}
-    .col-3#right-panel.right-box-height.shadow
-      = render partial: 'student_chats/right_chat_panel', locals: {messages: @messages, student_team: @student_team, select_options: @select_options, week_options: @week_options}
+    .col-3
+      .row.task-options-container#swap-meeting-assessment
+        = render partial: "student_teams/swap_chat_and_assessment", locals: {student_team_id: @student_team.id, selected: 0}
+      #right-panel-swap
+        = render partial: 'student_chats/right_chat_panel', locals: {messages: @messages, student_team: @student_team, select_options: @select_options, week_options: @week_options}
+
 
 = render 'student_reports/form', locals: {initial_items: @item_list}

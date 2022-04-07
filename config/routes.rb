@@ -109,6 +109,7 @@ Rails.application.routes.draw do
   get 'student_teams/:student_team_id/individual_data', to: 'student_teams#individual_data', as: 'individual_data'
 
   get 'student_teams/:student_team_id/swap_to_assessments', to: 'student_teams#swap_to_assessments', as: 'swap_to_assessments'
+  get 'student_teams/:student_team_id/swap_to_meetings', to: 'student_teams#swap_to_meetings', as: 'swap_to_meetings'
   get 'student_teams/:student_team_id/swap_to_tasks', to: 'student_teams#swap_to_tasks', as: 'swap_to_tasks'
 
   post 'student_teams/:student_team_id/post_chat', to: 'student_chats#post_chat', as: 'post_chat'

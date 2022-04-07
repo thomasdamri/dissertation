@@ -1,11 +1,9 @@
-#chat-box
+.task-options-container
+  = render partial: "student_chats/chat_form"
+
+
+.task-options-container
   %div
     = turbo_stream_from ("Team-"+ student_team.team.id.to_s)
     %div{id: 'student_chats'}
       = render partial: "student_chats/student_chat", collection: messages, locals: {user_id: current_user.id.to_i}
-  = simple_form_for StudentChat.new , url: post_chat_path(params[:student_team_id]), remote: true do |f|
-    .row.justify-content-between.form-group
-      .col
-        = f.text_area :chat_message, class: 'form-control', rows: '2', placeholder: "Send a message..."
-      .col-auto.ml-2
-        = f.button :submit, "Post", class: 'btn btn-outline-info'

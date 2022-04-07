@@ -1,2 +1,2 @@
-$('#left_menu_list').html("#{escape_javascript(render partial: 'assessment_list', locals: { assessments: @assessments} )}  "); 
-
+$('#right-panel-swap').html("#{escape_javascript(render partial: 'student_assessments/assessment_list', locals: { assessments: @assessments, student_team: @student_team} )}  "); 
+$('#swap-meeting-assessment').html("#{escape_javascript(render partial: 'student_teams/swap_chat_and_assessment', locals: {student_team_id: @student_team.id, selected: 1} )}  "); 

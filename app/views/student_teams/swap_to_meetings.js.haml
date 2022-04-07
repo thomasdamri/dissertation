@@ -1,0 +1,2 @@
+$('#right-panel-swap').html("#{escape_javascript(render partial: 'student_chats/right_chat_panel', locals: { messages: @messages, student_team: @student_team, select_options: @select_options, week_options: @week_options} )}  "); 
+$('#swap-meeting-assessment').html("#{escape_javascript(render partial: 'student_teams/swap_chat_and_assessment', locals: {student_team_id: @student_team.id, selected: 0} )}  "); 

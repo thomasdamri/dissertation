@@ -119,23 +119,27 @@
   border-color: #f0f6fc;
 }
 
-.chat-box{
-  height: 87vh;
-  overflow-y: scroll;
+// .chat-box{
+//   height: 87vh;
+//   overflow-y: scroll;
+// }
+
+.message-box{
+  white-space: pre-wrap;
 }
 
 .right-box-height{
-  height: 95vh;
-  position: sticky;
+  // height: 95vh;
+  // position: sticky;
   // margin: 5px;
   padding: 5px;
   // margin-bottom: 5px;
-  top: 1vh;
-  bottom: 1vh;
+  // top: 1vh;
+  // bottom: 1vh;
   background-color: #e9ecef;
   margin-top: 5px;
-  overflow-x: hidden;
-  overflow-y: hidden;
+  // overflow-x: hidden;
+  // overflow-y: hidden;
   border-radius: 25px;
   border-top: solid #161b22;
   border-left: solid #161b22;

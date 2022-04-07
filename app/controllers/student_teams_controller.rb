@@ -16,7 +16,7 @@ class StudentTeamsController < ApplicationController
     @select_options = StudentTeam.createTeamArray(params[:student_team_id], @team_id)
     @week_options = @student_team.team.uni_module.createWeekNumToDatesMap()
     
-    @messages = @student_team.team.get_week_chats(-1, (Date.today-7.day))
+    @messages = @student_team.team.get_week_chats(-1, @week_options.values[0].to_date)
   end
 
   def get_task_list
@@ -71,8 +71,8 @@ class StudentTeamsController < ApplicationController
   end
 
   def swap_to_assessments
-    @assessments = StudentTeam.find_by(id: params[:student_team_id]).team.uni_module.assessments
-    puts(@assessments.inspect)
+    @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    @assessments = @student_team.team.uni_module.assessments
     respond_to do |format|
       format.js 
     end
@@ -82,6 +82,16 @@ class StudentTeamsController < ApplicationController
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
     @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
     @tasks = @student_team.team.student_tasks.order(task_start_date: :desc)
+    respond_to do |format|
+      format.js 
+    end
+  end
+
+  def swap_to_meetings
+    @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
+    @week_options = @student_team.team.uni_module.createWeekNumToDatesMap()
+    @messages = @student_team.team.get_week_chats(-1, @week_options.values[0].to_date)
     respond_to do |format|
       format.js 
     end
