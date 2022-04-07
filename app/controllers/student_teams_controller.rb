@@ -79,15 +79,8 @@ class StudentTeamsController < ApplicationController
 
   def swap_to_tasks
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
-    @select_options = [["My Tasks", @student_team.id]]
-    users = StudentTeam.where(student_teams:{team_id: @student_team.team_id})
-    for u in users do
-      if u.id.to_i != params[:student_team_id].to_i 
-        puts(u.id)
-        puts(params[:student_team_id])
-        @select_options.push([u.user.real_display_name, u.id])
-      end
-    end
+    @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
+    @tasks = @student_team.team.student_tasks.order(task_start_date: :desc)
     respond_to do |format|
       format.js 
     end

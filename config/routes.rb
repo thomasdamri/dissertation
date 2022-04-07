@@ -121,6 +121,9 @@ Rails.application.routes.draw do
 
   get 'student_teams/:student_team_id/get_assessment/:assessment_id', to: 'student_teams#get_assessment', as: 'get_assessment'
 
+  get 'swap_task_data/:student_team_id/:selection', to: "student_teams#swap_task_data", as: 'swap_task_data'
+
+
   resources :student_reports do
     post 'report_response', to: 'student_reports#report_response'
     get 'get_list', on: :collection

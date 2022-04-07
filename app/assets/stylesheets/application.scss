@@ -65,7 +65,9 @@
 }
 
 #main-team-home-page-container{
-  background-color: #587792;
+  // background-color: #587792;
+  // background-color: #2a3441;
+  background-color: #714f41;
   // background-color: #e9ecef;
 }
 
@@ -83,15 +85,27 @@
 }
 
 .task-options-container{
-  background-color: #e9ecef;
+  // background-color: #e9ecef;
+  background-color: #eaeae0;
   border-radius: 25px;
   padding: 5px 15px 5px 15px;
   margin-top: 10px;
+  // border-color: black;
+  // border-width: 25px;
+  // border-top: 7px solid #f0f6fc;
+  // border-left: 7px solid #f0f6fc;
+  // border-bottom: 7px solid #f0f6fc;
+  // border-right: 7px solid #f0f6fc;
+  border: 5px solid #307aba;
+  // border: solid #161b22;
 }
 
 .task-container{
   background-color: #e9ecef;
   border-radius: 25px;
+  border-top: solid #161b22;
+  border-left:  solid #161b22;
+  border-right:  solid #161b22;
   padding: 5px 15px 5px 5px;
   // padding-left: 5px;
   // padding-right: 15px;
@@ -99,6 +113,50 @@
   // padding-bottom: 5px;
   margin-top: 10px;
 }
+
+.button-colour{
+  background-color: #307aba;
+  border-color: #f0f6fc;
+}
+
+.chat-box{
+  height: 87vh;
+  overflow-y: scroll;
+}
+
+.right-box-height{
+  height: 95vh;
+  position: sticky;
+  // margin: 5px;
+  padding: 5px;
+  // margin-bottom: 5px;
+  top: 1vh;
+  bottom: 1vh;
+  background-color: #e9ecef;
+  margin-top: 5px;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  border-radius: 25px;
+  border-top: solid #161b22;
+  border-left: solid #161b22;
+  border-bottom: solid #161b22;
+  border-right: solid #161b22;
+}
+
+.sticky-header{
+  height: 4vh;
+  position: sticky;
+  // margin: 5px;
+  padding: 5px;
+  // margin-bottom: 5px;
+  top: 0vh;
+  background-color: #e9ecef;
+}
+
+.selected-panel-box{
+  background-color: #9e9e9e;
+}
+
 
 
 // #main-task-feed{

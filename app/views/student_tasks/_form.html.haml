@@ -1,6 +1,6 @@
 -# Partial form for student tasks
 .col.task-options-container
-  = simple_form_for @task, url: student_task_create_path(@student_team.id) do |f|
+  = simple_form_for StudentTask.new, url: student_task_create_path(@student_team.id) do |f|
     .row.pt-1.mb-3
       .col.form-group.mb-0
         = f.text_area  :task_objective, required: true, as: :string, placeholder: "Whats the task objective?", rows: 2, class: 'form-control'
@@ -18,4 +18,4 @@
         = f.input_field :task_difficulty, as: :select, collection: ["Easy", "Medium", "Hard"], prompt: "Difficulty", class: 'form-control form-select'
 
       .col-auto 
-        = f.button :submit, 'Create Task', class: 'btn btn-primary float-right'
+        = f.button :submit, 'Create Task', class: 'btn btn-primary button-colour float-right'
