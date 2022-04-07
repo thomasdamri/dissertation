@@ -33,13 +33,8 @@ class StudentTeamsController < ApplicationController
   end
 
   def team_data_index
-    @test = StudentTeam.new
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
-    @select_options = [["Team", -1]]
-    users = StudentTeam.where(student_teams:{team_id: @student_team.team_id})
-    for u in users do
-      @select_options.push([u.user.real_display_name, u.id])
-    end
+    @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
     @tables = []
     @tables.append(@student_team.teamTaskCountComparison())
     @tables.append(@student_team.getTaskCountPerStudent())
@@ -55,7 +50,11 @@ class StudentTeamsController < ApplicationController
     selected = params[:student_team][:user_id].to_i
     if(selected < 0)
       @student_team = StudentTeam.find_by(id: params[:student_team_id])
-      @table2_data = @student_team.getTaskCountPerStudent()
+      @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
+      @tables = []
+      @tables.append(@student_team.teamTaskCountComparison())
+      @tables.append(@student_team.getTaskCountPerStudent())
+      @tables.append(@student_team.getWeeklyTeamHours())
       respond_to do |format|
         format.js 
       end

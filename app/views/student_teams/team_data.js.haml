@@ -1,1 +1,1 @@
-$('#graph-panel').html("#{escape_javascript(render partial: 'team_panel', locals: { table2_data: @table2_data} )}  "); 
+$('#task-main-feed').html("#{escape_javascript(render partial: 'infographs/team_data_index', locals: { tables: @tables, selection_options: @select_options} )}  "); 

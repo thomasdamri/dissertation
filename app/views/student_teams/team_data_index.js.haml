@@ -1,2 +1,2 @@
-$('#task-main-feed').html("#{escape_javascript(render partial: 'team_data_index', locals: { tables: @tables, selection_options: @select_options} )}  "); 
+$('#task-main-feed').html("#{escape_javascript(render partial: 'infographs/team_data_index', locals: { tables: @tables, selection_options: @select_options} )}  "); 
 $('#swap-task-data').html("#{escape_javascript(render partial: 'student_teams/swap_student_task_and_data', locals: {student_team_id: @student_team.id, selected: 1} )}  "); 

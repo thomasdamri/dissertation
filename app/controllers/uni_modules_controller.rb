@@ -158,13 +158,11 @@ class UniModulesController < ApplicationController
 
       # Find user
       u = User.find_by(username: team_attr[0])
-=
       # Find team, or create it if it doesnt already exist
       t = Team.find_or_create_by(uni_module: mod, team_number: team_attr[1])
       # Attach student to the team
 
       assign_student = u.student_teams.create(user: u, team: t)
-=
     end
 
     redirect_to uni_module_path mod

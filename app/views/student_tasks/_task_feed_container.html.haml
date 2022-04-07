@@ -1,4 +1,4 @@
-%div.task-container{:style => StudentTask.difficulty_int_to_style(task_local.task_difficulty)}
+%div.task-container.shadow{:style => StudentTask.difficulty_int_to_style(task_local.task_difficulty)}
   = link_to student_task_path(task_local), class: 'student_task_box', remote: true do
     .row.justify-content-between
       .col-auto
