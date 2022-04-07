@@ -4,13 +4,10 @@
 - content_for :title, "[Student] Team Homepage"
 
 .col.mt-0#main-team-home-page-container
-  .row.border
-    .col-2.border
-      = render partial: 'left_menu_panel', locals: {student_team: @student_team , users: @users}
-    .col-5.border
-      
+  .row.justify-content-center
+    .col-5.pr-4
       = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id, select_options: @select_options}
-    .col-5.border#right-panel
-      = render partial: 'student_chats/right_chat_panel', locals: {messages: @messages, student_team: @student_team}
+    .col-3#right-panel.right-box-height.shadow
+      = render partial: 'student_chats/right_chat_panel', locals: {messages: @messages, student_team: @student_team, select_options: @select_options, week_options: @week_options}
 
 = render 'student_reports/form', locals: {initial_items: @item_list}

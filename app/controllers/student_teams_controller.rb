@@ -14,7 +14,9 @@ class StudentTeamsController < ApplicationController
       @item_list.push([u.user.real_display_name, u.id])
     end
     @select_options = StudentTeam.createTeamArray(params[:student_team_id], @team_id)
-    @messages = @student_team.team.student_chats.order(posted: :asc)
+    @week_options = @student_team.team.uni_module.createWeekNumToDatesMap()
+    
+    @messages = @student_team.team.get_week_chats(-1, (Date.today-7.day))
   end
 
   def get_task_list

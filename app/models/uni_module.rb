@@ -63,4 +63,24 @@ class UniModule < ApplicationRecord
     Worklog.where(author: user, uni_module: self, fill_date: date).first.nil? ? false : true
   end
 
+  def get_week_range()
+    start_date = self.start_date
+    if(Date.today<self.end_date)
+      end_date = Date.today
+    else
+      end_date = self.end_date
+    end
+    range = start_date..end_date
+    return range
+  end
+
+  def createWeekNumToDatesMap()
+    week_hash = {}
+    range = self.get_week_range()
+    range.step(7) { |x| week_hash["Week "+week_hash.count.to_s] = x.to_s}
+    week_hash["Current Week"] = week_hash.delete week_hash.keys.last
+    reversed_hash = Hash[week_hash.to_a.reverse]
+    return reversed_hash
+  end
+
 end

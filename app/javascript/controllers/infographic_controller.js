@@ -3,7 +3,7 @@ import { get } from '@rails/request.js'
 import Rails from "@rails/ujs"
 
 export default class extends Controller {
-  static targets = ["graphSelect", "dropdownForm", "taskListForm"]
+  static targets = ["graphSelect", "dropdownForm", "taskListForm", "messagesFilterForm"]
 
   connect() {
     console.log("INFO GRAPHS CONTROLLER WORKING")
@@ -16,6 +16,9 @@ export default class extends Controller {
   }
   onPostSuccess(event) {
     console.log("success!")
+  }
+  change_messages(event){
+    Rails.fire(this.messagesFilterFormTarget, "submit")
   }
 
 }

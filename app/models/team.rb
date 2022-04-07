@@ -29,4 +29,15 @@ class Team < ApplicationRecord
     link.delete_suffix(',')
   end
 
+  def get_week_chats(student_team_id, week_key)
+    week_hash = self.uni_module.createWeekNumToDatesMap()
+    if(student_team_id==-1)
+      messages = self.student_chats.where(posted: week_key..(week_key+7.day)).order(posted: :asc)
+      return messages
+    else
+      messages = self.student_chats.where(posted: week_key..(week_key+7.day), student_team_id: student_team_id).order(posted: :asc)
+      return messages
+    end
+  end
+
 end

@@ -1,10 +1,3 @@
-
-%div
-  - @team = student_team.team
-  = turbo_stream_from ("Team-"+@team.id.to_s)
-  %div{id: 'student_chats'}
-    = render partial: "student_chats/student_chat", collection: @team.student_chats.order(posted: :asc), locals: {user_id: current_user.id.to_i}
-.row.fixed-row-bottom{ style: "position: fixed; bottom: 0;"}
-  = simple_form_for StudentChat.new , url: post_chat_path(params[:student_team_id]), remote: true do |f|
-    = f.text_field :chat_message, class: 'form-control', rows: '6', placeholder: "Send a message..."
-    = f.button :submit, "Post", class: 'btn btn-outline-info'
+= render partial: "student_chats/chat_filter", locals: {select_options: select_options, week_options: week_options}
+#chat-box
+  = render partial: "student_chats/current_chat_box", locals: {student_team: student_team, messages: messages}

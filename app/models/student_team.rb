@@ -153,7 +153,7 @@ class StudentTeam < ApplicationRecord
   end
 
   def self.createTeamArray(student_team_id, team_id)
-    select_options = [["Team", -1], ["My Tasks", student_team_id]]
+    select_options = [["Team", -1], ["Myself", student_team_id]]
     users = StudentTeam.where(student_teams:{team_id: team_id})
     for u in users do
       if u.id.to_i != student_team_id.to_i 

@@ -117,6 +117,8 @@ Rails.application.routes.draw do
 
   get 'get_user_tasks/:student_team_id', to: 'student_teams#get_task_list', as: 'get_task_list'
 
+  get 'filter_chat/:student_team_id', to: 'student_chats#filter_chat', as: 'filter_chat'
+
   get 'student_teams/:student_team_id/get_assessment/:assessment_id', to: 'student_teams#get_assessment', as: 'get_assessment'
 
   resources :student_reports do
