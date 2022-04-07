@@ -35,10 +35,11 @@ class StudentTeamsController < ApplicationController
   def team_data_index
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
     @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
+    range = @student_team.team.uni_module.get_week_range()
     @tables = []
-    @tables.append(@student_team.teamTaskCountComparison())
+    @tables.append(@student_team.teamTaskCountComparison(range))
     @tables.append(@student_team.getTaskCountPerStudent())
-    @tables.append(@student_team.getWeeklyTeamHours())
+    @tables.append(@student_team.getWeeklyTeamHours(range))
 
     respond_to do |format|
       format.js
@@ -51,20 +52,21 @@ class StudentTeamsController < ApplicationController
     if(selected < 0)
       @student_team = StudentTeam.find_by(id: params[:student_team_id])
       @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
+      range = @student_team.team.uni_module.get_week_range()
       @tables = []
-      @tables.append(@student_team.teamTaskCountComparison())
+      @tables.append(@student_team.teamTaskCountComparison(range))
       @tables.append(@student_team.getTaskCountPerStudent())
-      @tables.append(@student_team.getWeeklyTeamHours())
-      respond_to do |format|
-        format.js 
-      end
+      @tables.append(@student_team.getWeeklyTeamHours(range))
     else
-      @student_team = StudentTeam.find_by(id: selected)
-      @data1 = @student_team.uniqueStudentTaskCount()
-      puts(@data1.inspect)
-      respond_to do |format|
-        format.js {render 'individual_data'}
-      end
+      student_team = StudentTeam.find_by(id: params[:student_team_id])
+      @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
+      student_team = StudentTeam.find_by(id: selected)
+      range = @student_team.team.uni_module.get_week_range()
+      @tables = []
+      @tables.append(student_team.uniqueStudentTaskCount(range))
+    end
+    respond_to do |format|
+      format.js 
     end
   end
 

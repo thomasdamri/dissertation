@@ -1,7 +1,4 @@
 = render partial: "infographs/data_filter", locals: {selection_options: selection_options}
 
 #graph-panel
-  - if tables.count > 0
-    - tables.each do |table|
-      = render partial: 'infographs/data_panel', locals: {table_data: table}
-
+  = render partial: "infographs/table_list", locals: {tables: tables}

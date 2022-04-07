@@ -30,26 +30,28 @@ class StudentTeam < ApplicationRecord
     return data
   end
 
-  def uniqueStudentTaskCount()
-    graph_title = "Student Tasks Created Weekly"
-    y_axis = "Task Creation Count"
-    x_axis = "Week Start Date"
-    data = student_tasks.group_by_week(:task_start_date).count
-    return data
+  def uniqueStudentTaskCount(range)
+    table_data = {}
+    table_data["graph_type"] = 0
+    table_data["graph_title"] = "Student Tasks Created Weekly"
+    table_data["data"] = student_tasks.group_by_week(:task_start_date, range: range).count
+    table_data["xtitle"] = "Date (Weeks)"
+    table_data["ytitle"] = "Task Creation Count"
+    return table_data
   end
 
   #Use with line graph
-  def teamTaskCountComparison()
+  def teamTaskCountComparison(range)
 
     data = team.student_teams.map { | team_member|{
-      name: team_member.user.real_display_name, data: team_member.student_tasks.group_by_week(:task_start_date).count
+      name: team_member.user.real_display_name, data: team_member.student_tasks.group_by_week(:task_start_date, range: range).count
     }}
 
     table_data = {}
     table_data["graph_type"] = 0
     table_data["graph_title"] = "Task Creation Counts per Week"
     table_data["data"] = data
-    table_data["xtitle"] = "Date"
+    table_data["xtitle"] = "Date (Weeks)"
     table_data["ytitle"] = "Task Creation Count"
 
     return table_data
@@ -137,17 +139,17 @@ class StudentTeam < ApplicationRecord
     return statement
   end
 
-  def getWeeklyTeamHours()
+  def getWeeklyTeamHours(range)
     data = team.student_teams.map { | team_member|{
-      name: team_member.user.real_display_name, data: team_member.student_tasks.where.not(task_complete_date: nil).group_by_week(:task_complete_date).sum("hours")
+      name: team_member.user.real_display_name, data: team_member.student_tasks.where.not(task_complete_date: nil).group_by_week(:task_complete_date, range: range).sum("hours")
     }}
 
     table_data = {}
     table_data["graph_type"] = 0
     table_data["graph_title"] = "Hours Logged per Week"
     table_data["data"] = data
-    table_data["xtitle"] = "Date"
-    table_data["ytitle"] = "Hours Logged"
+    table_data["xtitle"] = "Date (Weeks)"
+    table_data["ytitle"] = "Time Logged (Hours)"
 
     return table_data
   end

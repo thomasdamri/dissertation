@@ -1,12 +1,12 @@
 -if selected == 0
-  .col-6.selected-panel-box
+  .col-6.selected-panel-box.text-center
     = link_to "Team Tasks", swap_to_tasks_path(student_team_id), remote: true
 
-  .col-6
+  .col-6.text-center.unselected-panel-box
     = link_to "Team Data", team_data_index_path(student_team_id), remote: true
 - else 
-  .col-6
+  .col-6.text-center.unselected-panel-box
     = link_to "Team Tasks", swap_to_tasks_path(student_team_id), remote: true
 
-  .col-6.selected-panel-box
+  .col-6.selected-panel-box.text-center
     = link_to "Team Data", team_data_index_path(student_team_id), remote: true
