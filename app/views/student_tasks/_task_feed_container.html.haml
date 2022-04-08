@@ -16,7 +16,7 @@
       .col-4#thumbs_up_comment
         =link_to fa_icon("comment", text: task_local.student_task_comments.count)
 
-    - comments_with_images = task_local.getCommentsWithImages()
+    - comments_with_images = task_local.getCommentsWithImages().reverse()
     - first_image = comments_with_images.first
     - if comments_with_images.size() > 0
       .row.pt-2
@@ -24,7 +24,7 @@
           .carousel-inner
             .carousel-item.active
               .d-block.w-100.img-fluid.rounded.text-center
-                = image_tag(first_image.image)
+                = image_tag(first_image.image, class: "img-fluid")
               .text-center
                 %p.mb-1
                   = first_image.comment
