@@ -70,9 +70,9 @@ class StudentTask < ApplicationRecord
   def self.selectTasks(which_student, what_filter)
     case what_filter
     when 1
-      return StudentTeam.find_by(id: which_student).student_tasks.where.not(task_complete_date: nil)
+      return StudentTeam.find_by(id: which_student).student_tasks.where.not(task_complete_date: nil).order(task_start_date: :desc)
     when 2
-      return StudentTeam.find_by(id: which_student).student_tasks.where("task_target_date < ? and task_complete_date IS ? ", Date.today, nil)
+      return StudentTeam.find_by(id: which_student).student_tasks.where("task_target_date < ? and task_complete_date IS ? ", Date.today, nil).order(task_target_date: :asc)
     when 3
       return StudentTeam.find_by(id: which_student).student_tasks.order("student_task_likes_count DESC")
     when 4
@@ -84,28 +84,28 @@ class StudentTask < ApplicationRecord
     when 7
       return StudentTeam.find_by(id: which_student).student_tasks.where(task_difficulty: 0)
     else
-      return StudentTeam.find_by(id: which_student).student_tasks
+      return StudentTeam.find_by(id: which_student).student_tasks.order(task_start_date: :desc)
     end
   end
 
   def self.selectTeamTasks(which_student, what_filter)
     case what_filter
     when 1
-      return StudentTask.where.not(task_complete_date: nil)
+      return StudentTask.where.not(task_complete_date: nil).order(task_start_date: :desc)
     when 2
-      return StudentTask.where("task_target_date < ? and task_complete_date IS ? ", Date.today, nil)
+      return StudentTask.where("task_target_date < ? and task_complete_date IS ? ", Date.today, nil).order(task_target_date: :asc)
     when 3
       return StudentTask.order("student_task_likes_count DESC")
     when 4
       return StudentTask.order("student_task_comments_count DESC")
     when 5
-      return StudentTask.where(task_difficulty: 2)
+      return StudentTask.where(task_difficulty: 2).order(task_start_date: :desc)
     when 6
-      return StudentTask.where(task_difficulty: 1)
+      return StudentTask.where(task_difficulty: 1).order(task_start_date: :desc)
     when 7
-      return StudentTask.where(task_difficulty: 0)
+      return StudentTask.where(task_difficulty: 0).order(task_start_date: :desc)
     else
-      return StudentTask.all
+      return StudentTask.all.order(task_start_date: :desc)
     end
   end
 
