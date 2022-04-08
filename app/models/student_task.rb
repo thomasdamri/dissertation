@@ -109,5 +109,10 @@ class StudentTask < ApplicationRecord
     end
   end
 
+  def getCommentsWithImages()
+    comments = self.student_task_comments.joins(:image_attachment)
+    return comments
+  end
+
 
 end

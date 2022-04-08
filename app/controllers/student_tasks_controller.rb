@@ -168,7 +168,7 @@ class StudentTasksController < ApplicationController
 
     #Only allow a list of trusted parameters through.
     def comment_params
-      params.require(:student_task_comment).permit(:comment)
+      params.require(:student_task_comment).permit(:comment, :image)
     end
 
     #Only allow a list of trusted parameters through.

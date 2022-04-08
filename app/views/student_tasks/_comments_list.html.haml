@@ -1,12 +1,17 @@
 .col
   - if comments.count > 0
     - comments.each do |c|
-      .row 
-        .col-auto
-          = c.user.real_display_name + " - " + c.posted_on.to_s
-      .row.border-bottom
-        .col 
-          = c.comment
+      .task-options-container
+        .row 
+          .col-auto
+            = c.user.real_display_name + " - " + c.posted_on.to_s
+        .row
+          .col 
+            = c.comment
+        - if c.image.attached?
+          .row 
+            .col
+              = image_tag(c.image)
 
 
 -# .list-group.overflow-auto.p-1

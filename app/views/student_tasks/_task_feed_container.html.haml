@@ -8,10 +8,33 @@
           = task_local.task_start_date.to_date
 
     .row 
-      .col
+      .col{style: "word-wrap: break-word;"}
         = task_local.task_objective
     .row.justify-content-between
       .col-4#like_button
         =link_to fa_icon("thumbs-up", text: task_local.student_task_likes.count), student_task_like_task_path(task_local), remote: true, method: :post
       .col-4#thumbs_up_comment
         =link_to fa_icon("comment", text: task_local.student_task_comments.count)
+
+    - comments_with_images = task_local.getCommentsWithImages()
+    - first_image = comments_with_images.first
+    - if comments_with_images.size() > 0
+      .row.pt-2
+        .col#commentCarousel.carousel.slide{"data-ride": "carousel"}
+          .carousel-inner
+            .carousel-item.active
+              .d-block.w-100.img-fluid.rounded.text-center
+                = image_tag(first_image.image)
+              .text-center
+                %p.mb-1
+                  = first_image.comment
+                %p.mb-1 
+                  = ("- "+ first_image.user.real_display_name + " -")
+            = render partial: "student_tasks/comment_carousel", collection: comments_with_images.drop(1)
+          %a.carousel-control-prev{"href": "#commentCarousel", "role": "button", "data-slide": "prev"}
+            %span.carousel-control-prev-icon{"aria-hidden": "true"}
+            %span.sr-only Previous 
+          %a.carousel-control-next{"href": "#commentCarousel", "role": "button", "data-slide": "next"}
+            %span.carousel-control-next-icon{"aria-hidden": "true"}
+            %span.sr-only Next 
+
