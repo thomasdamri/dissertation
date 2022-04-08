@@ -124,6 +124,8 @@ Rails.application.routes.draw do
 
   get 'swap_task_data/:student_team_id/:selection', to: "student_teams#swap_task_data", as: 'swap_task_data'
 
+  get 'show_student_task/:task_id/:student_team_id', to: "student_tasks#show_student_task", as: 'show_student_task'
+
 
   resources :student_reports do
     post 'report_response', to: 'student_reports#report_response'

@@ -4,10 +4,11 @@ class StudentTasksController < ApplicationController
   authorize_resource
 
   # GET /uni_modules/1
-  def show
-    @student_task = StudentTask.find_by(id: params[:id])
+  def show_student_task
+    @student_task = StudentTask.find_by(id: params[:task_id])
     @student_task_comment = StudentTaskComment.new
-    if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:id]).exists?)
+    @student_team_id = params[:student_team_id]
+    if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:task_id]).exists?)
       @like_outcome = "UNLIKE"
     else
       @like_outcome = "LIKE"
