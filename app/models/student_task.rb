@@ -83,6 +83,8 @@ class StudentTask < ApplicationRecord
       return StudentTeam.find_by(id: which_student).student_tasks.where(task_difficulty: 1)
     when 7
       return StudentTeam.find_by(id: which_student).student_tasks.where(task_difficulty: 0)
+    when 8
+      return StudentTask.find_by(id: which_student).student_tasks.where.not(latest_comment_time: nil).order(latest_comment_time: :desc)
     else
       return StudentTeam.find_by(id: which_student).student_tasks.order(task_start_date: :desc)
     end
@@ -104,6 +106,8 @@ class StudentTask < ApplicationRecord
       return StudentTask.where(task_difficulty: 1).order(task_start_date: :desc)
     when 7
       return StudentTask.where(task_difficulty: 0).order(task_start_date: :desc)
+    when 8
+      return StudentTask.where.not(latest_comment_time: nil).order(latest_comment_time: :desc)
     else
       return StudentTask.all.order(task_start_date: :desc)
     end

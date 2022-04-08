@@ -6,4 +6,4 @@
         = f.select :user_id, select_options, {}, { class: 'form-select form-control', data: { action: "change->infographic#change_task_list"}, include_blank: false }
       .col-6.form-group
         = f.label :team_id, "Filter by:"
-        = f.select :team_id, [["All Tasks", 0], ["Completed Tasks", 1], ["Overdue Tasks", 2], ["Highest Liked", 3], ["Highest Commented", 4],  ["Hard", 5], ["Medium", 6], ["Easy", 7]], {}, { class: 'form-select form-control', data: { action: "change->infographic#change_task_list"}, include_blank: false }
+        = f.select :team_id, [["New Tasks", 0], ["Completed Tasks", 1], ["Overdue Tasks", 2], ["Highest Liked", 3], ["Highest Commented", 4],  ["Hard", 5], ["Medium", 6], ["Easy", 7], ["New Comments", 8]], {}, { class: 'form-select form-control', data: { action: "change->infographic#change_task_list"}, include_blank: false }

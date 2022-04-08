@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_08_155456) do
+ActiveRecord::Schema.define(version: 2022_04_08_180253) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -138,6 +138,7 @@ ActiveRecord::Schema.define(version: 2022_04_08_155456) do
     t.text "task_completed_summary"
     t.bigint "student_task_likes_count"
     t.bigint "student_task_comments_count"
+    t.datetime "latest_comment_time"
     t.index ["student_team_id"], name: "fk_rails_fa29fb9ccd"
   end
 
