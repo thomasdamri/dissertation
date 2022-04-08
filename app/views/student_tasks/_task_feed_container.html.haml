@@ -16,11 +16,12 @@
       .col-4#thumbs_up_comment
         =link_to fa_icon("comment", text: task_local.student_task_comments.count)
 
+    - carouselId = ("carousel-" + task_local.id.to_s)
     - comments_with_images = task_local.getCommentsWithImages().reverse()
     - first_image = comments_with_images.first
     - if comments_with_images.size() > 0
       .row.pt-2
-        .col#commentCarousel.carousel.slide{"data-ride": "carousel"}
+        .col.carousel.slide{"data-ride": "carousel", "id": carouselId}
           .carousel-inner
             .carousel-item.active
               .d-block.w-100.img-fluid.rounded.text-center
@@ -31,10 +32,10 @@
                 %p.mb-1 
                   = ("- "+ first_image.user.real_display_name + " -")
             = render partial: "student_tasks/comment_carousel", collection: comments_with_images.drop(1)
-          %a.carousel-control-prev{"href": "#commentCarousel", "role": "button", "data-slide": "prev"}
+          %a.carousel-control-prev{"href": ("#" + carouselId), "role": "button", "data-slide": "prev"}
             %span.carousel-control-prev-icon{"aria-hidden": "true"}
             %span.sr-only Previous 
-          %a.carousel-control-next{"href": "#commentCarousel", "role": "button", "data-slide": "next"}
+          %a.carousel-control-next{"href": ("#" + carouselId), "role": "button", "data-slide": "next"}
             %span.carousel-control-next-icon{"aria-hidden": "true"}
             %span.sr-only Next 
 
