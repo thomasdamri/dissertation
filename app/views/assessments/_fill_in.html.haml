@@ -1,12 +1,15 @@
-%h2= "Peer Assessment: #{assessment.name}"
+.task-options-container
+  %h2= "Peer Assessment: #{assessment.name}"
 
-.card
+
   Ensure each of your answers does not exceed 250 characters.
-%br
 
-= form_tag({action: 'process_assess'}) do |f|
-  #errorsHere
-    = error
-  - assessment.criteria.each do |crit|
-    = render 'criteria/answer_fields', crit: crit
-  = submit_tag 'Submit', class: 'btn btn-primary'
+= form_tag(process_assessment_path(student_team_id: student_team.id), remote: true) do |f|
+  - if error != ""
+    .task-options-container.error-container#errorsHere
+      = error
+  - assessment.questions.each do |crit|
+    .task-options-container
+      = render partial: 'questions/answer_fields', locals: {crit: crit, team: team}
+  .text-center.pt-3
+    = submit_tag 'Submit', class: 'btn btn-primary'

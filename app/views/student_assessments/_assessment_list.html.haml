@@ -1,14 +1,16 @@
 .col
   - if assessments.count > 0
     - assessments.each do |a|
-      = link_to fillin_assessment_path(a), class: 'student_task_box', remote: true do
-        .row.border-top
-          .col
-            = a.name
-        .row
-          .col-auto
-            Closing on: 
-          .col
-            = a.date_closed.to_date
+      = link_to fillin_assessment_path(a, student_team: student_team), class: 'student_task_box', remote: true do
+        .task-options-container
+          .row.border-top
+            .col
+              %h4= a.name
+          .row
+            .col-auto
+              Closing on: 
+            .col
+              = a.date_closed.to_date
   - else 
-    No Assessments
+    .task-options-container.text-center
+      %h3 No Assessments

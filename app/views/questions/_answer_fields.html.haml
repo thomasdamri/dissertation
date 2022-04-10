@@ -1,0 +1,27 @@
+.crit-fillin
+  %h5.card-title= crit.title
+  - if not crit.subtitle.nil?
+    %h5.card-subtitle= crit.subtitle
+  - field_render = ""
+  - if crit.response_type.to_i == Question.string_type
+    - field_render = 'questions/string_field'
+  - elsif crit.response_type.to_i == Question.int_type
+    - field_render = 'questions/integer_field'
+  - elsif crit.response_type.to_i == Question.float_type
+    - field_render = 'questions/float_field'
+  - elsif crit.response_type.to_i == Question.bool_type
+    - field_render = 'questions/boolean_field'
+
+  - # Rendering the field and setting the name of the form element, which is used to find the element's value
+  - # in the controller
+  - if crit.single
+    - name = "response_#{crit.id}"
+    = render field_render, crit: crit, name: name
+  - else
+    - @team.users.each do |user|
+      .input-group
+        .input-group-prepend
+          %span.input-group-text= user.real_display_name
+        - name = "response_#{crit.id}_#{user.id}"
+        = render field_render, crit: crit, name: name
+      %hr

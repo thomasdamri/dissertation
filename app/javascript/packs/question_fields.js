@@ -20,7 +20,7 @@ function disableWeightBox(formElement){
     }
 }
 
-// Dynamically enabled and disables the min/max values for the criteria fields
+// Dynamically enabled and disables the min/max values for the question fields
 $(document).on('turbo:load', function(){
 
     // Check all single + assessed checkboxes on page load (for editing)

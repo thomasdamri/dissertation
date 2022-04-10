@@ -11,7 +11,7 @@
       .col{style: "word-wrap: break-word;"}
         = task_local.task_objective
     .row.justify-content-between
-      .col-4#like_button
+      .col-4{id: ("like-button"+task_local.id.to_s)}
         =link_to fa_icon("thumbs-up", text: task_local.student_task_likes.count), student_task_like_task_path(task_local), remote: true, method: :post
       .col-4#thumbs_up_comment
         =link_to fa_icon("comment", text: task_local.student_task_comments.count)

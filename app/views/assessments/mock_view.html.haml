@@ -2,7 +2,7 @@
 %h3= "Viewing this assessment as team #{@team.number}"
 
 = form_tag do |f|
-  - @assessment.criteria.each do |crit|
-    = render 'criteria/answer_fields', crit: crit
+  - @assessment.questions.each do |crit|
+    = render 'question/answer_fields', crit: crit
 
 = link_to "Back to assessment", @assessment, class: 'btn btn-secondary'

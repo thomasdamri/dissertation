@@ -5,7 +5,7 @@
 #  id           :bigint           not null, primary key
 #  author_id    :bigint
 #  target_id    :bigint
-#  criterium_id :bigint
+#  criteria_id :bigint
 #  value        :string(255)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
@@ -19,8 +19,8 @@ RSpec.describe AssessmentResult, type: :model do
     target = create :user, staff: false, username: "zzz12ed", email: "a@gmail.com"
     u = create :uni_module
     a = create :assessment, uni_module: u
-    c = create :criterium, assessment: a
-    ar = build :assessment_result_string, criterium: c, author: author
+    c = create :criteria, assessment: a
+    ar = build :assessment_result_string, criteria: c, author: author
     expect(ar).to be_valid
     ar.target = target
     expect(ar).to be_valid
@@ -39,20 +39,20 @@ RSpec.describe AssessmentResult, type: :model do
     target = create :user, staff: false, username: "zzz12ed", email: "a@gmail.com"
     u = create :uni_module
     a = create :assessment, uni_module: u
-    c = create :criterium, assessment: a
-    ar = build :assessment_result_string, criterium: c, author: author, value: val1
+    c = create :criteria, assessment: a
+    ar = build :assessment_result_string, criteria: c, author: author, value: val1
     expect(ar).to be_valid
     ar.value = val2
     expect(ar).to_not be_valid
   end
 
-  it 'is only valid when responding to an int/float criterium if it is within the min + max value' do
+  it 'is only valid when responding to an int/float criteria if it is within the min + max value' do
     author = create :user, staff: false
     target = create :user, staff: false, username: "zzz12ed", email: "a@gmail.com"
     u = create :uni_module
     a = create :assessment, uni_module: u
-    c = create :weighted_criterium, assessment: a
-    ar = build :assessment_result_string, criterium: c, author: author, value: c.min_value.to_s
+    c = create :weighted_criteria, assessment: a
+    ar = build :assessment_result_string, criteria: c, author: author, value: c.min_value.to_s
     expect(ar).to be_valid
     ar.value = (c.min_value.to_i - 1).to_s
     expect(ar).to_not be_valid

@@ -28,7 +28,7 @@ $(document).on('turbo:load', function(){
         event.preventDefault();
     });
 
-    // Deal with criteria field removing differently, due to different styling
+    // Deal with question field removing differently, due to different styling
     $('form').on('click', '.remove_fields.remove_crit', function(event){
         // Find the closets hidden element (must first navigate out of styling divs)
         $(this).closest('.row').prev('input[type=hidden]').val('1');
@@ -43,7 +43,7 @@ $(document).on('turbo:load', function(){
         if($(this).closest('.buttons').length === 0) {
             $(this).before($(this).data('fields').replace(regexp, time));
         }else{
-            // Place above all the buttons if doing criteria creation
+            // Place above all the buttons if doing question creation
             $(this).closest('.buttons').before($(this).data('fields').replace(regexp, time));
         }
 

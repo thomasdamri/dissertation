@@ -8,8 +8,8 @@ describe 'Filling in an assessment' do
     mod = create :uni_module
     create :staff_module, user: staff, uni_module: mod
     a = create :assessment, uni_module: mod
-    create :criterium, assessment: a, title: 'Test 1', response_type: 1, min_value: 1, max_value: 10
-    create :criterium, assessment: a, title: 'Test 2', response_type: 1, single: false, min_value: 1, max_value: 10
+    create :criteria, assessment: a, title: 'Test 1', response_type: 1, min_value: 1, max_value: 10
+    create :criteria, assessment: a, title: 'Test 2', response_type: 1, single: false, min_value: 1, max_value: 10
 
     t = create :team, uni_module: mod
 
@@ -192,10 +192,10 @@ describe 'Filling in an assessment' do
     login_as student, scope: :user
 
     a = create :assessment, uni_module: mod, name: "All data types test"
-    create :criterium, assessment: a, title: 'Test 1', response_type: 0
-    create :criterium, assessment: a, title: 'Test 2', response_type: 1, min_value: 1, max_value: 10
-    create :criterium, assessment: a, title: 'Test 3', response_type: 2, min_value: 1.1, max_value: 10.1
-    create :criterium, assessment: a, title: 'Test 4', response_type: 3, min_value: "No", max_value: "Yes"
+    create :criteria, assessment: a, title: 'Test 1', response_type: 0
+    create :criteria, assessment: a, title: 'Test 2', response_type: 1, min_value: 1, max_value: 10
+    create :criteria, assessment: a, title: 'Test 3', response_type: 2, min_value: 1.1, max_value: 10.1
+    create :criteria, assessment: a, title: 'Test 4', response_type: 3, min_value: "No", max_value: "Yes"
 
     visit "/teams/#{t.id}"
 
@@ -213,13 +213,13 @@ describe 'Filling in an assessment' do
     a.criteria.each do |crit|
       div = page.first('div.crit-fillin', text: crit.title)
       within(div){
-        if crit.response_type == Criterium.string_type
+        if crit.response_type == Criteria.string_type
           fill_in "response_#{crit.id}", with: "String response"
-        elsif crit.response_type == Criterium.int_type
+        elsif crit.response_type == Criteria.int_type
           fill_in "response_#{crit.id}", with: "1"
-        elsif crit.response_type == Criterium.float_type
+        elsif crit.response_type == Criteria.float_type
           fill_in "response_#{crit.id}", with: "4.5"
-        elsif crit.response_type == Criterium.bool_type
+        elsif crit.response_type == Criteria.bool_type
           choose "No"
         end
       }
@@ -248,7 +248,7 @@ describe 'Filling in an assessment' do
     login_as student, scope: :user
 
     a = create :assessment, uni_module: mod, name: "All data types test"
-    c = create :criterium, assessment: a, title: 'Test 1', response_type: 0
+    c = create :criteria, assessment: a, title: 'Test 1', response_type: 0
 
     val1 = "a" * (AssessmentResult.max_value_length + 1)
     val2 = "a" * AssessmentResult.max_value_length
@@ -275,8 +275,8 @@ describe "Assessment mock view" do
     mod = create :uni_module
     create :staff_module, user: staff, uni_module: mod
     a = create :assessment, uni_module: mod
-    create :criterium, assessment: a, title: 'Test 1', response_type: 1, min_value: 1, max_value: 10
-    create :criterium, assessment: a, title: 'Test 2', response_type: 1, single: false, min_value: 1, max_value: 10
+    create :criteria, assessment: a, title: 'Test 1', response_type: 1, min_value: 1, max_value: 10
+    create :criteria, assessment: a, title: 'Test 2', response_type: 1, single: false, min_value: 1, max_value: 10
 
     t = create :team, uni_module: mod
 

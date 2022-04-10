@@ -68,7 +68,7 @@ describe "Viewing the student dashboard" do
     }
 
     a = create :assessment, uni_module: mod, date_opened: Date.today + 1, date_closed: Date.today + 2
-    c = create :criterium, assessment: a
+    c = create :criteria, assessment: a
 
     # Test a future assessment (open day tomorrow)
     page.driver.browser.navigate.refresh
@@ -139,7 +139,7 @@ describe "Viewing the student dashboard" do
     }
 
     # Test an open completed assessment
-    create :assessment_result_empty, criterium: c, author: u, value: "Test Answer"
+    create :assessment_result_empty, criteria: c, author: u, value: "Test Answer"
     page.driver.browser.navigate.refresh
 
     # Find the list item for the module

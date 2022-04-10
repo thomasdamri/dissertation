@@ -1,20 +1,4 @@
-# == Schema Information
-#
-# Table name: criteria
-#
-#  id            :bigint           not null, primary key
-#  title         :string(255)
-#  response_type :integer
-#  min_value     :string(255)
-#  max_value     :string(255)
-#  assessment_id :bigint
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  assessed      :boolean
-#  weighting     :integer
-#  single        :boolean
-#
-class Criterium < ApplicationRecord
+class Question < ApplicationRecord
 
   # Possible data types
   @@string = 0
@@ -95,6 +79,6 @@ class Criterium < ApplicationRecord
   validates :assessed, inclusion: {in: [true, false]}
 
   # Additional validations involving min + max values
-  validates_with CriteriumValidator
+  validates_with QuestionValidator
 
 end

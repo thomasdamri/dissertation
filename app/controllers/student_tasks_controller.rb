@@ -111,6 +111,9 @@ class StudentTasksController < ApplicationController
   # DELETE /uni_modules/1
   def like_task
     @student_task = StudentTask.find_by(params[:student_task_id])
+    @task_id = params[:student_task_id]
+    @like_id = ("#like-button"+ params[:student_task_id].to_s)
+    puts(@like_id)
     if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:student_task_id]).exists?)
       @like = StudentTaskLike.find_by(user_id: current_user.id ,student_task_id: params[:student_task_id])
       @like.destroy

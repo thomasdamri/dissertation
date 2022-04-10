@@ -131,7 +131,7 @@ describe 'Creating an assessment' do
 
   end
 
-  specify 'I can create an assessment with a criterium of every single type', js: true do
+  specify 'I can create an assessment with a criteria of every single type', js: true do
     staff = create :user, staff: true
     login_as staff
 
@@ -221,7 +221,7 @@ describe 'Creating an assessment' do
     input_box = page.all('.crit-input').last
     within(input_box){
       expect(page).to have_content "Text Response Question"
-      fill_in "Field Title", with: ("a" * (Criterium.max_title_length + 1))
+      fill_in "Field Title", with: ("a" * (Criteria.max_title_length + 1))
       choose "Single Answer"
     }
 
@@ -338,7 +338,7 @@ describe 'Removing an assessment' do
 
     # Create the assessment to delete
     a = create :assessment, uni_module: mod
-    create :criterium, assessment: a
+    create :criteria, assessment: a
 
     # Visit page of the parent module
     visit "/uni_modules/#{mod.id}"
@@ -369,7 +369,7 @@ describe 'Removing an assessment' do
 
     # Create the assessment to delete
     a = create :assessment, uni_module: mod
-    create :criterium, assessment: a
+    create :criteria, assessment: a
 
     # Non-associated staff can still view the details of other modules so can visit the page
     visit "/uni_modules/#{mod.id}"
@@ -409,7 +409,7 @@ describe 'Removing an assessment' do
 
     # Create the assessment to delete
     a = create :assessment, uni_module: mod
-    create :criterium, assessment: a
+    create :criteria, assessment: a
 
     # Student cannot even view the module page to find the delete button
     expect(ability).to_not be_able_to(:read, mod)

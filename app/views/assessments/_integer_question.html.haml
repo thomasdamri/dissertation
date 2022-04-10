@@ -4,18 +4,18 @@
   .card-body
     - single_collection = {"Single Answer" => 1, "Team Answer" => 0}
     - boolean_collection = {"Yes" => "1", "No" => "0"}
-    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "The question/criteria shown to students when they fill in the form"}
+    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "The question shown to students when they fill in the form"}
       = f.input :title, as: :string, label: 'Field Title (Max 250 characters)'
-    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Minimum and maximum values that students can enter for this criteria (inclusive)"}
+    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Minimum and maximum values that students can enter for this question (inclusive)"}
       = f.input :min_value, as: :string, input_html: { class: 'min-value minmax' }
       = f.input :max_value, as: :string, input_html: { class: 'max-value minmax' }
     .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Single: students provide one response. Team: Students provide one response per team member"}
       = f.input :single, as: :radio_buttons, collection: single_collection, label: 'Single or Team answer?', input_html: { class: 'single'}
-    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Whether this criteria is involved in calculating each student's weighting"}
+    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Whether this question is involved in calculating each student's weighting"}
       = f.input :assessed, as: :radio_buttons, collection: boolean_collection, label: 'Assessed in weighting?', input_html: { class: 'assessed' }
-    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "By default, all criteria have the same weighting (1). Change this here to give some criteria greater significance"}
+    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "By default, all question have the same weighting (1). Change this here to give some question greater significance"}
       = f.input :weighting, as: :string, label: 'Relative Weighting', input_html: { class: 'relative-weight' }
-    = f.hidden_field :response_type, value: Criterium.int_type
+    = f.hidden_field :response_type, value: Question.int_type
     = f.hidden_field :_destroy
     .row
       .col-3

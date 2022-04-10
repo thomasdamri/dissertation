@@ -1,12 +1,12 @@
 -if selected == 0
-  .col-6.selected-panel-box.text-center
+  .col-6.selected-panel-box.text-center.fs-3
     = link_to "Meeting Notes", swap_to_meetings_path(student_team_id), remote: true
 
-  .col-6.text-center.unselected-panel-box
+  .col-6.text-center.unselected-panel-box.fs-3
     = link_to "Assessments", swap_to_assessments_path(student_team_id), remote: true
 - else 
-  .col-6.text-center.unselected-panel-box
+  .col-6.text-center.unselected-panel-box.fs-3
     = link_to "Meeting Notes", swap_to_meetings_path(student_team_id), remote: true
 
-  .col-6.selected-panel-box.text-center
-    = link_to "Assessments", swap_to_assessments_path(student_team_id), remote: true
+  .col-6.selected-panel-box.text-center.fs-3
+    = link_to "Assessments", swap_to_assessments_path(student_team_id), remote: true, class: "fs-1"

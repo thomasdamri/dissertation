@@ -16,14 +16,14 @@ class Assessment < ApplicationRecord
   # Module id, needed when submitting form
   attr_accessor :mod
 
-  # Destroy all dependent criteria when removing object
-  has_many :criteria, dependent: :destroy
-  #has_many :assessment_results, through: :criteria
+  # Destroy all dependent question when removing object
+  has_many :questions, dependent: :destroy
+  #has_many :assessment_results, through: :question
   belongs_to :uni_module
   has_many :student_weightings, dependent: :destroy
   has_many :team_grades, dependent: :destroy
 
-  accepts_nested_attributes_for :criteria, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
 
   # Name of the assessment must not be the same as another assessment for the same module
   validates :name, uniqueness: {scope: :uni_module}, presence: true
@@ -45,11 +45,11 @@ class Assessment < ApplicationRecord
 
   # Returns true if the given user has completed the assessment
   def completed_by?(user)
-    if criteria.size == 0
+    if questions.size == 0
       return false
     end
-    # Check if the user has any authored results for this assessment's criteria
-    if user.author_results.pluck(:criterium_id).include? criteria.first.id
+    # Check if the user has any authored results for this assessment's question
+    if user.author_results.pluck(:question_id).include? questions.first.id
       true
     else
       false
@@ -75,13 +75,13 @@ class Assessment < ApplicationRecord
   # Generates the individual weightings for all students in a given team according to the WebPA system
   def generate_weightings(team)
 
-    # Find all criteria in this assessment that are assessed
-    assessed_crits = criteria.where(assessed: true)
+    # Find all question in this assessment that are assessed
+    assessed_crits = questions.where(assessed: true)
 
-    # If there are no results for assessed criteria, give everyone the same weighting of 1 and return
-    if AssessmentResult.where(criterium: assessed_crits).count == 0
-      team.users.each do |user|
-        sw = StudentWeighting.find_or_initialize_by(user_id: user.id, assessment_id: id)
+    # If there are no results for assessed question, give everyone the same weighting of 1 and return
+    if AssessmentResult.where(question: assessed_crits).count == 0
+      team.student_teams.each do |student_team|
+        sw = StudentWeighting.find_or_initialize_by(student_team_id: student_team.id, assessment_id: id)
         sw.update_weighting 1, 0
       end
       return
@@ -97,11 +97,11 @@ class Assessment < ApplicationRecord
 
 
     team.users.each do |marker|
-      # Sum up the marks the student gave out in assessed criteria
-      author_results = assessment_results.where(criterium: assessed_crits, author_id: marker.id)
+      # Sum up the marks the student gave out in assessed question
+      author_results = assessment_results.where(question: assessed_crits, author_id: marker.id)
       marks_given = 0
       author_results.each do |res|
-        marks_given += res.criterium.weighting * res.value.to_f
+        marks_given += res.question.weighting * res.value.to_f
       end
 
       # Avoid division by 0 if the user has not filled in the form
@@ -109,10 +109,10 @@ class Assessment < ApplicationRecord
 
         # For each markee, work out the proportion of marks given out by the marker to them
         team.users.each do |markee|
-          # Sum the total number of marks across each criteria given to each user
+          # Sum the total number of marks across each question given to each user
           given_to_markee = 0
           author_results.where(target_id: markee.id).each do |res|
-            given_to_markee += res.criterium.weighting * res.value.to_f
+            given_to_markee += res.question.weighting * res.value.to_f
           end
           student_weights[markee.id] += given_to_markee / marks_given
         end
@@ -131,14 +131,14 @@ class Assessment < ApplicationRecord
     end
 
     # Add the weightings to the database
-    team.users.each do |user|
+    team.student_teams.each do |student_team|
       # Find existing student weighting for this assessment, or create a new one
-      sw = StudentWeighting.find_or_initialize_by(user: user, assessment_id: id)
+      sw = StudentWeighting.find_or_initialize_by(student_team_id: student_team.id, assessment_id: id)
       # Do not update the weighting if it has been manually set
       unless sw.manual_set
         num_results = assessment_results.count
         # Update this in the database
-        sw.update_weighting(student_weights[user.id], num_results)
+        sw.update_weighting(student_weights[student_team.user.id], num_results)
       end
     end
 

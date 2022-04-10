@@ -3,7 +3,7 @@
     %li.list-group-item.list-group-item-primary= "Question: " + crit.title
     - extra_string = ""
     - # Add minimum and maximum values to the response type if available
-    - if crit.response_type.to_i == Criterium.int_type or crit.response_type.to_i == Criterium.float_type
+    - if crit.response_type.to_i == Question.int_type or crit.response_type.to_i == Question.float_type
       - if not crit.min_value.nil? and crit.max_value.nil?
         - extra_string = "(#{crit.min_value} or higher)"
       - if crit.min_value.nil? and not crit.max_value.nil?
@@ -11,8 +11,8 @@
       - if (not crit.min_value.nil?) and (not crit.max_value.nil?)
         - extra_string = "(#{crit.min_value} - #{crit.max_value})"
     - # Display boolean labels if a boolean
-    - if crit.response_type.to_i == Criterium.bool_type
+    - if crit.response_type.to_i == Question.bool_type
       - extra_string = "#{crit.min_value} or #{crit.max_value}"
-    %li.list-group-item= "Response Type: #{Criterium.type_dict.key(crit.response_type.to_i)} #{extra_string}"
+    %li.list-group-item= "Response Type: #{Question.type_dict.key(crit.response_type.to_i)} #{extra_string}"
     %li.list-group-item= "Answer Type: " + (crit.single ? "Answered once" : "Answered once per team member").to_s
     %li.list-group-item= "Assessment: " + (crit.assessed ? "Relative weight in weighting calculation: " + crit.weighting.to_s : "Not included in weighting calculation").to_s

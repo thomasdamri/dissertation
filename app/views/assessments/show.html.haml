@@ -11,9 +11,9 @@
       - if can? :edit, @assessment
         = link_to "Change Dates", edit_assessment_path(@assessment), class: 'btn btn-info'
     .col-6#assessCrit
-      %h3 Assessment Criteria
-      %p= "Total criteria: " + @num_crits.to_s
-      %p= "Assessed criteria: " + @assessed_crits.to_s
+      %h3 Assessment Questions
+      %p= "Total questions: " + @num_crits.to_s
+      %p= "Assessed questions: " + @assessed_crits.to_s
       - if can? :mock_view, @assessment
         - if @assessment.uni_module.teams.length > 0
           = link_to "Show Student View", mock_view_assessment_path(@assessment) , class: 'btn btn-primary'

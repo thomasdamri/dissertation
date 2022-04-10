@@ -24,7 +24,7 @@ class StudentWeighting < ApplicationRecord
   validates :weighting, presence: true
   validates :results_at_last_check, presence: true
   # A user can only have one weighting result per assessment
-  validates :user, uniqueness: {scope: :assessment}
+  validates :student_team_id, uniqueness: {scope: :assessment}
   validates :manual_set, inclusion: {in: [true, false]}
 
   # Checks that a reason is always provided when manually changed

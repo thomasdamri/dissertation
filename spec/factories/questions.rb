@@ -16,15 +16,15 @@
 #
 FactoryBot.define do
 
-  factory :criterium, class: Criterium do
-    title { 'Test Criterium' }
+  factory :question, class: Question do
+    title { 'Test question' }
     response_type { 0 }
     single { true }
     assessed { false }
   end
 
-  factory :weighted_criterium, class: Criterium do
-    title { 'Test Criterium' }
+  factory :weighted_question, class: Question do
+    title { 'Test question' }
     response_type { 1 }
     single { false }
     assessed { true }
@@ -33,7 +33,7 @@ FactoryBot.define do
     max_value { 10 }
   end
 
-  factory :blank_criterium, class: Criterium do
+  factory :blank_question, class: Question do
     title {  }
     response_type {  }
     single {  }

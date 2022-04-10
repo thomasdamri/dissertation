@@ -20,21 +20,21 @@
       %hr
 
       %h2 Assessment Questions
-      = f.simple_fields_for :criteria do |af|
-        - if af.object.response_type == Criterium.string_type
-          = render 'string_criterium', f: af
-        - elsif af.object.response_type == Criterium.int_type
-          = render 'integer_criterium', f: af
-        - elsif af.object.response_type == Criterium.float_type
-          = render 'float_criterium', f: af
-        - elsif af.object.response_type == Criterium.bool_type
-          = render 'boolean_criterium', f: af
+      = f.simple_fields_for :questions do |af|
+        - if af.response_type == Question.string_type
+          = render 'string_question', f: af
+        - elsif af.response_type == Question.int_type
+          = render 'integer_question', f: af
+        - elsif af.response_type == Question.float_type
+          = render 'float_question', f: af
+        - elsif af.response_type == Question.bool_type
+          = render 'boolean_question', f: af
 
       .buttons
-        = link_to_add_fields 'Add Question - Text Response', f, :criteria, 'string_criterium'
-        = link_to_add_fields 'Add Question - Whole Number Response', f, :criteria, 'integer_criterium'
-        = link_to_add_fields 'Add Question - Decimal Number Response', f, :criteria, 'float_criterium'
-        = link_to_add_fields 'Add Question - Boolean Response', f, :criteria, 'boolean_criterium'
+        = link_to_add_fields 'Add Question - Text Response', f, :questions, 'string_question'
+        = link_to_add_fields 'Add Question - Whole Number Response', f, :questions, 'integer_question'
+        = link_to_add_fields 'Add Question - Decimal Number Response', f, :questions, 'float_question'
+        = link_to_add_fields 'Add Question - Boolean Response', f, :questions, 'boolean_question'
 
   .form-actions
     = f.button :submit, class: 'btn btn-lg btn-primary'

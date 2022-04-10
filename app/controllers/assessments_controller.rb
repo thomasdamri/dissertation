@@ -10,8 +10,8 @@ class AssessmentsController < ApplicationController
   # GET /assessments/1
   def show
     @title = "Viewing Assessment"
-    @num_crits = @assessment.criteria.count
-    @assessed_crits = @assessment.criteria.where(assessed: true).count
+    @num_crits = @assessment.questions.count
+    @assessed_crits = @assessment.questions.where(assessed: true).count
     @teams = @assessment.uni_module.teams
   end
 
@@ -38,9 +38,9 @@ class AssessmentsController < ApplicationController
     # Set show_results to a default value
     @assessment.show_results = false
 
-    # Set the criteria min/max values to nil if response type is a string
-    @assessment.criteria.each do |crit|
-      if crit.response_type == Criterium.string_type
+    # Set the questions min/max values to nil if response type is a string
+    @assessment.questions.each do |crit|
+      if crit.response_type == Question.string_type
         crit.max_value = nil
         crit.min_value = nil
       end
@@ -102,8 +102,8 @@ class AssessmentsController < ApplicationController
     @assessment = Assessment.find(params[:id])
     # Get the team this assessment is being filled in for
     @team = current_user.teams.where(uni_module_id: @assessment.uni_module.id).first
-
-    # Check user has not already filled in the form
+    @student_team = StudentTeam.find_by(id: params[:student_team])
+    # # Check user has not already filled in the form
     # if @assessment.completed_by? current_user
     #   redirect_to @team, notice: "You have already filled in this assessment"
     # end
@@ -121,45 +121,53 @@ class AssessmentsController < ApplicationController
   # Processes the form for students filling in the assessment
   def process_assess
     # Find the assessment being filled in
-    assessment = Assessment.find(params[:id])
+    @assessment = Assessment.find(params[:id])
+    @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    @assessments = @student_team.team.uni_module.assessments
     # Find the user's team
-    team = current_user.teams.where(uni_module_id: assessment.uni_module.id).first
+    team = current_user.teams.where(uni_module_id: @assessment.uni_module.id).first
 
     # Check user has not already filled in the form
-    if assessment.completed_by? current_user
-      redirect_to team
-    end
+    if @assessment.completed_by? current_user
+      respond_to do |format|
+        format.js {render 'student_teams/swap_to_assessments'}
+      end
+    else
 
-    # Create a transaction. The responses should only save if they are all valid
-    ActiveRecord::Base.transaction do
-      # Loop through each criteria and create a new response
-      assessment.criteria.each do |crit|
-        # For single response criteria, just save one new result
-        if crit.single
-          # Escape the response before storing in database
-          response = h params["response_#{crit.id}"]
-          AssessmentResult.create!(author: current_user, criterium: crit, value: response)
-        else
-          # For multi-response criteria, store each one for each user
-          team.users.each do |user|
-            response = h params["response_#{crit.id}_#{user.id}"]
-            AssessmentResult.create!(author: current_user, target: user, criterium: crit, value: response)
+      # Create a transaction. The responses should only save if they are all valid
+      ActiveRecord::Base.transaction do
+        # Loop through each question and create a new response
+        @assessment.questions.each do |crit|
+          puts(crit.inspect)
+          # For single response questions, just save one new result
+          if crit.single
+            # Escape the response before storing in database
+            response = h params["response_#{crit.id}"]
+            AssessmentResult.create!(author: current_user, question: crit, value: response)
+          else
+            # For multi-response question, store each one for each user
+            team.users.each do |user|
+              response = h params["response_#{crit.id}_#{user.id}"]
+              AssessmentResult.create!(author: current_user, target: user, question: crit, value: response)
+            end
           end
         end
+        @assessment.generate_weightings(team)
       end
 
-      assessment.generate_weightings(team)
-
+      # Return user to assessment list
+      respond_to do |format|
+        format.js {render 'student_teams/swap_to_assessments'}
+      end
     end
-
-    # Return user to the team overview page after completion
-    redirect_to team
-
   # Prevent an error page being shown to the user, send back to fill in page
   rescue ActiveRecord::RecordInvalid
     @team = team
     @error = "An error occurred. Are all your responses 250 characters or shorter?"
-    render 'assessments/fill_in'
+    respond_to do |format|
+      format.js {render 'assessments/fill_in'}
+    end
+
   end
 
   # View for staff to see what students see when filling in the assessment form
@@ -271,7 +279,7 @@ class AssessmentsController < ApplicationController
     redirect_to assessment, notice: "Emails sent successfully"
   end
 
-  # AJAX call to render a modal with the individual responses to each criteria
+  # AJAX call to render a modal with the individual responses to each question
   def get_ind_responses
     @assessment = Assessment.find(params['id'])
     @team = Team.find(params['team_id'])
@@ -366,7 +374,7 @@ class AssessmentsController < ApplicationController
     # Only allow a list of trusted parameters through.
     def assessment_params
       params.require(:assessment).permit(:name, :date_opened, :date_closed, :mod,
-                                         criteria_attributes: [:title, :order, :response_type, :min_value, :max_value,
+                                         questions_attributes: [:title, :order, :response_type, :min_value, :max_value,
                                                                :single, :assessed, :weighting, :_destroy])
     end
 end

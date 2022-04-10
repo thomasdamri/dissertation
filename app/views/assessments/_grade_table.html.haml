@@ -7,7 +7,7 @@
   - @teams.each do |team|
     - tg = TeamGrade.where(team: team, assessment: @assessment).first
     %tr
-      %td= team.number
+      %td= team.team_number
       %td= "#{@assessment.num_completed team} / #{team.users.count}"
       %td= tg.nil? ? "No grade assigned yet" : tg.grade
       %td= link_to "Set Grade", teams_grade_form_path(team, @assessment), class: 'btn btn-info', remote: true

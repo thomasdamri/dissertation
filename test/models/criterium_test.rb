@@ -16,7 +16,7 @@
 #
 require 'test_helper'
 
-class CriteriumTest < ActiveSupport::TestCase
+class CriteriaTest < ActiveSupport::TestCase
   # test "the truth" do
   #   assert true
   # end

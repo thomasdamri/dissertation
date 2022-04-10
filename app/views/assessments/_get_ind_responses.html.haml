@@ -6,7 +6,7 @@
         %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
           %span{"aria-hidden": "true"} &times;
       .modal-body
-        - @assessment.criteria.each do |crit|
+        - @assessment.questions.each do |crit|
           %h3= crit.title
           - if crit.single
             %table.table.table-bordered.table-striped.table-hover{id: "indResponseTable_#{crit.id}"}
@@ -16,7 +16,7 @@
               - @team.users.each do |u|
                 %tr
                   %td= u.real_display_name
-                  - res = AssessmentResult.where(author: u, criterium: crit).first
+                  - res = AssessmentResult.where(author: u, question: crit).first
                   %td= res.nil? ? "-" : res.value
           - else
             %table.table.table-bordered.table-striped.table-hover{id: "indResponseTable_#{crit.id}"}
@@ -31,7 +31,7 @@
                 %tr
                   %th= u.real_display_name
                   - @team.users.each do |u2|
-                    - res = AssessmentResult.where(author: u2, target: u, criterium: crit).first
+                    - res = AssessmentResult.where(author: u2, target: u, question: crit).first
                     %td= res.nil? ? "-" : res.value
           %hr
       .modal-footer

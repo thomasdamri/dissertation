@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_08_180253) do
+ActiveRecord::Schema.define(version: 2022_04_09_181131) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -36,11 +36,11 @@ ActiveRecord::Schema.define(version: 2022_04_08_180253) do
   create_table "assessment_results", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "author_id"
     t.bigint "target_id"
-    t.bigint "criteria_id"
+    t.bigint "question_id"
     t.string "value"
     t.bigint "student_weightings_id"
     t.index ["author_id"], name: "index_assessment_results_on_author_id"
-    t.index ["criteria_id"], name: "index_assessment_results_on_criteria_id"
+    t.index ["question_id"], name: "index_assessment_results_on_question_id"
     t.index ["student_weightings_id"], name: "fk_rails_0ec8355172"
     t.index ["target_id"], name: "index_assessment_results_on_target_id"
   end
@@ -56,7 +56,7 @@ ActiveRecord::Schema.define(version: 2022_04_08_180253) do
     t.index ["uni_module_id"], name: "index_assessments_on_uni_module_id"
   end
 
-  create_table "criteria", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  create_table "questions", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "title"
     t.integer "response_type"
     t.string "min_value"
@@ -65,7 +65,7 @@ ActiveRecord::Schema.define(version: 2022_04_08_180253) do
     t.boolean "assessed"
     t.integer "weighting"
     t.boolean "single"
-    t.index ["assessment_id"], name: "index_criteria_on_assessment_id"
+    t.index ["assessment_id"], name: "index_questions_on_assessment_id"
   end
 
   create_table "report_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
@@ -234,7 +234,7 @@ ActiveRecord::Schema.define(version: 2022_04_08_180253) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "assessments", "uni_modules", on_delete: :cascade
-  add_foreign_key "criteria", "assessments", on_delete: :cascade
+  add_foreign_key "questions", "assessments", on_delete: :cascade
   add_foreign_key "report_objects", "student_reports", on_delete: :cascade
   add_foreign_key "staff_modules", "uni_modules", on_delete: :cascade
   add_foreign_key "staff_modules", "users", on_delete: :cascade

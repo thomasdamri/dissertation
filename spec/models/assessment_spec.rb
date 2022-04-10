@@ -55,14 +55,14 @@ RSpec.describe Assessment, type: :model do
     u = create :uni_module
     a = create :assessment, uni_module: u
 
-    c1 = create :criterium, assessment: a
-    c2 = create :criterium, assessment: a, title: 'Something else'
+    c1 = create :criteria, assessment: a
+    c2 = create :criteria, assessment: a, title: 'Something else'
 
-    expect(Criterium.count).to eq(2)
+    expect(Criteria.count).to eq(2)
 
     a.destroy
 
-    expect(Criterium.count).to eq(0)
+    expect(Criteria.count).to eq(0)
 
   end
 
@@ -106,9 +106,9 @@ RSpec.describe Assessment, type: :model do
 
       a = Assessment.first
 
-      c = create :criterium, assessment: a
+      c = create :criteria, assessment: a
 
-      create :assessment_result_empty, author: u1, target: u2, criterium: c, value: 'Text'
+      create :assessment_result_empty, author: u1, target: u2, criteria: c, value: 'Text'
 
       expect(a.completed_by?(u1)).to eq true
       expect(a.completed_by?(u2)).to eq false
@@ -128,7 +128,7 @@ RSpec.describe Assessment, type: :model do
       a = Assessment.first
       t = Team.first
 
-      c = create :criterium, assessment: a
+      c = create :criteria, assessment: a
 
       u1 = create :user
       u2 = create :user, username: 'zzz12ab', email: 'somethingelse@gmail.com'
@@ -140,19 +140,19 @@ RSpec.describe Assessment, type: :model do
 
       expect(a.num_completed(t)).to eq 0
 
-      create :assessment_result_empty, author: u1, target: u2, criterium: c, value: 'Text'
+      create :assessment_result_empty, author: u1, target: u2, criteria: c, value: 'Text'
 
       expect(a.num_completed(t)).to eq 1
 
       # Creating another result with the same author to check it counts users, not just results
-      create :assessment_result_empty, author: u1, target: u3, criterium: c, value: 'Text'
+      create :assessment_result_empty, author: u1, target: u3, criteria: c, value: 'Text'
 
       expect(a.num_completed(t)).to eq 1
 
-      create :assessment_result_empty, author: u2, target: u2, criterium: c, value: 'Text'
+      create :assessment_result_empty, author: u2, target: u2, criteria: c, value: 'Text'
       expect(a.num_completed(t)).to eq 2
 
-      create :assessment_result_empty, author: u3, target: u2, criterium: c, value: 'Text'
+      create :assessment_result_empty, author: u3, target: u2, criteria: c, value: 'Text'
       expect(a.num_completed(t)).to eq 3
     end
 
@@ -183,9 +183,9 @@ RSpec.describe Assessment, type: :model do
       a = create :assessment, uni_module: u
       t = create :team, uni_module: u
 
-      c1 = create :weighted_criterium, assessment: a, title: 'A'
-      c2 = create :weighted_criterium, assessment: a, title: 'B'
-      c3 = create :weighted_criterium, assessment: a, title: 'C'
+      c1 = create :weighted_criteria, assessment: a, title: 'A'
+      c2 = create :weighted_criteria, assessment: a, title: 'B'
+      c3 = create :weighted_criteria, assessment: a, title: 'C'
 
       u1 = create :student
       u2 = create(:student, username: 'zzy12dp', email: 'dperry2@sheffield.ac.uk')
@@ -202,60 +202,60 @@ RSpec.describe Assessment, type: :model do
       # Each user rates themselves 10/10
       t.users.each do |user|
         a.criteria.each do |crit|
-          create :assessment_result_empty, criterium: crit, author: user, target: user, value: 10
+          create :assessment_result_empty, criteria: crit, author: user, target: user, value: 10
         end
       end
 
       # C1
-      create :assessment_result_empty, criterium: c1, author: u1, target: u2, value: 8
-      create :assessment_result_empty, criterium: c1, author: u1, target: u3, value: 2
-      create :assessment_result_empty, criterium: c1, author: u1, target: u4, value: 5
+      create :assessment_result_empty, criteria: c1, author: u1, target: u2, value: 8
+      create :assessment_result_empty, criteria: c1, author: u1, target: u3, value: 2
+      create :assessment_result_empty, criteria: c1, author: u1, target: u4, value: 5
 
-      create :assessment_result_empty, criterium: c1, author: u2, target: u1, value: 10
-      create :assessment_result_empty, criterium: c1, author: u2, target: u3, value: 1
-      create :assessment_result_empty, criterium: c1, author: u2, target: u4, value: 6
+      create :assessment_result_empty, criteria: c1, author: u2, target: u1, value: 10
+      create :assessment_result_empty, criteria: c1, author: u2, target: u3, value: 1
+      create :assessment_result_empty, criteria: c1, author: u2, target: u4, value: 6
 
-      create :assessment_result_empty, criterium: c1, author: u3, target: u1, value: 10
-      create :assessment_result_empty, criterium: c1, author: u3, target: u2, value: 8
-      create :assessment_result_empty, criterium: c1, author: u3, target: u4, value: 5
+      create :assessment_result_empty, criteria: c1, author: u3, target: u1, value: 10
+      create :assessment_result_empty, criteria: c1, author: u3, target: u2, value: 8
+      create :assessment_result_empty, criteria: c1, author: u3, target: u4, value: 5
 
-      create :assessment_result_empty, criterium: c1, author: u4, target: u1, value: 10
-      create :assessment_result_empty, criterium: c1, author: u4, target: u2, value: 7
-      create :assessment_result_empty, criterium: c1, author: u4, target: u3, value: 3
+      create :assessment_result_empty, criteria: c1, author: u4, target: u1, value: 10
+      create :assessment_result_empty, criteria: c1, author: u4, target: u2, value: 7
+      create :assessment_result_empty, criteria: c1, author: u4, target: u3, value: 3
 
       # C2
-      create :assessment_result_empty, criterium: c2, author: u1, target: u2, value: 9
-      create :assessment_result_empty, criterium: c2, author: u1, target: u3, value: 3
-      create :assessment_result_empty, criterium: c2, author: u1, target: u4, value: 6
+      create :assessment_result_empty, criteria: c2, author: u1, target: u2, value: 9
+      create :assessment_result_empty, criteria: c2, author: u1, target: u3, value: 3
+      create :assessment_result_empty, criteria: c2, author: u1, target: u4, value: 6
 
-      create :assessment_result_empty, criterium: c2, author: u2, target: u1, value: 10
-      create :assessment_result_empty, criterium: c2, author: u2, target: u3, value: 2
-      create :assessment_result_empty, criterium: c2, author: u2, target: u4, value: 7
+      create :assessment_result_empty, criteria: c2, author: u2, target: u1, value: 10
+      create :assessment_result_empty, criteria: c2, author: u2, target: u3, value: 2
+      create :assessment_result_empty, criteria: c2, author: u2, target: u4, value: 7
 
-      create :assessment_result_empty, criterium: c2, author: u3, target: u1, value: 8
-      create :assessment_result_empty, criterium: c2, author: u3, target: u2, value: 9
-      create :assessment_result_empty, criterium: c2, author: u3, target: u4, value: 5
+      create :assessment_result_empty, criteria: c2, author: u3, target: u1, value: 8
+      create :assessment_result_empty, criteria: c2, author: u3, target: u2, value: 9
+      create :assessment_result_empty, criteria: c2, author: u3, target: u4, value: 5
 
-      create :assessment_result_empty, criterium: c2, author: u4, target: u1, value: 7
-      create :assessment_result_empty, criterium: c2, author: u4, target: u2, value: 8
-      create :assessment_result_empty, criterium: c2, author: u4, target: u3, value: 4
+      create :assessment_result_empty, criteria: c2, author: u4, target: u1, value: 7
+      create :assessment_result_empty, criteria: c2, author: u4, target: u2, value: 8
+      create :assessment_result_empty, criteria: c2, author: u4, target: u3, value: 4
 
       # C3
-      create :assessment_result_empty, criterium: c3, author: u1, target: u2, value: 7
-      create :assessment_result_empty, criterium: c3, author: u1, target: u3, value: 4
-      create :assessment_result_empty, criterium: c3, author: u1, target: u4, value: 7
+      create :assessment_result_empty, criteria: c3, author: u1, target: u2, value: 7
+      create :assessment_result_empty, criteria: c3, author: u1, target: u3, value: 4
+      create :assessment_result_empty, criteria: c3, author: u1, target: u4, value: 7
 
-      create :assessment_result_empty, criterium: c3, author: u2, target: u1, value: 9
-      create :assessment_result_empty, criterium: c3, author: u2, target: u3, value: 3
-      create :assessment_result_empty, criterium: c3, author: u2, target: u4, value: 8
+      create :assessment_result_empty, criteria: c3, author: u2, target: u1, value: 9
+      create :assessment_result_empty, criteria: c3, author: u2, target: u3, value: 3
+      create :assessment_result_empty, criteria: c3, author: u2, target: u4, value: 8
 
-      create :assessment_result_empty, criterium: c3, author: u3, target: u1, value: 9
-      create :assessment_result_empty, criterium: c3, author: u3, target: u2, value: 10
-      create :assessment_result_empty, criterium: c3, author: u3, target: u4, value: 6
+      create :assessment_result_empty, criteria: c3, author: u3, target: u1, value: 9
+      create :assessment_result_empty, criteria: c3, author: u3, target: u2, value: 10
+      create :assessment_result_empty, criteria: c3, author: u3, target: u4, value: 6
 
-      create :assessment_result_empty, criterium: c3, author: u4, target: u1, value: 10
-      create :assessment_result_empty, criterium: c3, author: u4, target: u2, value: 8
-      create :assessment_result_empty, criterium: c3, author: u4, target: u3, value: 5
+      create :assessment_result_empty, criteria: c3, author: u4, target: u1, value: 10
+      create :assessment_result_empty, criteria: c3, author: u4, target: u2, value: 8
+      create :assessment_result_empty, criteria: c3, author: u4, target: u3, value: 5
 
     end
 
