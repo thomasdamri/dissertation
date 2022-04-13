@@ -74,12 +74,12 @@ class Assessment < ApplicationRecord
     team_grade = team_grade.nil? ? "NULL" : team_grade.grade
 
     # Try to find user's individual weighting
-    weight = student_team.student_weightings.where(assessment_id: assessment).first
+    weight = student_team.student_weightings.where(assessment_id: self.id).first
     ind_weight = weight.nil? ? "NULL" : weight.weighting
 
     # Only calculate an individual grade if both team grade and indiv. weighting exist
     ind_grade = "ERROR"
-    unless t_grade.nil? or weight.nil?
+    unless team_grade.nil? or weight.nil?
       ind_grade = team_grade * ind_weight
     end
     return ind_grade

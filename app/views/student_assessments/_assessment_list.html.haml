@@ -15,7 +15,7 @@
                   = a.date_closed.to_date
             - if a.has_team_grades?
               .col-auto.pull-right
-                %h5= ("Grade: ")
+                %h5= ("Grade: "+ a.get_individual_grade(student_team).to_s)
             -elsif a.completed_by?(student_team)
               .col-auto.pull-right
                 %h5 Submitted
