@@ -12,10 +12,18 @@ class StudentTeam < ApplicationRecord
   belongs_to :team
 
 
-  has_many :student_weightings
-  has_many :student_tasks
+  # Has many weighting results (one per completed assessment)
+  has_many :student_weightings, dependent: :destroy
+  
+  has_many :student_tasks, dependent: :destroy
   has_many :student_reports
   has_many :student_chats
+
+  # Has many AssessmentResults written by the user
+  has_many :author_results, foreign_key: 'author_id', class_name: 'AssessmentResult', dependent: :destroy
+  # Has many AssessmentResults written about the user
+  has_many :target_results, foreign_key: 'target_id', class_name: 'AssessmentResult', dependent: :destroy
+  
 
   # A user can only be added to a team once
   validates :user, uniqueness: {scope: :team}

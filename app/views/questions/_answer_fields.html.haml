@@ -18,10 +18,10 @@
     - name = "response_#{crit.id}"
     = render field_render, crit: crit, name: name
   - else
-    - @team.users.each do |user|
+    - @team.student_teams.each do |student_team|
       .input-group
         .input-group-prepend
-          %span.input-group-text= user.real_display_name
-        - name = "response_#{crit.id}_#{user.id}"
+          %span.input-group-text= student_team.user.real_display_name
+        - name = "response_#{crit.id}_#{student_team.id}"
         = render field_render, crit: crit, name: name
       %hr

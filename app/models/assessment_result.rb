@@ -17,9 +17,8 @@ class AssessmentResult < ApplicationRecord
   end
 
   belongs_to :question
-  #has_one :assessment, through: :question
-  belongs_to :author, class_name: 'User', foreign_key: 'author_id'
-  belongs_to :target, class_name: 'User', foreign_key: 'target_id', optional: true
+  belongs_to :author, class_name: 'StudentTeam', foreign_key: 'author_id'
+  belongs_to :target, class_name: 'StudentTeam', foreign_key: 'target_id', optional: true
 
   belongs_to :student_weightings, optional: true
 

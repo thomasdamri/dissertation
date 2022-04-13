@@ -3,14 +3,27 @@
     - assessments.each do |a|
       = link_to fillin_assessment_path(a, student_team: student_team), class: 'student_task_box', remote: true do
         .task-options-container
-          .row.border-top
-            .col
-              %h4= a.name
           .row
-            .col-auto
-              Closing on: 
             .col
-              = a.date_closed.to_date
+              .row.border-top
+                .col
+                  %h4= a.name
+              .row
+                .col-auto
+                  Closing on: 
+                .col
+                  = a.date_closed.to_date
+            - if a.has_team_grades?
+              .col-auto.pull-right
+                %h5= ("Grade: ")
+            -elsif a.completed_by?(student_team)
+              .col-auto.pull-right
+                %h5 Submitted
+            -elsif (!a.within_fill_dates?)
+              .col-auto.pull-right
+                %h5 Closed
+
+              
   - else 
     .task-options-container.text-center
       %h3 No Assessments

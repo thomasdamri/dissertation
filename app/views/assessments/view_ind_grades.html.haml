@@ -13,11 +13,11 @@
     %th
   - @teams.each do |team|
     - team_grade = TeamGrade.where(team: team, assessment: @assess).first
-    - team.users.each do |user|
-      - ind_weight = StudentWeighting.where(user: user, assessment: @assess).first
+    - team.student_teams.each do |student_team|
+      - ind_weight = StudentWeighting.where(student_team_id: student_team.id, assessment: @assess).first
       %tr
-        %td= "Team #{team.number}"
-        %td= user.real_display_name
+        %td= "Team #{team.team_number}"
+        %td= student_team.user.real_display_name
         - if team_grade.nil?
           %td Pending team grade
         - else

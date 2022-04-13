@@ -1,8 +1,14 @@
-%h1= @assessment.name
-%h3= "Viewing this assessment as team #{@team.number}"
+.col-4.align-self-cente
+  .text-center
+    .text-center
+      = link_to "Back to assessment", @assessment, class: 'btn btn-secondary'
+    .task-options-container
+      %h1= @assessment.name
+      %h3= "Viewing this assessment as team #{@team.team_number}"
 
-= form_tag do |f|
-  - @assessment.questions.each do |crit|
-    = render 'question/answer_fields', crit: crit
+    = form_tag do |f|
+      - @assessment.questions.each do |crit|
+        .task-options-container
+          = render 'questions/answer_fields', crit: crit
 
-= link_to "Back to assessment", @assessment, class: 'btn btn-secondary'
+

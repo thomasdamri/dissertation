@@ -1,5 +1,5 @@
 -# frozen_string_literal: true
-= simple_form_for(@assessment, url: @form_url) do |f|
+= simple_form_for(Assessment.new, url: @form_url) do |f|
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?
   

@@ -16,10 +16,8 @@ class StudentWeighting < ApplicationRecord
 
   #belongs_to :user
   belongs_to :assessment
+  belongs_to :student_team
 
-  belongs_to :student_teams
-
-  has_many :assessment_results
 
   validates :weighting, presence: true
   validates :results_at_last_check, presence: true
@@ -36,7 +34,7 @@ class StudentWeighting < ApplicationRecord
     unless manual_set
       self.weighting = new_weighting
       self.results_at_last_check = new_results
-      save
+      self.save
     end
   end
 
@@ -45,7 +43,7 @@ class StudentWeighting < ApplicationRecord
     self.manual_set = true
     self.reason = new_reason
     self.weighting = new_weighting
-    save
+    self.save
   end
 
 end

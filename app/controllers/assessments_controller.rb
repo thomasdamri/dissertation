@@ -96,26 +96,26 @@ class AssessmentsController < ApplicationController
 
   # Shows form for user to fill in the assessment
   def fill_in
-    @title = "Completing Assessment"
-    @error = ""
-    # Get current assessment, so the server knows which assessment is being filled in
     @assessment = Assessment.find(params[:id])
-    # Get the team this assessment is being filled in for
-    @team = current_user.teams.where(uni_module_id: @assessment.uni_module.id).first
     @student_team = StudentTeam.find_by(id: params[:student_team])
-    # # Check user has not already filled in the form
-    # if @assessment.completed_by? current_user
-    #   redirect_to @team, notice: "You have already filled in this assessment"
-    # end
+    # Check user has not already filled in the form
+    if (!@assessment.completed_by? @student_team) && (@assessment.within_fill_dates?)
 
-    # # Check if assessment close date has expired
-    # unless @assessment.within_fill_dates?
-    #   redirect_to @team, notice: "This assessment can no longer be filled in"
-    # end
-
-    respond_to do |format|
-      format.js 
+      @title = "Completing Assessment"
+      @error = ""
+      # Get current assessment, so the server knows which assessment is being filled in
+      # Get the team this assessment is being filled in for
+      @team = current_user.teams.where(uni_module_id: @assessment.uni_module.id).first
+      
+      respond_to do |format|
+        format.js 
+      end
+    else
+      respond_to do |format|
+        format.js {render 'assessments/completed_assessment'}
+      end
     end
+
   end
 
   # Processes the form for students filling in the assessment
@@ -128,7 +128,7 @@ class AssessmentsController < ApplicationController
     team = current_user.teams.where(uni_module_id: @assessment.uni_module.id).first
 
     # Check user has not already filled in the form
-    if @assessment.completed_by? current_user
+    if @assessment.completed_by? @student_team
       respond_to do |format|
         format.js {render 'student_teams/swap_to_assessments'}
       end
@@ -138,17 +138,16 @@ class AssessmentsController < ApplicationController
       ActiveRecord::Base.transaction do
         # Loop through each question and create a new response
         @assessment.questions.each do |crit|
-          puts(crit.inspect)
           # For single response questions, just save one new result
           if crit.single
             # Escape the response before storing in database
             response = h params["response_#{crit.id}"]
-            AssessmentResult.create!(author: current_user, question: crit, value: response)
+            AssessmentResult.create!(author: @student_team, question: crit, value: response)
           else
             # For multi-response question, store each one for each user
-            team.users.each do |user|
-              response = h params["response_#{crit.id}_#{user.id}"]
-              AssessmentResult.create!(author: current_user, target: user, question: crit, value: response)
+            team.student_teams.each do |student_team|
+              response = h params["response_#{crit.id}_#{student_team.id}"]
+              AssessmentResult.create!(author: @student_team, target: student_team, question: crit, value: response)
             end
           end
         end
@@ -229,13 +228,13 @@ class AssessmentsController < ApplicationController
     csv_str = CSV.generate headers: true do |csv|
       csv << ["Student Username", "Team Number", "Team Grade", "Individual Weighting", "Individual Grade"]
       assessment.uni_module.teams.each do |team|
-        team.users.each do |user|
+        team.student_teams.each do |student_team|
           # Try to find the team's grade
           t_grade = team.team_grades.where(assessment_id: assessment.id).first
           team_grade = t_grade.nil? ? "NULL" : t_grade.grade
 
           # Try to find user's individual weighting
-          weight = user.student_weightings.where(assessment_id: assessment).first
+          weight = student_team.student_weightings.where(assessment_id: assessment).first
           ind_weight = weight.nil? ? "NULL" : weight.weighting
 
           # Only calculate an individual grade if both team grade and indiv. weighting exist
@@ -244,7 +243,7 @@ class AssessmentsController < ApplicationController
             ind_grade = team_grade * ind_weight
           end
 
-          csv << [user.username, team.number, team_grade, ind_weight, ind_grade]
+          csv << [student_team.user.username, team.team_number, team_grade, ind_weight, ind_grade]
         end
       end
     end
@@ -262,10 +261,10 @@ class AssessmentsController < ApplicationController
   def send_score_email
     assessment = Assessment.find(params['id'])
     teams = assessment.uni_module.teams.pluck(:id)
-    stud_teams = StudentTeam.where(team_id: teams).pluck(:user_id)
-    users = User.where(id: stud_teams).all
+    stud_teams = StudentTeam.where(team_id: teams).pluck(:user_id, :id)
+    users = User.where(id: stud_teams.user_id).all
 
-    users.each do |u|
+    stud_teams.each do |u|
       team = u.teams.where(uni_module: assessment.uni_module).first
       team_grade = team.team_grades.where(assessment: assessment).first
       ind_weight = StudentWeighting.where(user: u, assessment: assessment).first
