@@ -83,4 +83,14 @@ class UniModule < ApplicationRecord
     return reversed_hash
   end
 
+  def getUncompletedOutgoingAssessmentCount(student_team)
+    num_outgoing = 0
+    assessments.each do |assessment|
+      if (assessment.within_fill_dates? && !(assessment.completed_by? student_team))
+        num_outgoing += 1
+      end
+    end
+    return num_outgoing
+  end
+
 end

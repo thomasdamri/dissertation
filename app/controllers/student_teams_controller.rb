@@ -4,6 +4,7 @@ class StudentTeamsController < ApplicationController
 
   def index 
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    @outgoing_assessments = @student_team.team.uni_module.getUncompletedOutgoingAssessmentCount(@student_team)
     @task = StudentTask.new
     @student_report = StudentReport.new
     @student_report.report_objects.build

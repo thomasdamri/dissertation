@@ -4,6 +4,10 @@
 - content_for :title, "[Student] Team Homepage"
 
 .col.mt-0#main-team-home-page-container
+  -if @outgoing_assessments > 0
+    .row.justify-content-center 
+      .col-8.task-options-container
+        %h4.font-weight-bold.text-wrap= ("You currently have " + @outgoing_assessments.to_s+ " peer assessments to complete. Please submit them before deadline to provide peer feedback.")
   .row.justify-content-center
     .col-5.pr-4
       = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id, select_options: @select_options}

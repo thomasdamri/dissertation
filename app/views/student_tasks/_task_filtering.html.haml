@@ -2,8 +2,8 @@
   = simple_form_for StudentTeam.new, url: get_task_list_path(params[:student_team_id]), remote: true, html: {"data-infographic-target": "taskListForm"}, method: :get do |f|
     .row
       .col-6.form-group
-        = f.label :user_id, "Tasks By:"
+        %h5.font-weight-bold= f.label :user_id, "Tasks By:"
         = f.select :user_id, select_options, {}, { class: 'form-select form-control', data: { action: "change->infographic#change_task_list"}, include_blank: false }
       .col-6.form-group
-        = f.label :team_id, "Filter by:"
+        %h5.font-weight-bold= f.label :team_id, "Filter by:"
         = f.select :team_id, [["New Tasks", 0], ["Completed Tasks", 1], ["Overdue Tasks", 2], ["Highest Liked", 3], ["Highest Commented", 4],  ["Hard", 5], ["Medium", 6], ["Easy", 7], ["New Comments", 8]], {}, { class: 'form-select form-control', data: { action: "change->infographic#change_task_list"}, include_blank: false }
