@@ -16,7 +16,9 @@ class StudentTeamsController < ApplicationController
     end
     @select_options = StudentTeam.createTeamArray(params[:student_team_id], @team_id)
     @week_options = @student_team.team.uni_module.createWeekNumToDatesMap()
-    
+    @tasks = @student_team.team.student_tasks.order(task_start_date: :desc)
+    @tasks_count = @tasks.count
+    @pagy, @tasks = pagy(@tasks, items: 10)
     @messages = @student_team.team.get_week_chats(-1, @week_options.values[0].to_date)
   end
 
@@ -28,6 +30,8 @@ class StudentTeamsController < ApplicationController
     else
       @tasks = StudentTask.selectTasks(selected, filter)
     end
+    @tasks_count = @tasks.count
+    @pagy, @tasks = pagy(@tasks, items: 10)
     respond_to do |format|
       format.js
     end
@@ -73,7 +77,7 @@ class StudentTeamsController < ApplicationController
 
   def swap_to_assessments
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
-    @assessments = @student_team.team.uni_module.assessments
+    @assessments = @student_team.team.uni_module.assessments.order(date_opened: :desc)
     respond_to do |format|
       format.js 
     end
@@ -83,6 +87,8 @@ class StudentTeamsController < ApplicationController
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
     @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
     @tasks = @student_team.team.student_tasks.order(task_start_date: :desc)
+    @tasks_count = @tasks.count
+    @pagy, @tasks = pagy(@tasks, items: 10)
     respond_to do |format|
       format.js 
     end

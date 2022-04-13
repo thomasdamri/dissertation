@@ -7,11 +7,11 @@
   -if @outgoing_assessments > 0
     .row.justify-content-center 
       .col-8.task-options-container
-        %h4.font-weight-bold.text-wrap= ("You currently have " + @outgoing_assessments.to_s+ " peer assessments to complete. Please submit them before deadline to provide peer feedback.")
+        %h4.font-weight-bold.text-wrap.text-center= ("You currently have " + @outgoing_assessments.to_s+ " peer assessments to complete. Please submit them before deadline to provide peer feedback.")
   .row.justify-content-center
-    .col-5.pr-4
-      = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id, select_options: @select_options}
-    .col-3
+    .col-4.pr-4
+      = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id, select_options: @select_options, tasks: @tasks, pagy: @pagy, tasks_count: @tasks_count}
+    .col-4
       .row.task-options-container#swap-meeting-assessment
         = render partial: "student_teams/swap_chat_and_assessment", locals: {student_team_id: @student_team.id, selected: 0}
       #right-panel-swap

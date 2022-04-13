@@ -3,4 +3,4 @@
     .row#swap-task-data
       = render partial: 'student_teams/swap_student_task_and_data', locals: {student_team_id: student_team_id, selected: 0}
 #task-main-feed
-  = render partial: 'student_tasks/task_index', locals: {student_team_id: student_team_id, select_options: select_options, tasks: @student_team.team.student_tasks.order(task_start_date: :desc)}
+  = render partial: 'student_tasks/task_index', locals: {student_team_id: student_team_id, select_options: select_options, tasks: tasks, pagy: pagy, tasks_count: tasks_count}

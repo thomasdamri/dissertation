@@ -44,7 +44,6 @@ class StudentTasksController < ApplicationController
     @student_task.task_difficulty = StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty])
     @student_task.task_start_date = DateTime.now
     
-    #@student_team = StudentTeam.find_by(id: params[:student_team_id])
     if @student_task.save
       redirect_to student_team_dashboard_path(@student_task.student_team_id), notice: 'Task was successfully created'
     else

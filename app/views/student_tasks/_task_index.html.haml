@@ -3,4 +3,4 @@
 .row 
   = render partial: 'student_tasks/task_filtering', locals: {select_options: select_options}
 .row#task-list
-  =render partial: 'student_tasks/task_feed', locals: {tasks: tasks}
+  =render partial: 'student_tasks/task_feed', locals: {tasks: tasks, pagy: pagy,tasks_count: tasks_count}

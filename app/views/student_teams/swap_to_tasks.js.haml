@@ -1,4 +1,4 @@
-$('#task-main-feed').html("#{escape_javascript(render partial: 'student_tasks/task_index', locals: {student_team_id: @student_team.id, select_options: @select_options, tasks: @tasks} )}  "); 
+$('#task-main-feed').html("#{escape_javascript(render partial: 'student_tasks/task_index', locals: {student_team_id: @student_team.id, select_options: @select_options, tasks: @tasks, pagy: @pagy, tasks_count: @tasks_count} )}  "); 
 $('#swap-task-data').html("#{escape_javascript(render partial: 'student_teams/swap_student_task_and_data', locals: {student_team_id: @student_team.id, selected: 0} )}  "); 
 
 

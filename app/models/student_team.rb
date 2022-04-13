@@ -173,6 +173,8 @@ class StudentTeam < ApplicationRecord
     return select_options
   end
 
+
+
   def self.whatIsTeamData()
     output = "Team data is a collection of graphs and tables, representing your teams data.\n"
     output += "Data collected ranges from tasks posted, hours logged, contributions to meetings, etc.\n"
