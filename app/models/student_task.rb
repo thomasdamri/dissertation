@@ -118,5 +118,36 @@ class StudentTask < ApplicationRecord
     return comments
   end
 
+  def self.whatAreTeamTasks()
+    output = "Student Tasks are a way of documenting your progress throughout a project.\n"
+    output += "Think of this as a shared team diary, where everybody contributes to documenting the progress of your project.\n"
+    output += "A task should take around 1-6 hours to complete, and you should create a separate task for every undertaking you perform."
+    output += "Tasks are useful for many reasons. To keep everybody organized and up to date, to collect data which will aid you in completing peer assessments and to help staff with students not contributing fairly."
+    return output
+  end
 
+  def self.difficultyExplained()
+    output = "Student Tasks are marked with a difficulty value; either easy, medium or hard.\n"
+    output += "When creating a task, consider the amount of time that you think will be spent on this task, as this value will give your peers a better indication of the task that you are working on.\n"
+    output += "A medium task will be a little more lengthier, taking around 2-3 hours.\n"
+    output += "Any task larger than this should be marked as hard, letting your team mates know how long you expect to spend on this challenge.\n"
+    output += "Ranking tasks based on difficulty will also come in handy, as you may be able to see which tasks students are finding difficult, allowing you to intervene and help out. "
+    return output
+
+  end
+
+  def self.commendationsExplained()
+    output = "Team interaction is encouraged.\n"
+    output += "See a student putting in great work on a task? Give it a like to show your support!\n"
+    output += "Comments are also useful for you to discuss the specific task. Perhaps a student has commented that they are finding difficulty somewhere, or experiencing a bug. Push them along with a hint, or a link to a useful webpage.\n"
+    output += "The task comment section is also useful to log your progress on the task, connecting a screenshot will also help your team mates get a better picture of what you're currently working on."
+    return output
+  end
+
+  def self.taskCompletingExplained()
+    output = "Once you have finished a task, you should mark it as complete.\n"
+    output += "This allows you to summarize the task and work you have completed, as well as giving an accurate number of hours spent on it.\n"
+    output += "Be careful when logging hours, as if a student suspects you are inflating your time spent on tasks, you may be reported. \n"
+    return output
+  end
 end

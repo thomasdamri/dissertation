@@ -1,12 +1,71 @@
 -if selected == 0
-  .col-6.selected-panel-box.text-center
+  .col-1
+    = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#studentTaskHelpModal'
+  .col-5.selected-panel-box.text-center
     = link_to "Team Tasks", swap_to_tasks_path(student_team_id), remote: true
 
-  .col-6.text-center.unselected-panel-box
+  .col-5.text-center.unselected-panel-box
     = link_to "Team Data", team_data_index_path(student_team_id), remote: true
+  .col-1
+    = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#studentDataHelpModal'
 - else 
-  .col-6.text-center.unselected-panel-box
+  .col-1.pull-left
+    = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#studentTaskHelpModal'
+  .col-5.text-center.unselected-panel-box
     = link_to "Team Tasks", swap_to_tasks_path(student_team_id), remote: true
 
-  .col-6.selected-panel-box.text-center
+  .col-5.selected-panel-box.text-center
     = link_to "Team Data", team_data_index_path(student_team_id), remote: true
+  .col-1
+    = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#studentDataHelpModal'
+
+
+.modal.fade#studentTaskHelpModal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Team Tasks Explained
+        %button.close{type: :button, data: {dismiss: :modal}}
+          %span &times;
+
+      %div.modal-body
+        // What a team task is
+        .mb-3.text-wrap{"style": "white-space: pre-line;"}
+          %h6 What is a Task and Why?
+          %p= StudentTask.whatAreTeamTasks()
+
+        // Task difficulty Explained
+        .mb-3
+          %h6 Task Difficulty
+          %p= StudentTask.difficultyExplained()
+          
+        // Task Liking and Commenting
+        .mb-3
+          %h6 Commendations and Comments
+          %p= StudentTask.commendationsExplained()
+        
+        // Completing a task
+        .mb-3
+          %h6 Completing a Task
+          %p= StudentTask.taskCompletingExplained()
+          %p{"style": "font-weight: bold;"} Completing tasks and logging hours are important, as they will allow for better and more informative team data infographics.
+
+.modal.fade#studentDataHelpModal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Student Data Explained
+        %button.close{type: :button, data: {dismiss: :modal}}
+          %span &times;
+
+      %div.modal-body
+        // What student data is
+        .mb-3.text-wrap{"style": "white-space: pre-line;"}
+          %h6 What is student data?
+          %p= StudentTeam.whatIsTeamData()
+
+        // Why use it
+        .mb-3
+          %h6 Whats the point?
+          %p= StudentTeam.whyTeamData()
+          

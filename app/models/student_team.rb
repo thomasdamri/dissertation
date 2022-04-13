@@ -173,4 +173,18 @@ class StudentTeam < ApplicationRecord
     return select_options
   end
 
+  def self.whatIsTeamData()
+    output = "Team data is a collection of graphs and tables, representing your teams data.\n"
+    output += "Data collected ranges from tasks posted, hours logged, contributions to meetings, etc.\n"
+    output += "You can even filter to see data for the whole team, or individual members."
+    return output
+  end
+
+  def self.whyTeamData()
+    output = "Team data is useful as it squashes a lot of data down into an easy to read and digest form.\n"
+    output += "This can come in handy when completing peer assessments, allowing for more accurate ratings. You can also jog your memory, by seeing student data from early into the project.\n"
+    output += "Staff will also use this when dealing with reports, as they can quickly look for outliers and anomaly's, without having to look through lots of data."
+    return output
+  end
+
 end
