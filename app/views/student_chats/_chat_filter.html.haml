@@ -2,9 +2,8 @@
   = simple_form_for StudentTeam.new, url: filter_chat_path(params[:student_team_id]), remote: true, html: {"data-infographic-target": "messagesFilterForm"}, method: :get do |f|
     .row
       .col-6.form-group
-        = f.label :user_id, "Messages By:"
+        %h5.font-weight-bold= f.label :user_id, "Messages By:"
         = f.select :user_id, select_options, {}, { class: 'form-select form-control', data: { action: "change->infographic#change_messages"}, include_blank: false }
       .col-6.form-group
-        = f.label :team_id, "Filter by:"
-        -puts(week_options.inspect)
+        %h5.font-weight-bold= f.label :team_id, "Filter by:"
         = f.select :team_id, week_options, {}, { class: 'form-select form-control', data: { action: "change->infographic#change_messages"}, include_blank: false }

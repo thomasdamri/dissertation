@@ -1,4 +1,8 @@
--if student_chat.get_user_id().to_i == user_id
-  = render partial: 'student_chats/self_message_container', locals: {message: student_chat}
-- else 
-  = render partial: 'student_chats/message_container', locals: {message: student_chat}
+.row
+  .col{style: "word-wrap: break-word;"}
+    %p.font-weight-normal= simple_format student_chat.chat_message
+.row 
+  .col-auto
+    %p.font-weight-bold=  student_chat.user.real_display_name 
+  .col 
+    %p.font-weight-light= student_chat.posted.to_s

@@ -1,12 +1,59 @@
 -if selected == 0
-  .col-6.selected-panel-box.text-center.fs-3
+  .col-1
+    = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#meetingHelpModal'
+  .col-5.selected-panel-box.text-center
     = link_to "Meeting Notes", swap_to_meetings_path(student_team_id), remote: true
 
-  .col-6.text-center.unselected-panel-box.fs-3
+  .col-5.text-center.unselected-panel-box
     = link_to "Assessments", swap_to_assessments_path(student_team_id), remote: true
+  .col-1
+    = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#assessmentHelpModal'
 - else 
-  .col-6.text-center.unselected-panel-box.fs-3
+  .col-1
+    = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#meetingHelpModal'
+  .col-5.text-center.unselected-panel-box
     = link_to "Meeting Notes", swap_to_meetings_path(student_team_id), remote: true
 
-  .col-6.selected-panel-box.text-center.fs-3
+  .col-5.selected-panel-box.text-center
     = link_to "Assessments", swap_to_assessments_path(student_team_id), remote: true, class: "fs-1"
+  .col-1
+    = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#assessmentHelpModal'
+
+
+.modal.fade#meetingHelpModal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Meeting Notes Explained
+        %button.close{type: :button, data: {dismiss: :modal}}
+          %span &times;
+
+      %div.modal-body
+        // What a team task is
+        .mb-3.text-wrap{"style": "white-space: pre-line;"}
+          %h6 What are Meeting Notes For?
+          %p= StudentChat.whatAreNotes()
+
+        .mb-3.text-wrap{"style": "white-space: pre-line;"}
+          %h6 What to Note?
+          %p= StudentChat.whatToNote()
+
+.modal.fade#assessmentHelpModal
+  .modal-dialog
+    .modal-content
+      .modal-header
+        %h5.modal-title Student Assessments Explained
+        %button.close{type: :button, data: {dismiss: :modal}}
+          %span &times;
+
+      -# %div.modal-body
+      -#   // What student data is
+      -#   .mb-3.text-wrap{"style": "white-space: pre-line;"}
+      -#     %h6 What are Peer Assessments?
+      -#     %p= Assessment.whatAreAssessments()
+
+      -#   // Why use it
+      -#   .mb-3
+      -#     %h6 Are they Assessed?
+      -#     %p= Assessment.areTheyAssessed()
+          

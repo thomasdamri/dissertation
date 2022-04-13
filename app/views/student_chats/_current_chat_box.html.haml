@@ -6,4 +6,8 @@
   %div
     = turbo_stream_from ("Team-"+ student_team.team.id.to_s)
     %div{id: 'student_chats'}
-      = render partial: "student_chats/student_chat", collection: messages, locals: {user_id: current_user.id.to_i}
+      - if messages.count > 0
+        = render partial: "student_chats/student_chat", collection: messages, locals: {user_id: current_user.id.to_i}
+      - else 
+        .task-options-container.text-center 
+          %p There are currently no chats this week.
