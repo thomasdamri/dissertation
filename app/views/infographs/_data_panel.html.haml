@@ -5,7 +5,7 @@
   .row 
     .col
       - if table_data["graph_type"] == 0 #line graph
-        = line_chart table_data["data"], xtitle: table_data["xtitle"], ytitle: table_data["ytitle"]
+        = line_chart table_data["data"], xtitle: table_data["xtitle"], ytitle: table_data["ytitle"], discrete: true
 
       - elsif table_data["graph_type"] == 1 #bar chart
         = bar_chart table_data["data"], xtitle: table_data["xtitle"], ytitle: table_data["ytitle"]

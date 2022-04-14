@@ -58,7 +58,7 @@ class StudentTeam < ApplicationRecord
     table_data = {}
     table_data["graph_type"] = 0
     table_data["graph_title"] = "Task Creation Counts per Week"
-    table_data["data"] = data
+    table_data["data"] = StudentTeam.replaceKeysWithWeekNumber(data)
     table_data["xtitle"] = "Date (Weeks)"
     table_data["ytitle"] = "Task Creation Count"
 
@@ -183,10 +183,22 @@ class StudentTeam < ApplicationRecord
   end
 
   def self.whyTeamData()
+    output = "The aim of displaying team data is not to act as a competition between team mates to try and do the most work, but is to guide the team in fairly contributing.\n"
     output = "Team data is useful as it squashes a lot of data down into an easy to read and digest form.\n"
     output += "This can come in handy when completing peer assessments, allowing for more accurate ratings. You can also jog your memory, by seeing student data from early into the project.\n"
     output += "Staff will also use this when dealing with reports, as they can quickly look for outliers and anomaly's, without having to look through lots of data."
     return output
   end
+
+  def self.replaceKeysWithWeekNumber(data)
+    new_data = []
+    data.each do |person_hash, index|
+      person_hash[:data] = person_hash[:data].transform_keys.with_index {|k,i| ("Week #{i}")}
+      new_data.append(person_hash)
+    end
+    return new_data
+  end
+
+
 
 end
