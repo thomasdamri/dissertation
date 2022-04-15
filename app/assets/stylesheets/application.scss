@@ -90,14 +90,12 @@
   border-radius: 25px;
   padding: 5px 15px 5px 15px;
   margin-top: 10px;
-  // border-color: black;
-  // border-width: 25px;
-  // border-top: 7px solid #f0f6fc;
-  // border-left: 7px solid #f0f6fc;
-  // border-bottom: 7px solid #f0f6fc;
-  // border-right: 7px solid #f0f6fc;
   border: 5px solid #307aba;
   // border: solid #161b22;
+}
+
+.selectable-container:hover{
+  background-color: #f0f6fc;
 }
 
 .error-container{
@@ -162,6 +160,8 @@
   background-color: #e9ecef;
 }
 
+
+
 .selected-panel-box{
   font-weight: bold;
   text-decoration: underline;
@@ -175,6 +175,12 @@
   font-size: 22px;
 }
 
+.glowing_assignment{
+  // width: 250px;
+  box-shadow: 0 4px 16px 0 rgba(255, 255, 255, 0.2), 0 12px 40px rgba(255, 255, 255, 0.19);
+  // text-align: center;
+
+}
 
 
 // #main-task-feed{

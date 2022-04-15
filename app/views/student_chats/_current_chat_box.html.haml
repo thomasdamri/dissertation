@@ -9,5 +9,5 @@
       - if messages.count > 0
         = render partial: "student_chats/student_chat", collection: messages, locals: {user_id: current_user.id.to_i}
       - else 
-        .task-options-container.text-center 
+        .text-center 
           %p There are currently no chats this week.
