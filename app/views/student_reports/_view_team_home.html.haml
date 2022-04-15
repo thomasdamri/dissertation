@@ -1,15 +1,4 @@
--# 
-  Index View for task 
-  Allows admin to view all tasks and create new ones
-- content_for :title, "[Student] Team Homepage"
-
 .col.mt-0#main-team-home-page-container
-  .row 
-    = link_to fa_icon("flag", text: 'Report'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#reportModal'
-  -if @outgoing_assessments > 0
-    .row.justify-content-center 
-      .col-8.task-options-container
-        %h4.font-weight-bold.text-wrap.text-center= ("You currently have " + @outgoing_assessments.to_s+ " peer assessments to complete. Please submit them before deadline to provide peer feedback.")
   .row.justify-content-center
     .col-4.pr-4
       = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id, select_options: @select_options, tasks: @tasks, pagy: @pagy, tasks_count: @tasks_count}
@@ -19,5 +8,3 @@
       #right-panel-swap
         = render partial: 'student_chats/right_chat_panel', locals: {messages: @messages, student_team: @student_team, select_options: @select_options, week_options: @week_options}
 
-
-= render 'student_reports/form', locals: {initial_items: @item_list}

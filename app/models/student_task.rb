@@ -31,6 +31,17 @@ class StudentTask < ApplicationRecord
     end
   end
 
+  def return_difficulty()
+    case self.task_difficulty
+    when 0
+      return "Easy"
+    when 2
+      return "Hard"
+    else
+      return "Medium"
+    end
+  end
+
   def self.difficulty_int_to_colour(integer_input)
     case integer_input
     when 0

@@ -1,0 +1,26 @@
+%h3= question.title
+- if question.single
+  %table.table.table-bordered.table-striped.table-hover{id: "indResponseTable_#{question.id}"}
+    %tr
+      %th Student
+      %th Response
+    - team.student_teams.each do |st|
+      %tr
+        %td= st.user.real_display_name
+        - res = AssessmentResult.where(author: st, question: question).first
+        %td= res.nil? ? "-" : res.value
+- else
+  %table.table.table-bordered.table-striped.table-hover{id: "indResponseTable_#{question.id}"}
+    %tr
+      %th{rowspan: team.student_teams.count + 2} Assessee
+      %th{colspan: team.student_teams.count + 1} Assessor
+    %tr
+      %th
+      - team.student_teams.each do |st|
+        %th= st.user.real_display_name
+    - team.student_teams.each do |st1|
+      %tr
+        %th= st1.user.real_display_name
+        - team.student_teams.each do |st2|
+          - res = AssessmentResult.where(author: st2, target: st1, question: question).first
+          %td= res.nil? ? "-" : res.value

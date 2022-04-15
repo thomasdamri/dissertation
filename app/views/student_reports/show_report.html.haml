@@ -1,0 +1,12 @@
+.container.mt-4
+  = render partial: 'reporter_details', locals: {student_report: @student_report, reporter: @reporter}
+
+  - if @student_report.object_type == 0
+    = render partial: 'user_report_object', locals: {report_objects: @report_objects, pagy_report: @pagy_report, student_report: @student_report}
+  - elsif @student_report.object_type == 1
+    = render partial: 'grade_report_object', locals: {report_objects: @report_objects, pagy_report: @pagy_report, student_report: @student_report}
+  - else 
+    = render partial: 'task_report_object', locals: {report_objects: @report_objects, pagy_report: @pagy_report, student_report: @student_report}
+
+  - if @student_report.object_type != 2
+    = render "student_teams/admin_index"

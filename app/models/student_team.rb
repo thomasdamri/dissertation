@@ -199,6 +199,18 @@ class StudentTeam < ApplicationRecord
     return new_data
   end
 
+  def get_assessments_with_grades()
+    assessments = self.team.uni_module.assessments
+    graded_list = []
+    assessments.each do |assessment|
+      if assessment.has_team_grades?
+        graded = [assessment.name, assessment.id]
+        graded_list.append(graded)
+      end
+    end
+    return graded_list
+  end
+
 
 
 end

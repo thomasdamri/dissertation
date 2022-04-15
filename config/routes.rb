@@ -126,6 +126,7 @@ Rails.application.routes.draw do
 
   get 'show_student_task/:task_id/:student_team_id', to: "student_tasks#show_student_task", as: 'show_student_task'
 
+  get 'show_report/:report_id/:student_team_id', to: "student_reports#show_report", as: 'show_report'
 
   resources :student_reports do
     post 'report_response', to: 'student_reports#report_response'

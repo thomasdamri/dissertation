@@ -1,13 +1,17 @@
-.row.mb-3.justify-content-center
-  = pagy_bootstrap_nav(@pagy).html_safe
-  - @report_objects.each.with_index(@pagy.offset) do |report_object, index|
-    - report_object_team = StudentTeam.find_by(id: report_object.report_object_id)
-    - reportee = report_object_team.user
-    .row.mb-3
-      .col-auto 
-        Reportee Details:
-      .col 
-        = reportee.real_display_name + " / " + reportee.email
-    .row.mb-3 
-      #task-list-panel
-        = render partial: 'student_teams/student_tasks_list', locals: {student_team_id: report_object_team.id, team_tasks: report_object_team.student_tasks}
+#putModalHere
+
+.task-options-container
+  .row.mb-3.justify-content-center
+    .col
+      = pagy_bootstrap_nav(pagy).html_safe
+  .row
+    .col
+      - report_objects.each.with_index(pagy.offset) do |report_object, index|
+        - if (student_report.object_type == 0)
+          - report_object  = StudentTeam.find_by(id: report_object.report_object_id)
+          - reportee = report_object.user
+          .row.mb-3
+            .col-auto 
+              Reportee Details:
+            .col 
+              = reportee.real_display_name + " / " + reportee.email

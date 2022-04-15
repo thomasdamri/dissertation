@@ -14,12 +14,12 @@
           %td= report.reporting_int_to_string
           %td= report.report_reason
           %td= report.report_date
-          %td= link_to 'View', student_report_path(report)
+          %td= link_to 'View', show_report_path(report, report.student_team.id)
       -else 
         %tr.table-danger
           %td= report.user.real_display_name
           %td= report.reporting_int_to_string
           %td= report.report_reason
           %td= report.report_date
-          %td= link_to 'View', student_report_path(report)
+          %td= link_to 'View', show_report_path(report, report.student_team.id)
 

@@ -6,34 +6,7 @@
         %button.close{"type": "button", "data-dismiss": "modal", "aria-label": "Close"}
           %span{"aria-hidden": "true"} &times;
       .modal-body
-        - @assessment.questions.each do |crit|
-          %h3= crit.title
-          - if crit.single
-            %table.table.table-bordered.table-striped.table-hover{id: "indResponseTable_#{crit.id}"}
-              %tr
-                %th Student
-                %th Response
-              - @team.users.each do |u|
-                %tr
-                  %td= u.real_display_name
-                  - res = AssessmentResult.where(author: u, question: crit).first
-                  %td= res.nil? ? "-" : res.value
-          - else
-            %table.table.table-bordered.table-striped.table-hover{id: "indResponseTable_#{crit.id}"}
-              %tr
-                %th{rowspan: @team.users.count + 2} Assessee
-                %th{colspan: @team.users.count + 1} Assessor
-              %tr
-                %th
-                - @team.users.each do |u|
-                  %th= u.real_display_name
-              - @team.users.each do |u|
-                %tr
-                  %th= u.real_display_name
-                  - @team.users.each do |u2|
-                    - res = AssessmentResult.where(author: u2, target: u, question: crit).first
-                    %td= res.nil? ? "-" : res.value
-          %hr
+        = render partial: "response_table", collection: @assessment.questions, as: :question,locals: {team: @team}
       .modal-footer
         %button.btn.btn-secondary{"type": "button", "data-dismiss": "modal"}
           Close

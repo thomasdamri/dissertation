@@ -41,11 +41,37 @@ class StudentReportsController < ApplicationController
   end
 
   # GET /uni_modules/new
-  def show
+  def show_report
     @title = "Viewing Report"
-    @student_report = StudentReport.find(params[:id])
+    @student_report = StudentReport.find(params[:report_id])
     @reporter = @student_report.user
-    @pagy, @report_objects = pagy(@student_report.report_objects, items: 1)
+    @pagy_report, @report_objects = pagy(@student_report.report_objects, items: 1)
+    if @student_report.object_type == 2
+      # @student_task = StudentTask.find_by(id: @student_report)
+      @student_task_comment = StudentTaskComment.new
+      # @student_team_id = params[:student_team_id]
+      if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:task_id]).exists?)
+        @like_outcome = "UNLIKE"
+      else
+        @like_outcome = "LIKE"
+      end
+    else 
+      @student_team = @student_report.student_team
+      @outgoing_assessments = @student_team.team.uni_module.getUncompletedOutgoingAssessmentCount(@student_team)
+      @task = StudentTask.new
+      @team_id = StudentTeam.find_by(id:  @student_team.id).team.id
+      @item_list = []
+      @users = StudentTeam.where(student_teams:{team_id: @team_id})
+      for u in @users do
+        @item_list.push([u.user.real_display_name, u.id])
+      end
+      @select_options = StudentTeam.createTeamArray( @student_team.id, @team_id)
+      @week_options = @student_team.team.uni_module.createWeekNumToDatesMap()
+      @tasks = @student_team.team.student_tasks.order(task_start_date: :desc)
+      @tasks_count = @tasks.count
+      @pagy, @tasks = pagy(@tasks, items: 10)
+      @messages = @student_team.team.get_week_chats(-1, @week_options.values[0].to_date)
+    end
   end
 
   def get_list
@@ -64,16 +90,12 @@ class StudentReportsController < ApplicationController
         @item_list.push([u.user.real_display_name, u.id])
       end
     elsif @selected == 1 
-      @grade = ["Grade 1", 0]
-      @item_list = @item_list.push(@grade)
-    elsif @selected == 2 
+      @item_list = @student.get_assessments_with_grades()
+    else
       @tasks = StudentTask.joins(:student_team).where("student_teams.team_id = ?", @team_id).select(:task_objective, :id)
       for t in @tasks do
         @item_list.push([t.task_objective, t.id])
       end
-    else
-      @team = ["My Team", @team_id]
-      @item_list.push(@team)
     end
     respond_to do |format|
       format.turbo_stream 
