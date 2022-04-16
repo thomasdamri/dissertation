@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import { get } from '@rails/request.js'
 
 export default class extends Controller {
-  static targets = ["reportingSelect","formCollection", "takeActionBoolean", "emailReporteeBoolean", "reporteeResponse"]
+  static targets = ["reportingSelect","formCollection", "takeActionBoolean", "emailReporteeBoolean", "reporteeResponse", "actionTakenText"]
 
   connect() {
     console.log("hello from StimulusJS")
@@ -26,14 +26,18 @@ export default class extends Controller {
   change_action_take(event){
     console.log("changing action")
     let takeActionBooleanValue = this.takeActionBooleanTarget.value
+    let actionTaken = this.actionTakenTextTarget
     let emailReporteeBooleanElement = this.emailReporteeBooleanTarget
     let actionTakenInputBoxElement = this.reporteeResponseTarget
     console.log(takeActionBooleanValue)
     if(takeActionBooleanValue==true){
+      actionTaken.disabled = false
       emailReporteeBooleanElement.disabled = false
       emailReporteeBooleanElement.value = 0
-      actionTakenInputBoxElement.disabled = false
+      actionTakenInputBoxElement.disabled = true
     } else{
+      actionTaken.disabled = true
+      actionTaken.value = null
       emailReporteeBooleanElement.value = false
       actionTakenInputBoxElement.value = null
       emailReporteeBooleanElement.disabled = true

@@ -127,6 +127,42 @@ class StudentReportsController < ApplicationController
     @student_report = StudentReport.find(params[:report_id])
   end
 
+  def complete_report
+    @student_report = StudentReport.find(params[:report_id])
+    @uni_module = @student_report.student_team.team.uni_module
+    if @student_report.update(task_report_resolution_params)
+      puts(@student_report.inspect)
+      #Email Reporter
+      reporter = @student_report.student_team.user
+      StudentMailer.reporter_response(user: reporter, reporter_response: @student_report.reporter_response)
+
+      #Email Reportees
+      params[:student_report][:report_objects_attributes].each_value do |report_object| 
+        puts(ReportObject.find(report_object[:id]).inspect)
+        # Email reportees
+        if(report_object[:action_taken] && report_object[:emailed_reportee])
+          report = ReportObject.find(report_object[:id])
+          # If report is for a student
+          if(@student_report .object_type==0)
+            reportee = StudentTeam.find(report.report_object_id).user
+          # If report is for a task, get student and delete the task
+          elsif(@student_report.object_type==2)
+            task = StudentTask.find(report.report_object_id)
+            reportee = task.student_team.user
+            task.destroy
+          end
+          StudentMailer.reportee_response(user: reportee , reportee_response: report.reportee_response)
+        end
+      end
+      @student_report.handled_by = current_user.id
+      @student_report.complete = true
+      @student_report.save
+      redirect_to @uni_module, notice: "Report successfully resolved"
+    else 
+      render :complete_report_form
+    end
+  end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.
@@ -147,4 +183,8 @@ class StudentReportsController < ApplicationController
     params.require(:student_report).permit(:reporter_response, :delete_reported_task)
   end
 
-end
+  def task_report_resolution_params
+    params.require(:student_report).permit(:reporter_response, report_objects_attributes: [:action_taken, :emailed_reportee, :taken_action, :id, :reportee_response])
+  end
+
+end 

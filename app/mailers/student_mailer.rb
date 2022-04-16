@@ -14,4 +14,16 @@ class StudentMailer < ApplicationMailer
     mail to: user.email, subject: "Your Peer Assessment Grade"
   end
 
+  def reporter_response(user, reporter_response)
+    @user = user
+    @reporter_response = reporter_response
+    mail to: user.email, subject: "Report Response"
+  end
+
+  def reportee_response(user, reportee_response)
+    @user = user
+    @reportee_response = reportee_response
+    mail to: user.email, subject: "Report Details"
+  end
+
 end
