@@ -1,56 +1,56 @@
 #putModalHere
+.width_80
+  %h1= @assessment.name
 
-%h1= @assessment.name
-
-.card.card-body
-  .row
-    .col-6#assessDate
-      %h3 Assessment Dates
-      %p= "Date opened: " + @assessment.date_opened.to_s
-      %p= "Date closed: " + @assessment.date_closed.to_s
-      - if can? :edit, @assessment
-        = link_to "Change Dates", edit_assessment_path(@assessment), class: 'btn btn-info'
-    .col-6#assessCrit
-      %h3 Assessment Questions
-      %p= "Total questions: " + @num_crits.to_s
-      %p= "Assessed questions: " + @assessed_crits.to_s
-      - if can? :mock_view, @assessment
-        - if @assessment.uni_module.teams.length > 0
-          = link_to "Show Student View", mock_view_assessment_path(@assessment) , class: 'btn btn-primary'
-        - else
-          .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "You need to add teams in order to use the student view"}
-            = button_to "Show Student View", '#', class: 'btn btn-secondary', disabled: true
-%hr
-
-.card#gradeTools
-  .card-header
-    %h3 Grade Tools
-  .card-body
+  .card.card-body
     .row
-      - if @assessment.has_team_grades?
-        - if can? :delete_grades, @assessment
-          .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Permanently remove all team grades for this assessment"}
-            = button_to 'Delete Existing Team Grades', delete_grades_path(@assessment), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure? This is a permanent action that will remove group grades for all teams" }
-        .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Sends emails to all students, provided they have a team grade and an individual grade"}
-          = button_to 'Send grades via email', assessment_score_email_path, method: :post, class: 'btn btn-info'
-      -else
-        - if can? :upload_grades, @assessment
-          .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Upload a CSV file with team grades for this assessment"}
-            = link_to 'Upload Team Grades', upload_grades_path(@assessment), class: 'btn btn-info', remote: true
-      - if can? :view_ind_grades, @assessment
-        .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "View each student's individual grade, and make manual changes to them"}
-          = link_to "View Individual Grades", view_ind_grades_path(@assessment), class: 'btn btn-info'
-      - if @assessment.has_team_grades?
-        - if can? :toggle_results, @assessment
-          - if @assessment.show_results
-            .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Prevent students seeing their results for this assessment"}
-              = link_to "Hide students' grades", toggle_results_path(@assessment), method: :post, class: 'btn btn-warning'
+      .col-6#assessDate
+        %h3 Assessment Dates
+        %p= "Date opened: " + @assessment.date_opened.to_s
+        %p= "Date closed: " + @assessment.date_closed.to_s
+        - if can? :edit, @assessment
+          = link_to "Change Dates", edit_assessment_path(@assessment), class: 'btn btn-info'
+      .col-6#assessCrit
+        %h3 Assessment Questions
+        %p= "Total questions: " + @num_crits.to_s
+        %p= "Assessed questions: " + @assessed_crits.to_s
+        - if can? :mock_view, @assessment
+          - if @assessment.uni_module.teams.length > 0
+            = link_to "Show Student View", mock_view_assessment_path(@assessment) , class: 'btn btn-primary'
           - else
-            .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Allow students to see their results for this assessment"}
-              = button_to "Show students their grade", toggle_results_path(@assessment), method: :post, class: 'btn btn-warning'
+            .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "You need to add teams in order to use the student view"}
+              = button_to "Show Student View", '#', class: 'btn btn-secondary', disabled: true
+  %hr
 
-%h3 Team Grades
-= render 'assessments/grade_table'
+  .card#gradeTools
+    .card-header
+      %h3 Grade Tools
+    .card-body
+      .row
+        - if @assessment.has_team_grades?
+          - if can? :delete_grades, @assessment
+            .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Permanently remove all team grades for this assessment"}
+              = button_to 'Delete Existing Team Grades', delete_grades_path(@assessment), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure? This is a permanent action that will remove group grades for all teams" }
+          .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Sends emails to all students, provided they have a team grade and an individual grade"}
+            = button_to 'Send grades via email', assessment_score_email_path, method: :post, class: 'btn btn-info'
+        -else
+          - if can? :upload_grades, @assessment
+            .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Upload a CSV file with team grades for this assessment"}
+              = link_to 'Upload Team Grades', upload_grades_path(@assessment), class: 'btn btn-info', remote: true
+        - if can? :view_ind_grades, @assessment
+          .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "View each student's individual grade, and make manual changes to them"}
+            = link_to "View Individual Grades", view_ind_grades_path(@assessment), class: 'btn btn-info'
+        - if @assessment.has_team_grades?
+          - if can? :toggle_results, @assessment
+            - if @assessment.show_results
+              .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Prevent students seeing their results for this assessment"}
+                = link_to "Hide students' grades", toggle_results_path(@assessment), method: :post, class: 'btn btn-warning'
+            - else
+              .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Allow students to see their results for this assessment"}
+                = button_to "Show students their grade", toggle_results_path(@assessment), method: :post, class: 'btn btn-warning'
 
-%hr
-= link_to 'Back to module', @assessment.uni_module, class: 'btn btn-secondary'
+  %h3 Team Grades
+  = render 'assessments/grade_table'
+
+  %hr
+  = link_to 'Back to module', @assessment.uni_module, class: 'btn btn-secondary'

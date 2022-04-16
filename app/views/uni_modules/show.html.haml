@@ -1,57 +1,44 @@
 #putModalHere
+.width_80
+  %h1= @uni_module.title
 
-%h1= @uni_module.title
+  .card.card-body#modInfo
+    .row
+      .col-6
+        %h3 Module Staff
+        %ul.list-group
+          - @staff_list.each do |sm|
+            %li.list-group-item= link_to sm.user.real_display_name, sm.user.email_link
+          - if @show_all and can? :show_all_staff, @uni_module
+            %li.list-group-item.list-group-item-info= link_to "Show All Staff", show_all_staff_path(@uni_module), remote: true
+      .col-6
+        %h3 Student Info
+        %ul.list-group
+          %li.list-group-item= "Students enrolled: " + @students.to_s
+          %li.list-group-item= "Number of teams: " + @teams.count.to_s
+          - if can? :show_all_students, @uni_module
+            %li.list-group-item= link_to "Show All Students", show_all_students_path(@uni_module), remote: true
+    .row
+      .col-3
+        - if can? :edit, @uni_module
+          = link_to 'Edit details', edit_uni_module_path(@uni_module), class: "btn btn-info"
 
-.card.card-body#modInfo
-  .row
-    .col-6
-      %h3 Module Staff
-      %ul.list-group
-        - @staff_list.each do |sm|
-          -puts(sm.inspect)
-          %li.list-group-item= link_to sm.user.real_display_name, sm.user.email_link
-        - if @show_all and can? :show_all_staff, @uni_module
-          %li.list-group-item.list-group-item-info= link_to "Show All Staff", show_all_staff_path(@uni_module), remote: true
-    .col-6
-      -# %h3 Student Reports
-      -#   %ul.list-group
-      -#     -# %li.list-group-item= "First work log week: " + @uni_module.start_date.to_formatted_s(:long_ordinal)
-      -#     -# %li.list-group-item= "Last work log week: " + @uni_module.end_date.to_formatted_s(:long_ordinal)
-      -#     - if can? :view_disputes, @uni_module
-      -#       %li.list-group-item= link_to "View Disputes", view_disputes_path(@uni_module)
-      %h3 Student Reports
-      %ul.list-group
-        -# %li.list-group-item= "First work log week: " + @uni_module.start_date.to_formatted_s(:long_ordinal)
-        -# %li.list-group-item= "Last work log week: " + @uni_module.end_date.to_formatted_s(:long_ordinal)
-        - if can? :view_disputes, @uni_module
-          %li.list-group-item= link_to "View Reports", student_reports_path(@uni_module)
-      %h3 Student Info
-      %ul.list-group
-        %li.list-group-item= "Students enrolled: " + @students.to_s
-        %li.list-group-item= "Number of teams: " + @teams.count.to_s
-        - if can? :show_all_students, @uni_module
-          %li.list-group-item= link_to "Show All Students", show_all_students_path(@uni_module), remote: true
-  .row
-    .col-3
-      - if can? :edit, @uni_module
-        = link_to 'Edit details', edit_uni_module_path(@uni_module), class: "btn btn-info"
+  %h2 Assessments
+  = link_to 'Add new peer assessment', new_assessment_path, class: 'btn btn-primary'
+  = render 'assessment_list'
 
-%h2 Assessments
-= link_to 'Add new peer assessment', new_assessment_path, class: 'btn btn-primary'
-= render 'assessment_list'
+  %hr
+  %h2 Teams
+  - # Only display the button card if staff have permission to access it
+  - if can? :upload_teams, @uni_module
+    .card
+      .card-header
+        %h4.card-title Team Assignments
+      .card-body
+        - # Display the upload assignment button if no team assignments yet, otherwise display delete button
+        - if @teams.count == 0
+          = link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info", remote: true
+        - else
+          = link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
 
-%hr
-%h2 Teams
-- # Only display the button card if staff have permission to access it
-- if can? :upload_teams, @uni_module
-  .card
-    .card-header
-      %h4.card-title Team Assignments
-    .card-body
-      - # Display the upload assignment button if no team assignments yet, otherwise display delete button
-      - if @teams.count == 0
-        = link_to 'Upload Team Assignment', upload_teams_path(@uni_module.id), class: "btn btn-info", remote: true
-      - else
-        = link_to 'Remove Current Team Assignment', delete_teams_path(@uni_module.id), class: 'btn btn-danger', method: :delete, data: {confirm: 'This will permanently remove all teams in this module'}
-
-= render 'uni_modules/team_list'
+  = render 'uni_modules/team_list'

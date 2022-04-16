@@ -1,39 +1,39 @@
 #putModalHere
+.width_80
+  %h2= "Team " + @team.team_number.to_s
 
-%h2= "Team " + @team.team_number.to_s
+  %h3 Members
+  = render 'admin/small_user_list'
+  - if @team.users.count > 0
+    .glyphRow
+      %h5 Group Email Info
+      %span.material-icons email
+      #groupEmail
+        .card.card-body
+          .row
+            .col-9
+              .card
+                %p#groupEmailText= @team.group_email_link
+            .col-2
+              %button.copy-btn.btn.btn-info Copy to clipboard
 
-%h3 Members
-= render 'admin/small_user_list'
-- if @team.users.count > 0
-  .glyphRow
-    %h5 Group Email Info
-    %span.material-icons email
-    #groupEmail
-      .card.card-body
-        .row
-          .col-9
-            .card
-              %p#groupEmailText= @team.group_email_link
-          .col-2
-            %button.copy-btn.btn.btn-info Copy to clipboard
+  %hr
 
-%hr
+  %h3 Peer Assessments
+  - if current_user.staff
+    = render 'admin/assessment_list_staff'
+  - else
+    = render 'admin/assessment_list'
 
-%h3 Peer Assessments
-- if current_user.staff
-  = render 'admin/assessment_list_staff'
-- else
-  = render 'admin/assessment_list'
+  %hr
 
-%hr
-
-%h3 Reports
-- if @reports.count > 0
-  = render 'student_reports/reports_list', locals: {reports: @reports}
--else
-  "No Current Reports"
+  %h3 Reports
+  - if @reports.count > 0
+    = render 'student_reports/reports_list', locals: {reports: @reports}
+  -else
+    "No Current Reports"
 
 
-%hr
-- if can? :show, @team.uni_module
-  = link_to "Back to module", @team.uni_module, class: 'btn btn-secondary'
+  %hr
+  - if can? :show, @team.uni_module
+    = link_to "Back to module", @team.uni_module, class: 'btn btn-secondary'

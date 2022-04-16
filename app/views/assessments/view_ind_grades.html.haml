@@ -1,45 +1,45 @@
 #putModalHere
+.width_80
+  %h3= "Viewing individual grades for #{@assess.name}"
 
-%h3= "Viewing individual grades for #{@assess.name}"
-
-%table.table.table-bordered.table-hover.table-striped#indGradeTable
-  %tr
-    %th Team Number
-    %th Student Name
-    %th Team Grade
-    %th Peer Assessment Weighting
-    %th Individual Mark
-    %th Manually Set?
-    %th
-  - @teams.each do |team|
-    - team_grade = TeamGrade.where(team: team, assessment: @assess).first
-    - team.student_teams.each do |student_team|
-      - ind_weight = StudentWeighting.where(student_team_id: student_team.id, assessment: @assess).first
-      %tr
-        %td= "Team #{team.team_number}"
-        %td= student_team.user.real_display_name
-        - if team_grade.nil?
-          %td Pending team grade
-        - else
-          %td= team_grade.grade
-        - if ind_weight.nil?
-          %td{"colspan": 4}= "No students from this team have completed this assessment yet"
-        - else
-          %td= ind_weight.weighting
-          %td= team_grade.nil? ? "Pending team grade" : (team_grade.grade * ind_weight.weighting).round(2)
-          - if ind_weight.manual_set
-            %td
-              Yes
-              %br
-              %strong Reason:
-              = ind_weight.reason
-            %td
-              - if can? :reset_grade, ind_weight
-                = button_to "Reset Weighting", reset_grade_path(ind_weight), method: :post, class: 'btn btn-warning'
+  %table.table.table-bordered.table-hover.table-striped#indGradeTable
+    %tr
+      %th Team Number
+      %th Student Name
+      %th Team Grade
+      %th Peer Assessment Weighting
+      %th Individual Mark
+      %th Manually Set?
+      %th
+    - @teams.each do |team|
+      - team_grade = TeamGrade.where(team: team, assessment: @assess).first
+      - team.student_teams.each do |student_team|
+        - ind_weight = StudentWeighting.where(student_team_id: student_team.id, assessment: @assess).first
+        %tr
+          %td= "Team #{team.team_number}"
+          %td= student_team.user.real_display_name
+          - if team_grade.nil?
+            %td Pending team grade
           - else
-            %td= "No"
-            %td
-              - if can? :update_grade, ind_weight
-                = link_to "Set Weighting", update_grade_form_path(ind_weight), remote: true, class: 'btn btn-warning'
+            %td= team_grade.grade
+          - if ind_weight.nil?
+            %td{"colspan": 4}= "No students from this team have completed this assessment yet"
+          - else
+            %td= ind_weight.weighting
+            %td= team_grade.nil? ? "Pending team grade" : (team_grade.grade * ind_weight.weighting).round(2)
+            - if ind_weight.manual_set
+              %td
+                Yes
+                %br
+                %strong Reason:
+                = ind_weight.reason
+              %td
+                - if can? :reset_grade, ind_weight
+                  = button_to "Reset Weighting", reset_grade_path(ind_weight), method: :post, class: 'btn btn-warning'
+            - else
+              %td= "No"
+              %td
+                - if can? :update_grade, ind_weight
+                  = link_to "Set Weighting", update_grade_form_path(ind_weight), remote: true, class: 'btn btn-warning'
 
-= link_to "Back to Assessment", @assess, class: 'btn btn-secondary'
+  = link_to "Back to Assessment", @assess, class: 'btn btn-secondary'

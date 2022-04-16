@@ -1,6 +1,7 @@
-%h1= "Editing Module: #{@uni_module.name}"
+.width_80
+  %h1= "Editing Module: #{@uni_module.name}"
 
-= render 'form'
+  = render 'form'
 
-= link_to 'Back to module', @uni_module, class: 'btn btn-lg btn-warning'
-= link_to 'Back to dashboard', home_staff_home_path, class: 'btn btn-lg btn-warning'
+  = link_to 'Back to module', @uni_module, class: 'btn btn-lg btn-warning'
+  = link_to 'Back to dashboard', home_staff_home_path, class: 'btn btn-lg btn-warning'

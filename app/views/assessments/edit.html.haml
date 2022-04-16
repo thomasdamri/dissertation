@@ -1,6 +1,7 @@
-%h1= "Editing assessment: #{@assessment.name}"
+.width_80
+  %h1= "Editing assessment: #{@assessment.name}"
 
-= render 'form'
+  = render 'form'
 
-= link_to 'Back to assessment', assessment_path(@assessment), class: 'btn btn-secondary'
-= link_to "Back to module", @assessment.uni_module, class: 'btn btn-secondary'
+  = link_to 'Back to assessment', assessment_path(@assessment), class: 'btn btn-secondary'
+  = link_to "Back to module", @assessment.uni_module, class: 'btn btn-secondary'

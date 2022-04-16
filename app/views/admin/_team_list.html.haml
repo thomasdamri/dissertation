@@ -1,22 +1,23 @@
-- if @teams.length > 0
-  %nav{"aria-label": "Student list navigation"}
-    = will_paginate @teams
-%table.table.table-bordered.table-striped.table-hover
-  %thead
-    %tr
-      %th Module
-      %th Team Number
-      %th Number of Students
-      %th
-      %th
-      %th
-
-  %tbody
-    - @teams.each do |team|
+.width_80
+  - if @teams.length > 0
+    %nav{"aria-label": "Student list navigation"}
+      = will_paginate @teams
+  %table.table.table-bordered.table-striped.table-hover
+    %thead
       %tr
-        %td= team.uni_module.name
-        %td= team.number
-        %td= team.student_teams.count
-        %td= link_to 'View', team, class: 'btn btn-primary'
-        %td= link_to 'Edit', edit_team_path(team), class: 'btn btn-info'
-        %td= link_to 'Delete', team, method: :delete, data: { confirm: 'Are you sure? This is a permanent action that will remove all team data?' }, class: 'btn btn-danger'
+        %th Module
+        %th Team Number
+        %th Number of Students
+        %th
+        %th
+        %th
+
+    %tbody
+      - @teams.each do |team|
+        %tr
+          %td= team.uni_module.name
+          %td= team.team_number
+          %td= team.student_teams.count
+          %td= link_to 'View', team, class: 'btn btn-primary'
+          %td= link_to 'Edit', edit_team_path(team), class: 'btn btn-info'
+          %td= link_to 'Delete', team, method: :delete, data: { confirm: 'Are you sure? This is a permanent action that will remove all team data?' }, class: 'btn btn-danger'

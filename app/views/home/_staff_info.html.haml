@@ -12,17 +12,3 @@
             .collapse{id: "collapse#{mod.id}"}
               = link_to "Edit", edit_uni_module_path(mod), class: 'btn btn-info'
               = link_to 'Delete', mod, method: :delete, data: { confirm: 'Are you sure? This is a permanent action that will remove all module data?' }, class: 'btn btn-danger'
-.card.col#logInfo
-  .card-body
-    %h3 My Work Log Disputes
-    %ul.list-group
-      - if @team_disputes.length == 0
-        %li.list-group-item.list-group-item-secondary You do not have any unresolved disputes
-      - else
-        - # List the teams with disputes still to sort out with numbers in badges
-        - @team_disputes.each do |k, v|
-          - team = Team.where(id: k).first
-          - mod = team.uni_module
-          %li.list-group-item
-            = link_to "#{mod.code} - Team #{team.number}", view_disputes_path(mod)
-            %span.badge.badge-primary= v
