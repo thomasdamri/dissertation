@@ -261,17 +261,16 @@ class AssessmentsController < ApplicationController
   def send_score_email
     assessment = Assessment.find(params['id'])
     teams = assessment.uni_module.teams.pluck(:id)
-    stud_teams = StudentTeam.where(team_id: teams).pluck(:user_id, :id)
-    users = User.where(id: stud_teams.user_id).all
+    stud_teams = StudentTeam.where(team_id: teams)
 
-    stud_teams.each do |u|
-      team = u.teams.where(uni_module: assessment.uni_module).first
+    stud_teams.each do |st|
+      team = st.team
       team_grade = team.team_grades.where(assessment: assessment).first
-      ind_weight = StudentWeighting.where(user: u, assessment: assessment).first
+      ind_weight = StudentWeighting.where(student_team: st, assessment: assessment).first
 
       # Only send the email to the student if they have a team grade and an individual weighting
       unless team_grade.nil? or ind_weight.nil?
-        StudentMailer.score_email(u, assessment, team_grade, ind_weight).deliver
+        StudentMailer.score_email(st.user, assessment, team_grade, ind_weight).deliver
       end
     end
 
