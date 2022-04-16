@@ -22,3 +22,6 @@
       %h6="Report Description:"
     .col
       = student_report.report_reason
+  .row 
+    .col 
+      = link_to fa_icon("check", text: "Complete Report"), complete_report_form_path(student_report.id)

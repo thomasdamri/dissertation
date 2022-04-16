@@ -2,7 +2,7 @@ import { Controller } from "stimulus"
 import { get } from '@rails/request.js'
 
 export default class extends Controller {
-  static targets = ["reportingSelect","formCollection"]
+  static targets = ["reportingSelect","formCollection", "takeActionBoolean", "emailReporteeBoolean", "reporteeResponse"]
 
   connect() {
     console.log("hello from StimulusJS")
@@ -20,6 +20,36 @@ export default class extends Controller {
       get(`/student_reports/get_list?target=${target}&selected=${selected}`, {
         responseKind: "turbo-stream"
       })
+    }
+  }
+
+  change_action_take(event){
+    console.log("changing action")
+    let takeActionBooleanValue = this.takeActionBooleanTarget.value
+    let emailReporteeBooleanElement = this.emailReporteeBooleanTarget
+    let actionTakenInputBoxElement = this.reporteeResponseTarget
+    console.log(takeActionBooleanValue)
+    if(takeActionBooleanValue==true){
+      emailReporteeBooleanElement.disabled = false
+      emailReporteeBooleanElement.value = 0
+      actionTakenInputBoxElement.disabled = false
+    } else{
+      emailReporteeBooleanElement.value = false
+      actionTakenInputBoxElement.value = null
+      emailReporteeBooleanElement.disabled = true
+      actionTakenInputBoxElement.disabled = true
+    }
+  }
+
+  change_email_reportee(event){
+    let emailReporteeBooleanValue = this.emailReporteeBooleanTarget.value
+    let actionTakenInputBoxElement = this.reporteeResponseTarget
+    console.log(emailReporteeBooleanValue)
+    if(emailReporteeBooleanValue==true){
+      actionTakenInputBoxElement.disabled = false
+    } else{
+      actionTakenInputBoxElement.value = null
+      actionTakenInputBoxElement.disabled = true
     }
   }
 

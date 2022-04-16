@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_09_181131) do
+ActiveRecord::Schema.define(version: 2022_04_16_161116) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -71,8 +71,10 @@ ActiveRecord::Schema.define(version: 2022_04_09_181131) do
   create_table "report_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_report_id"
     t.text "reportee_response"
-    t.string "action_taken", default: "0", null: false
+    t.string "action_taken"
     t.bigint "report_object_id", null: false
+    t.integer "emailed_reportee"
+    t.integer "taken_action"
     t.index ["student_report_id"], name: "fk_rails_7395fc1714"
   end
 

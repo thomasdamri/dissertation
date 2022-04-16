@@ -123,6 +123,10 @@ class StudentReportsController < ApplicationController
     end
   end
 
+  def complete_report_form
+    @student_report = StudentReport.find(params[:report_id])
+  end
+
 
   private
   # Use callbacks to share common setup or constraints between actions.

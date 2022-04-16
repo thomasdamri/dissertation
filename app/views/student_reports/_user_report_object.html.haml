@@ -3,10 +3,10 @@
 .task-options-container
   .row.mb-3.justify-content-center
     .col
-      = pagy_bootstrap_nav(pagy).html_safe
+      = pagy_bootstrap_nav(pagy_report).html_safe
   .row
     .col
-      - report_objects.each.with_index(pagy.offset) do |report_object, index|
+      - report_objects.each.with_index(pagy_report.offset) do |report_object, index|
         - if (student_report.object_type == 0)
           - report_object  = StudentTeam.find_by(id: report_object.report_object_id)
           - reportee = report_object.user
