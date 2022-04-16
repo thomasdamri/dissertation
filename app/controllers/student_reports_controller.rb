@@ -127,6 +127,10 @@ class StudentReportsController < ApplicationController
     @student_report = StudentReport.find(params[:report_id])
   end
 
+  def show_complete_report
+    @student_report = StudentReport.find(params[:report_id])
+  end
+
   def complete_report
     @student_report = StudentReport.find(params[:report_id])
     @uni_module = @student_report.student_team.team.uni_module
@@ -149,7 +153,8 @@ class StudentReportsController < ApplicationController
           elsif(@student_report.object_type==2)
             task = StudentTask.find(report.report_object_id)
             reportee = task.student_team.user
-            task.destroy
+            task.hidden = true
+            task.save
           end
           StudentMailer.reportee_response(user: reportee , reportee_response: report.reportee_response)
         end

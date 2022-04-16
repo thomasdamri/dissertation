@@ -1,0 +1,47 @@
+
+.task-options-container
+  -student_report = report_object.student_report
+  - if student_report.object_type ==0
+    - object  = StudentTeam.find_by(id: report_object.report_object_id)
+    - object_name = object.user.real_display_name
+  -elsif student_report.object_type == 1
+    - object  = Assessment.find_by(id: report_object.report_object_id)
+    - object_name = object.name
+  - else 
+    - object  = StudentTask.find_by(id: report_object.report_object_id)
+    - object_name = object.task_objective
+  
+  %h5.font-weight-bold= ("Report Item: " + object_name.to_s)
+  .row 
+    .col-auto
+      %h5 Will you take action on this reported item?
+    .col-auto
+      -if report_object.taken_action == 0
+        %p No
+      - else 
+        %p Yes
+  .row 
+    .col 
+      %h5 Action Taken:
+  .row 
+    .col 
+      %p= report_object.action_taken
+  -if report_object.taken_action != 0
+    
+
+    - if student_report.object_type != 1
+      .row 
+        .col-auto
+          %h5 Would you like to email the reportee?
+        .col-auto
+          -if(report_object.emailed_reportee==0)
+            %p No
+          - else 
+            %p Yes
+      -if(report_object.emailed_reportee==1)      
+        .row 
+          .col 
+            %h5 Message to reportee:
+        .row 
+          .col 
+            %p= report_object.reportee_response 

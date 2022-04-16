@@ -127,6 +127,7 @@ Rails.application.routes.draw do
   get 'show_student_task/:task_id/:student_team_id', to: "student_tasks#show_student_task", as: 'show_student_task'
 
   get 'show_report/:report_id/:student_team_id', to: "student_reports#show_report", as: 'show_report'
+  get 'show_complete_report/:report_id', to: "student_reports#show_complete_report", as: "show_complete_report"
   get 'complete_report_form/:report_id', to: 'student_reports#complete_report_form', as: 'complete_report_form'
   patch 'complete_report/:report_id', to: 'student_reports#complete_report', as: 'complete_report'
 

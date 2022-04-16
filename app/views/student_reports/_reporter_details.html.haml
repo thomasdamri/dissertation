@@ -1,7 +1,7 @@
 .task-options-container
   .row
     .col
-      =link_to fa_icon("chevron-left", text: 'Go Back'), team_path(student_report.student_team) 
+      =link_to fa_icon("chevron-left", text: 'Go Back'), student_report.student_team.team
     .col-auto.pull-right
       %h4= ("Report #"+ student_report.id.to_s)
   .row.mt-1.mb-1
@@ -22,6 +22,13 @@
       %h6="Report Description:"
     .col
       = student_report.report_reason
-  .row 
-    .col 
-      = link_to fa_icon("check", text: "Complete Report"), complete_report_form_path(student_report.id)
+
+  - if !student_report.complete 
+    .row 
+      .col 
+        = link_to fa_icon("check", text: "Complete Report"), complete_report_form_path(student_report.id)
+  - else 
+    .row 
+      .col
+        - resolver = User.find(student_report.handled_by)
+        %h4.font-weight-bold= ("This report has been marked as resolved by "+ resolver.real_display_name)

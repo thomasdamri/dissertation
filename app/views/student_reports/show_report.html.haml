@@ -1,5 +1,7 @@
 .container.mt-4
   = render partial: 'reporter_details', locals: {student_report: @student_report, reporter: @reporter}
+  -if @student_report.complete
+    = render partial: "show_reporter_response", locals: {student_report: @student_report}
 
   - if @student_report.object_type == 0
     = render partial: 'user_report_object', locals: {report_objects: @report_objects, pagy_report: @pagy_report, student_report: @student_report}
@@ -8,5 +10,9 @@
   - else 
     = render partial: 'task_report_object', locals: {report_objects: @report_objects, pagy_report: @pagy_report, student_report: @student_report}
 
+
   - if @student_report.object_type != 2
+    .task-options-container
+      .row.col.text-center 
+        %h5.font-weight-bold The reportees team page can be seen below. Please use this to help aid your report resolution decisions.
     = render "student_teams/admin_index"

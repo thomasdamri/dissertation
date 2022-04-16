@@ -7,6 +7,9 @@
     .col
       = pagy_bootstrap_nav(pagy_report).html_safe
 
-- report_objects.each.with_index(pagy_report.offset) do |report_object, index|
-  - report_object = StudentTask.find_by(id: report_object.report_object_id)
+- report_objects.each.with_index(pagy_report.offset) do |ro, index|
+  -@chosen_object = ro
+  - report_object = StudentTask.find_by(id: ro.report_object_id)
   = render partial: "student_tasks/show_task", locals: {student_task: report_object, student_task_comment: StudentTaskComment.new , student_team_id: student_report.student_team}
+-if @chosen_object.student_report.complete
+  = render partial: "show_complete_report", locals: {report_object: @chosen_object}

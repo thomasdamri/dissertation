@@ -7,9 +7,10 @@
       = pagy_bootstrap_nav(pagy_report).html_safe
   .row
     .col
-      - report_objects.each.with_index(pagy_report.offset) do |report_object, index|
+      - report_objects.each.with_index(pagy_report.offset) do |ro, index|
+        -@chosen_object = ro
         - team = student_report.student_team.team
-        - report_object = Assessment.find_by(id: report_object.report_object_id)
+        - report_object = Assessment.find_by(id: ro.report_object_id)
         .row
           .col-auto 
             Assessment Details:
@@ -53,4 +54,6 @@
                       %br
                       %strong Reason:
                       = ind_weight.reason
+-if @chosen_object.student_report.complete
+  = render partial: "show_complete_report", locals: {report_object: @chosen_object}
 
