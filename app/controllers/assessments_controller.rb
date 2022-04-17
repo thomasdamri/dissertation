@@ -59,7 +59,8 @@ class AssessmentsController < ApplicationController
         crit.assessed = false
       end
     end
-
+    @assessment.save
+    puts(@assessment.errors.full_messages)
     if @assessment.save
       redirect_to @assessment, notice: 'Assessment was successfully created.'
     else

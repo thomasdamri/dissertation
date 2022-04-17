@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_16_161116) do
+ActiveRecord::Schema.define(version: 2022_04_17_183900) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 2022_04_16_161116) do
 
   create_table "report_objects", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_report_id"
-    t.text "reportee_response"
+    t.text "reportee_response", size: :medium
     t.string "action_taken"
     t.bigint "report_object_id", null: false
     t.integer "emailed_reportee"
@@ -96,15 +96,15 @@ ActiveRecord::Schema.define(version: 2022_04_16_161116) do
     t.bigint "student_team_id"
     t.integer "object_type", null: false
     t.datetime "report_date", null: false
-    t.text "reporter_response"
+    t.text "reporter_response", size: :medium
     t.boolean "complete", default: false
-    t.text "report_reason", null: false
+    t.text "report_reason", size: :medium, null: false
     t.bigint "handled_by"
     t.index ["student_team_id"], name: "fk_rails_273f11fcde"
   end
 
   create_table "student_task_comments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
-    t.text "comment", null: false
+    t.text "comment", size: :medium, null: false
     t.datetime "posted_on"
     t.bigint "user_id"
     t.boolean "deleted", default: false, null: false
@@ -114,7 +114,7 @@ ActiveRecord::Schema.define(version: 2022_04_16_161116) do
 
   create_table "student_task_edits", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_task_id"
-    t.text "edit_reason", null: false
+    t.text "edit_reason", size: :medium, null: false
     t.datetime "previous_target_date", null: false
     t.integer "user_id", null: false
     t.datetime "edit_date", null: false
@@ -129,7 +129,7 @@ ActiveRecord::Schema.define(version: 2022_04_16_161116) do
 
   create_table "student_tasks", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.bigint "student_team_id"
-    t.text "task_objective", null: false
+    t.text "task_objective", size: :medium, null: false
     t.integer "task_difficulty", default: 0, null: false
     t.integer "task_progress", default: 0, null: false
     t.datetime "task_start_date"
@@ -137,7 +137,7 @@ ActiveRecord::Schema.define(version: 2022_04_16_161116) do
     t.datetime "task_complete_date"
     t.boolean "hidden", default: false
     t.integer "hours"
-    t.text "task_completed_summary"
+    t.text "task_completed_summary", size: :medium
     t.bigint "student_task_likes_count"
     t.bigint "student_task_comments_count"
     t.datetime "latest_comment_time"
@@ -235,6 +235,10 @@ ActiveRecord::Schema.define(version: 2022_04_16_161116) do
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "assessment_results", "questions", on_delete: :cascade
+  add_foreign_key "assessment_results", "student_weightings", column: "student_weightings_id", on_delete: :cascade
+  add_foreign_key "assessment_results", "users", column: "author_id"
+  add_foreign_key "assessment_results", "users", column: "target_id"
   add_foreign_key "assessments", "uni_modules", on_delete: :cascade
   add_foreign_key "questions", "assessments", on_delete: :cascade
   add_foreign_key "report_objects", "student_reports", on_delete: :cascade

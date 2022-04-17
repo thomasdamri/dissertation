@@ -28,16 +28,20 @@ export default class extends Controller {
     let takeActionBooleanValue = this.takeActionBooleanTarget.value
     let emailReporteeBooleanElement = this.emailReporteeBooleanTarget
     let actionTakenInputBoxElement = this.reporteeResponseTarget
+    let actionTakenText = this.actionTakenTextTarget
     console.log(takeActionBooleanValue)
     if(takeActionBooleanValue==true){
       emailReporteeBooleanElement.disabled = false
       emailReporteeBooleanElement.value = 0
       actionTakenInputBoxElement.disabled = true
+      actionTakenText.disabled = false
     } else{
       emailReporteeBooleanElement.value = false
       actionTakenInputBoxElement.value = null
       emailReporteeBooleanElement.disabled = true
       actionTakenInputBoxElement.disabled = true
+      actionTakenText.disabled = true
+      actionTakenText.value = null
     }
   }
 

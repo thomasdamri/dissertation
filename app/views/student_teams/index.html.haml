@@ -4,13 +4,17 @@
 - content_for :title, "[Student] Team Homepage"
 
 .col.mt-0#main-team-home-page-container
-  .row 
-    = link_to fa_icon("flag", text: 'Report'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#reportModal'
+  -# .row.col-auto.task-options-container 
+  -#   = link_to fa_icon("flag", text: 'Report'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#reportModal'
   -if @outgoing_assessments > 0
     .row.justify-content-center 
       .col-8.task-options-container
         %h4.font-weight-bold.text-wrap.text-center= ("You currently have " + @outgoing_assessments.to_s+ " peer assessments to complete. Please submit them before deadline to provide peer feedback.")
-  .row.justify-content-center
+  .row 
+    .col-1.offset-1.pr-4
+      .row 
+        .col.pl-2.task-options-container.text-center
+          = link_to fa_icon("flag", text: 'Report'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#reportModal'
     .col-4.pr-4
       = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id, select_options: @select_options, tasks: @tasks, pagy: @pagy, tasks_count: @tasks_count}
     .col-4

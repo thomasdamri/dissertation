@@ -13,8 +13,8 @@
       - elsif table_data["graph_type"] == 2 #pie chart
         = pie_chart table_data["data"]
 
-      - elsif table_data["graph_type"] == 2 #column chart
-        = column_chart table_data["data"]
+      - elsif table_data["graph_type"] == 3 #column chart
+        = column_chart table_data["data"], colors: ["green", "yellow", "red"]
 
   - if table_data["statements"] != nil 
     .row

@@ -6,7 +6,7 @@
         .col.auto 
           =link_to fa_icon("chevron-left", text: 'Go Back'), :back
         .col-auto.pull-right
-          = f.button :submit
+          = f.button :submit, 'Complete Report', class: 'btn btn-primary', data: { confirm: 'Are you sure? Once submitted the report will be marked as complete and emails will be sent.'}
 
     .task-options-container
       %h4.font-weight-bold Response to Reportee:
@@ -58,3 +58,7 @@
           .row 
             .col 
               = ro.text_area :reportee_response, hint: "This response will be emailed to the reportee, so please be detailed.", data: {target: "report.reporteeResponse"}, disabled: true, class: "form-control"
+        - else 
+          .d-none
+            = ro.select :emailed_reportee, [["No", 0], ["Yes", 1]], {}, { class: 'form-select form-control', data: { action: "change->report#change_email_reportee"}, "data-report-target": "emailReporteeBoolean", include_blank: false , disabled: true}
+            = ro.text_area :reportee_response, hint: "This response will be emailed to the reportee, so please be detailed.", data: {target: "report.reporteeResponse"}, disabled: true, class: "form-control"

@@ -7,7 +7,7 @@
   #navbarText.collapse.navbar-collapse
     %ul.navbar-nav.mr-auto
       %li.nav-item.active
-        %a.nav-link{:href => root_path}
+        %a.nav-link.navbar-text{:href => root_path}
           Home
       - unless current_user.nil?
         - if current_user.staff
@@ -33,7 +33,7 @@
           %li.nav-item.active
             %a.nav-link{:href => admin_dashboard_path} Admin Dashboard
       %li.nav-item.active
-        %a.nav-link{:href => about_url} About
+        %a.nav-link.navbar-text{:href => about_url} About
     %span.nav-item.active
       - if current_user.nil?
         = link_to 'Sign in', new_user_session_path, class: 'btn', style: 'color: white;'

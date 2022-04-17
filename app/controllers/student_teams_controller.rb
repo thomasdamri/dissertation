@@ -45,7 +45,10 @@ class StudentTeamsController < ApplicationController
     @tables.append(@student_team.teamTaskCountComparison(range))
     @tables.append(@student_team.getTaskCountPerStudent())
     @tables.append(@student_team.getWeeklyTeamHours(range))
-
+    @tables.append(@student_team.getTotalHoursLoggedTeam())
+    @tables.append(@student_team.getMeetingContributionsPerWeek(range))
+    @tables.append(@student_team.percentageOfTasksCompleteOnTimeTeam())
+    @tables.append(@student_team.tasksCompletePerWeekTeam(range))
     respond_to do |format|
       format.js
     end
@@ -62,6 +65,10 @@ class StudentTeamsController < ApplicationController
       @tables.append(@student_team.teamTaskCountComparison(range))
       @tables.append(@student_team.getTaskCountPerStudent())
       @tables.append(@student_team.getWeeklyTeamHours(range))
+      @tables.append(@student_team.getTotalHoursLoggedTeam())
+      @tables.append(@student_team.getMeetingContributionsPerWeek(range))
+      @tables.append(@student_team.percentageOfTasksCompleteOnTimeTeam())
+      @tables.append(@student_team.tasksCompletePerWeekTeam(range))
     else
       student_team = StudentTeam.find_by(id: params[:student_team_id])
       @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
@@ -69,6 +76,9 @@ class StudentTeamsController < ApplicationController
       range = @student_team.team.uni_module.get_week_range()
       @tables = []
       @tables.append(student_team.uniqueStudentTaskCount(range))
+      @tables.append(student_team.easyMediumHardStudentComparison())
+      @tables.append(student_team.studentWeeklyTeamHours(range))
+      @tables.append(student_team.studentCompleteTaskWeek(range))
     end
     respond_to do |format|
       format.js 

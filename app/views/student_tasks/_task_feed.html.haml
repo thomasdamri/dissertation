@@ -1,9 +1,9 @@
 .col.px-1
   - if tasks.count > 0
     - if tasks_count > 10
-      .row
-        .col.task-options-container.text-center 
-          = pagy_bootstrap_nav(pagy).html_safe
+      -# .row
+      -#   .col.task-options-container.text-center 
+      -#     = pagy_bootstrap_nav(pagy).html_safe
     - tasks.each do |task|
       = render partial: 'student_tasks/task_feed_container', locals: {task_local: task}
 

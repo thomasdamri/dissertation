@@ -15,6 +15,6 @@ class UpdateStringToTextField < ActiveRecord::Migration[6.0]
 
     add_column :student_tasks, :task_completed_summary, :text, limit: 16.megabytes - 1
 
-    change_column :student_tasks, :task_target_date, :text, limit: 16.megabytes - 1
+    change_column :student_tasks, :task_target_date, :datetime
   end
 end

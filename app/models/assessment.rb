@@ -191,10 +191,28 @@ class Assessment < ApplicationRecord
         # Update this in the database
         sw.update_weighting(student_weights[student_team.id], num_results)
       end
-      puts(sw.inspect)
-      puts(sw.errors.full_messages)
     end
 
+  end
+
+  def self.whatAreAssessments()
+    output = "Peer Assessments provide a structured way for students to critique and provide feedback to each other..\n"
+    output += "These questions range from yes/no types, text responses and number responses, like rating something  between 0-5.\n"
+    output += "Your module leaders have the option to make these questions hold a weighting.\n"
+    return output
+  end
+
+  def self.whatAreWeightings()
+    output = "Weightings are useful, as they attempt to fairly redistribute grades throughout the team, depending on how everybody answered the peer assessments.\n"
+    output += "This is helpful, as sometimes not everybody will end up contributing fairly\n"
+    output += "So with assessments which will generate a weighting for yourself and your team mates, your grades should more accurately relate to your inputs.\n"
+    return output
+  end
+
+  def self.howToAnswerQuestions()
+    output = "When you answer the peer assessments, you may find yourself struggling to accurately rate members.\n"
+    output += "It is suggested that you use TeamPlayerPlus to study the team data and previous tasks, to allow yourself to give more accurate ratings.\n"
+    return output
   end
 
 

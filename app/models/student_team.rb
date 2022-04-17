@@ -32,12 +32,6 @@ class StudentTeam < ApplicationRecord
     return StudentTeam.find_by(id: student_team_id).user.real_display_name
   end
 
-  #Can use with column graph or line graph
-  def wholeTeamWeeklyTaskCount()
-    data = team.student_tasks.group_by_week(:task_target_date).count
-    return data
-  end
-
   def uniqueStudentTaskCount(range)
     table_data = {}
     table_data["graph_type"] = 0
@@ -45,6 +39,52 @@ class StudentTeam < ApplicationRecord
     table_data["data"] = student_tasks.group_by_week(:task_start_date, range: range).count
     table_data["xtitle"] = "Date (Weeks)"
     table_data["ytitle"] = "Task Creation Count"
+    return table_data
+  end
+
+  def studentCompleteTaskWeek(range)
+    table_data = {}
+    table_data["graph_type"] = 0
+    table_data["graph_title"] = "Student Tasks Completed Weekly"
+    table_data["data"] = student_tasks.group_by_week(:task_complete_date, range: range).count
+    table_data["xtitle"] = "Date (Weeks)"
+    table_data["ytitle"] = "Task Complete Count"
+    return table_data
+  end
+
+  def studentWeeklyTeamHours(range)
+    data = {}
+    data[user.real_display_name] = 
+    puts(data.inspect)
+    table_data = {}
+    table_data["graph_type"] = 0
+    table_data["graph_title"] = "Hours Logged per Week"
+    table_data["data"] = student_tasks.where.not(task_complete_date: nil).group_by_week(:task_complete_date, range: range).sum("hours")
+    table_data["xtitle"] = "Date (Weeks)"
+    table_data["ytitle"] = "Time Logged (Hours)"
+    return table_data
+  end
+
+  def easyMediumHardStudentComparison()
+    data = {}
+    data["Easy"] = 0
+    data["Medium"] = 0
+    data["Hard"] = 0
+    student_tasks.each do |st|
+      if st.task_difficulty==0
+        data["Easy"] += 1
+      elsif st.task_difficulty==1
+        data["Medium"] += 1
+      else 
+        data["Hard"] += 1
+      end
+    end
+    table_data = {}
+    table_data["graph_type"] = 3
+    table_data["graph_title"] = "Comparison between Easy, Medium, Hard Task Count"
+    table_data["data"] = data
+    table_data["xtitle"] = "Task Difficulty"
+    table_data["ytitle"] = "Task Count"
     return table_data
   end
 
@@ -155,7 +195,7 @@ class StudentTeam < ApplicationRecord
     table_data = {}
     table_data["graph_type"] = 0
     table_data["graph_title"] = "Hours Logged per Week"
-    table_data["data"] = data
+    table_data["data"] = StudentTeam.replaceKeysWithWeekNumber(data)
     table_data["xtitle"] = "Date (Weeks)"
     table_data["ytitle"] = "Time Logged (Hours)"
 
@@ -173,6 +213,79 @@ class StudentTeam < ApplicationRecord
     return select_options
   end
 
+  def getTotalHoursLoggedTeam()
+    data = {}
+    team.student_teams.each do |member|
+      name = member.user.real_display_name
+      data[name] = member.student_tasks.sum(:hours)
+    end
+    table_data = {}
+    table_data["graph_type"] = 1
+    table_data["graph_title"] = "Total Time Logged"
+    table_data["data"] = data
+    table_data["xtitle"] = "Time Logged (Hours)"
+    table_data["ytitle"] = "Team Member"
+    return table_data
+  end
+
+  def getMeetingContributionsPerWeek(range)
+    data = team.student_teams.map { | team_member|{
+      name: team_member.user.real_display_name, data: team_member.student_chats.group_by_week(:posted, range: range).count
+    }}
+
+    table_data = {}
+    table_data["graph_type"] = 0
+    table_data["graph_title"] = "Weekly Meeting Contribution Count Per Week"
+    table_data["data"] = StudentTeam.replaceKeysWithWeekNumber(data)
+    table_data["xtitle"] = "Date (Weeks)"
+    table_data["ytitle"] = "Messages Sent"
+    return table_data
+  end
+
+  def percentageOfTasksCompleteOnTimeTeam()
+    data = {}
+    team.student_teams.each do |member|
+      name = member.user.real_display_name
+      tasks_finished_on_time = 0
+      member.student_tasks.each do |task|
+        # If the task has been marked complete and was finished before its target date
+        if((task.task_complete_date != nil) && (task.task_target_date >= task.task_complete_date))
+          tasks_finished_on_time += 1
+        end
+      end
+      total_tasks = member.student_tasks.count
+      if(total_tasks==0)
+        on_time_ratio = 0
+      else 
+
+        on_time_ratio = (tasks_finished_on_time /total_tasks.to_f) * 100
+      end
+      data[name] = on_time_ratio
+    end
+    table_data = {}
+    table_data["graph_type"] = 1
+    table_data["graph_title"] = "Percentage of Tasks Finished on Time"
+    table_data["data"] = data
+    table_data["xtitle"] = "Percentage of Tasks finished on Time"
+    table_data["ytitle"] = "Team Member"
+    return table_data
+  end
+
+  def tasksCompletePerWeekTeam(range)
+    data = team.student_teams.map { | team_member|{
+      name: team_member.user.real_display_name, data: team_member.student_tasks.group_by_week(:task_complete_date, range: range).count
+    }}
+
+    table_data = {}
+    table_data["graph_type"] = 0
+    table_data["graph_title"] = "Tasks Completed per Week"
+    table_data["data"] = StudentTeam.replaceKeysWithWeekNumber(data)
+    table_data["xtitle"] = "Date (Weeks)"
+    table_data["ytitle"] = "Task Completed Count"
+
+    return table_data
+
+  end
 
 
   def self.whatIsTeamData()

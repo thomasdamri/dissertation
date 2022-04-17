@@ -46,14 +46,19 @@
         %button.close{type: :button, data: {dismiss: :modal}}
           %span &times;
 
-      -# %div.modal-body
-      -#   // What student data is
-      -#   .mb-3.text-wrap{"style": "white-space: pre-line;"}
-      -#     %h6 What are Peer Assessments?
-      -#     %p= Assessment.whatAreAssessments()
+      %div.modal-body
+        // What are assessments
+        .mb-3.text-wrap{"style": "white-space: pre-line;"}
+          %h6 What are Peer Assessments?
+          %p= Assessment.whatAreAssessments()
 
-      -#   // Why use it
-      -#   .mb-3
-      -#     %h6 Are they Assessed?
-      -#     %p= Assessment.areTheyAssessed()
-          
+        // What are weighitngs
+        .mb-3
+          %h6 Are they Assessed?
+          %p= Assessment.whatAreWeightings()
+          %p{"style": "font-weight: bold;"} If you feel like your grade is unfair and doesn't accurately represent your input, please submit a report.
+
+        // how to answer questions
+        .mb-3
+          %h6 How to accurately rate peers?
+          %p= Assessment.howToAnswerQuestions()
