@@ -23,6 +23,18 @@ class Ability
         # Staff can only manage their own modules
         can :manage, UniModule, staff_modules: {user_id: user.id}
 
+        can [:show_student_task, :comment, :like_task, :return_task_list], StudentTask do |st|
+          st.student_team.team.uni_module.staff_modules.pluck(:user_id).include? user.id
+        end
+
+        can [:show_report, :report_resolution, :show_complete_report, :complete_report, :complete_report_form], StudentReport do |sr|
+          sr.student_team.team.uni_module.staff_modules.pluck(:user_id).include? user.id
+        end 
+
+        can [:manage], StudentTeam do |st|
+          st.team.uni_module.staff_modules.pluck(:user_id).include? user.id
+        end
+
         # Staff can edit their modules' teams
         can :manage, Team do |team|
           team.uni_module.staff_modules.pluck(:user_id).include? user.id
@@ -65,28 +77,20 @@ class Ability
         end
 
         can [:complete, :edit, :update, :destroy], StudentTask, user: user
-        # can :read, StudentTask, student_teams: {user_id: user.id}
-        # # Students can view their own team
-        # can :read, Team, student_teams: {user_id: user.id}
-        # # Students can interact with their own team's worklogs
-        # can [:new_worklog, :process_worklog, :display_worklogs, :display_log, :review_worklogs], Team, student_teams: {user_id: user.id}
+        can [:delete_comment], StudentTaskComment, user: user
+
+        # Must be apart of the team to create reports
+        can [:create, :get_list, :create], StudentReport
+
         # Students can fill in their team's peer assessments and see the results
         can [:fill_in, :process_assess, :results], Assessment do |assess|
           user.teams.pluck(:uni_module_id).include? assess.uni_module.id
-        end
-
-        # Can dispute worklogs from their own team
-        can [:accept_worklog, :dispute_worklog, :dispute_form], Worklog do |wl|
-          user.teams.pluck(:uni_module_id).include? wl.uni_module.id
         end
 
         can [:edit, :destroy, :update], StudentTask do |st|
           user.student_teams.pluck(:id).include? st.student_team_id
         end
 
-        # can [:delete_comment], StudentTaskComment do |c|
-        #   user.id == (c.user_id)
-        # end
         can [:delete_comment], StudentTaskComment, user_id: user.id
       end
     end

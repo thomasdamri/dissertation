@@ -12,5 +12,5 @@
           .row 
             .col.img-fluid
               = image_tag(c.image, class: "img-fluid")
--#           -if current_user.id == (c.user_id)
--#             = button_to 'Delete', delete_comment_path(c), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure?" }, remote: true
+        -if can? :delete_comment, c
+          = link_to 'Delete', delete_comment_path(c), method: :delete, class: 'btn btn-danger', data: { confirm: "Are you sure?" }

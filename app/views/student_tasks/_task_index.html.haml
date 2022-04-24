@@ -1,5 +1,6 @@
-.row
-  = render partial: 'student_tasks/form', locals: {student_team_id: student_team_id}
+- if StudentTeam.find(student_team_id).isInTeam?(current_user)
+  .row
+    = render partial: 'student_tasks/form', locals: {student_team_id: student_team_id}
 .row 
   = render partial: 'student_tasks/task_filtering', locals: {select_options: select_options}
 .row#task-list

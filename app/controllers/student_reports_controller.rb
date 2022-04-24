@@ -171,25 +171,23 @@ class StudentReportsController < ApplicationController
 
   private
   # Use callbacks to share common setup or constraints between actions.
+    #Only allow a list of trusted parameters through.
+    def student_report_params
+      params.require(:student_report).permit(:object_type, :report_reason, report_objects_attributes: [:report_object_id])
+    end
 
+    def user_report_resolution_params
+      params.require(:student_report).permit(:reporter_response, :reportee_response, :notify_reportee)
+    end
+    def normal_report_resolution_params
+      params.require(:student_report).permit(:reporter_response)
+    end
+    def task_report_resolution_params
+      params.require(:student_report).permit(:reporter_response, :delete_reported_task)
+    end
 
-  #Only allow a list of trusted parameters through.
-  def student_report_params
-    params.require(:student_report).permit(:object_type, :report_reason, report_objects_attributes: [:report_object_id])
-  end
-
-  def user_report_resolution_params
-    params.require(:student_report).permit(:reporter_response, :reportee_response, :notify_reportee)
-  end
-  def normal_report_resolution_params
-    params.require(:student_report).permit(:reporter_response)
-  end
-  def task_report_resolution_params
-    params.require(:student_report).permit(:reporter_response, :delete_reported_task)
-  end
-
-  def task_report_resolution_params
-    params.require(:student_report).permit(:reporter_response, report_objects_attributes: [:action_taken, :emailed_reportee, :taken_action, :id, :reportee_response])
-  end
+    def task_report_resolution_params
+      params.require(:student_report).permit(:reporter_response, report_objects_attributes: [:action_taken, :emailed_reportee, :taken_action, :id, :reportee_response])
+    end
 
 end 

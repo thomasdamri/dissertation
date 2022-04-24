@@ -1,5 +1,6 @@
 class StudentTask < ApplicationRecord
   belongs_to :student_team
+  has_one :user, through: :student_team
   has_many :student_task_edits, :dependent => :destroy
   has_many :student_task_comments, :dependent => :destroy
   has_many :student_task_likes, :dependent => :destroy

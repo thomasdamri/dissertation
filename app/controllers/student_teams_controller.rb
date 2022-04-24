@@ -1,9 +1,10 @@
 class StudentTeamsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_team
   authorize_resource
-
+  
   def index 
-    @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    authorize! :manage, @student_team
     @outgoing_assessments = @student_team.team.uni_module.getUncompletedOutgoingAssessmentCount(@student_team)
     @task = StudentTask.new
     @student_report = StudentReport.new
@@ -23,6 +24,7 @@ class StudentTeamsController < ApplicationController
   end
 
   def get_task_list
+    authorize! :manage, @student_team
     selected = params[:student_team][:user_id].to_i
     filter = params[:student_team][:team_id].to_i
     if(selected==-1)
@@ -39,6 +41,7 @@ class StudentTeamsController < ApplicationController
 
   def team_data_index
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    authorize! :manage, @student_team
     @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
     range = @student_team.team.uni_module.get_week_range()
     @tables = []
@@ -56,6 +59,7 @@ class StudentTeamsController < ApplicationController
 
   def team_data 
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    authorize! :manage, @student_team
     selected = params[:student_team][:user_id].to_i
     if(selected < 0)
       @student_team = StudentTeam.find_by(id: params[:student_team_id])
@@ -87,6 +91,7 @@ class StudentTeamsController < ApplicationController
 
   def swap_to_assessments
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    authorize! :manage, @student_team
     @assessments = @student_team.team.uni_module.assessments.order(date_opened: :desc)
     respond_to do |format|
       format.js 
@@ -95,6 +100,7 @@ class StudentTeamsController < ApplicationController
 
   def swap_to_tasks
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    authorize! :manage, @student_team
     @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
     @tasks = @student_team.team.student_tasks.order(task_start_date: :desc)
     @tasks_count = @tasks.count
@@ -106,6 +112,7 @@ class StudentTeamsController < ApplicationController
 
   def swap_to_meetings
     @student_team = StudentTeam.find_by(id: params[:student_team_id])
+    authorize! :manage, @student_team
     @select_options = StudentTeam.createTeamArray(params[:student_team_id], @student_team.team.id)
     @week_options = @student_team.team.uni_module.createWeekNumToDatesMap()
     @messages = @student_team.team.get_week_chats(-1, @week_options.values[0].to_date)
@@ -115,8 +122,8 @@ class StudentTeamsController < ApplicationController
   end
 
   def get_assessment
+    authorize! :manage, @student_team
     @assessment = Assessment.find_by(id: params[:assessment_id])
-    puts(@assessment.inspect)
     respond_to do |format|
       format.js { render 'student_assessments/show_assessment'}
     end
@@ -128,11 +135,6 @@ class StudentTeamsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_team
-      @student_team = Student_Team.find(params[:student_team_id])
+      @student_team = StudentTeam.find(params[:student_team_id])
     end
-
-    # # Only allow a list of trusted parameters through.
-    # def team_params
-    #   params.fetch(:team, {})
-    # end
 end

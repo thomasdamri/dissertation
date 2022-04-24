@@ -287,6 +287,10 @@ class StudentTeam < ApplicationRecord
 
   end
 
+  def isInTeam?(user)
+    return team.student_teams.pluck(:user_id).include? user.id
+  end
+
 
   def self.whatIsTeamData()
     output = "Team data is a collection of graphs and tables, representing your teams data.\n"

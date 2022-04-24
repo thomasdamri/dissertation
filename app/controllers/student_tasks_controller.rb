@@ -98,14 +98,11 @@ class StudentTasksController < ApplicationController
   end
 
   def delete_comment
-    
-    @comment = StudentTaskComment.find_by(id: params[:id])
-    @student_task = StudentTask.find_by(id: @comment.student_task_id)
-    authorize! :delete_comment, @student_task
+    @comment = StudentTaskComment.find(params[:id])
+    student_team_id = @comment.student_team_id
     @comment.destroy
-    respond_to do |format|
-      format.js
-    end
+    redirect_to student_team_dashboard_path(student_team_id), notice: 'Comment deleted'
+
   end
 
   # DELETE /uni_modules/1
