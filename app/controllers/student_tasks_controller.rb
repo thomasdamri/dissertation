@@ -1,6 +1,7 @@
 class StudentTasksController < ApplicationController
 
   before_action :authenticate_user!
+  before_action :set_task, only: [:edit, :update, :complete]
   authorize_resource
 
   # GET /uni_modules/1
@@ -8,11 +9,6 @@ class StudentTasksController < ApplicationController
     @student_task = StudentTask.find_by(id: params[:task_id])
     @student_task_comment = StudentTaskComment.new
     @student_team_id = params[:student_team_id]
-    if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:task_id]).exists?)
-      @like_outcome = "UNLIKE"
-    else
-      @like_outcome = "LIKE"
-    end
     respond_to do |format|
       format.js
     end
@@ -31,6 +27,7 @@ class StudentTasksController < ApplicationController
 
   # GET /uni_modules/1/edit
   def edit
+    authorize! :edit, @student_task
     @title = "Editing Task"
     @student_task = StudentTask.find(params[:id])
     @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
@@ -54,6 +51,7 @@ class StudentTasksController < ApplicationController
 
   # PATCH/PUT /uni_modules/1
   def update
+    authorize! :update, @student_task
     @student_task = StudentTask.find_by(id:params[:id])
     puts(student_task_edit_params[:student_task][:student_task_edit][:edit_reason])
     # edit_reason = student_task_edit_params[:student_task_edits][:edit_reason]
@@ -75,7 +73,10 @@ class StudentTasksController < ApplicationController
 
   # DELETE /uni_modules/1
   def destroy
-
+    @student_task = StudentTask.find(params[:id])
+    student_team_id = @student_task.student_team_id
+    @student_task.destroy 
+    redirect_to student_team_dashboard_path(student_team_id), notice: 'Task deleted'
   end
 
   # DELETE /uni_modules/1
@@ -87,11 +88,9 @@ class StudentTasksController < ApplicationController
     @student_task = StudentTask.find_by(id: params[:student_task_id])
     if @comment.save
       @comment_outcome = "Comment posted"
-      redirect_to student_task_path(@student_task), notice: 'Comment posted'
     else
       #Need to add something to notify of error
       @comment_outcome = "Comment failed to post"
-      redirect_to student_task_path(@student_task), notice: 'Comment failed'
     end
     respond_to do |format|
       format.js
@@ -99,8 +98,10 @@ class StudentTasksController < ApplicationController
   end
 
   def delete_comment
+    
     @comment = StudentTaskComment.find_by(id: params[:id])
     @student_task = StudentTask.find_by(id: @comment.student_task_id)
+    authorize! :delete_comment, @student_task
     @comment.destroy
     respond_to do |format|
       format.js
@@ -136,12 +137,9 @@ class StudentTasksController < ApplicationController
   end
 
   def complete
-    @student_task = StudentTask.find_by(id: params[:student_task_id])
-    puts(complete_params[:hours])
-    puts(complete_params[:task_completed_summary])
+    authorize! :complete, @student_task
     @student_task.hours = complete_params[:hours].to_i
     @student_task.task_completed_summary = complete_params[:task_completed_summary]
-    puts(@student_task.inspect)
     if(@student_task.update(complete_params))
       @student_task.task_complete_date = DateTime.now
       @student_task.save
@@ -157,6 +155,10 @@ class StudentTasksController < ApplicationController
 
 
   private
+    def set_task
+      @student_task = StudentTask.find(params[:student_task_id])
+    end
+
     # Use callbacks to share common setup or constraints between actions.
 
 

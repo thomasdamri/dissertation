@@ -6,7 +6,8 @@
 
       .col
         .float-right
-          - if student_task.student_team.user.id == current_user.id && student_task.task_complete_date == nil
+          -# # - if student_task.student_team.user.id == current_user.id && student_task.task_complete_date == nil
+          - if can? :complete, student_task
             = link_to fa_icon("check", text: 'Complete'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#completeTaskModal'
           - elsif student_task.task_complete_date != nil
             Task Complete
@@ -30,6 +31,9 @@
         .col 
           = "Completion Summary: " + student_task.task_completed_summary.to_s
     .row 
+      -if can? :destroy, student_task
+        .col 
+          =link_to "Delete", student_task_path(student_task), method: :delete, data: { confirm: "Are you sure?"}
       .col#like_button.float-right
         =link_to fa_icon("thumbs-up", text: student_task.student_task_likes.count), student_task_like_task_path(student_task), remote: true, method: :post, class: 'float-right'
   .task-options-container
@@ -42,7 +46,7 @@
           = f.file_field :image
         .col
           = f.button :submit, 'Comment', class: 'btn btn-primary float-right' 
-  .row.pt-2
+  .row.pt-2#comment_list
     = render partial: 'student_tasks/comments_list', locals: {comments: student_task.student_task_comments}  
 
 

@@ -7,6 +7,9 @@ class Ability
     # User needs to be logged in first
     if user.present?
 
+
+
+
       # Admin has all permissions
       if user.admin
         can :manage, :all
@@ -51,10 +54,22 @@ class Ability
         end
 
       else
-        # Students can view their own team
-        can :read, Team, student_teams: {user_id: user.id}
-        # Students can interact with their own team's worklogs
-        can [:new_worklog, :process_worklog, :display_worklogs, :display_log, :review_worklogs], Team, student_teams: {user_id: user.id}
+        # # Students can view their own home page
+        can :manage, StudentTeam, user: user
+
+        can :manage, StudentChat, user: user
+
+        # Can read any task created by a team member
+        can [:show_student_task, :comment, :like_task], StudentTask do |st|
+          st.student_team.team.student_teams.pluck(:user_id).include? user.id
+        end
+
+        can [:complete, :edit, :update, :destroy], StudentTask, user: user
+        # can :read, StudentTask, student_teams: {user_id: user.id}
+        # # Students can view their own team
+        # can :read, Team, student_teams: {user_id: user.id}
+        # # Students can interact with their own team's worklogs
+        # can [:new_worklog, :process_worklog, :display_worklogs, :display_log, :review_worklogs], Team, student_teams: {user_id: user.id}
         # Students can fill in their team's peer assessments and see the results
         can [:fill_in, :process_assess, :results], Assessment do |assess|
           user.teams.pluck(:uni_module_id).include? assess.uni_module.id
