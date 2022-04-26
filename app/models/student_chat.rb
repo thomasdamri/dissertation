@@ -4,6 +4,8 @@ class StudentChat < ApplicationRecord
   
   after_create_commit {broadcast_prepend_to ("Team-"+self.student_team.team.id.to_s), target: "student_chats", locals: {user_id: self.get_user_id().to_i}}
 
+  validates :chat_message, length: {in: 1..300}
+
   def get_user_id()
     return StudentTeam.find_by(id:self.student_team_id).user_id
   end

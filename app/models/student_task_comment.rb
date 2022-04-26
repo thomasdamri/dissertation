@@ -5,6 +5,8 @@ class StudentTaskComment < ApplicationRecord
 
   after_create_commit {self.updateLatestCommentDate()}
 
+  validates :comment, length: { in: 1..300}
+
   def updateLatestCommentDate()
     self.student_task.latest_comment_time = DateTime.now
     self.student_task.save

@@ -91,12 +91,24 @@
   // border: solid #161b22;
 }
 
+.error-container{
+  background-color: #eaeae0;
+  border-radius: 25px;
+  padding: 5px 15px 5px 15px;
+  margin-top: 10px;
+  border: 5px solid red;
+}
+
 .selectable-container:hover{
   background-color: #f0f6fc;
 }
 
 .error-container{
   border: 5px solid #E3242B;
+}
+
+.text-height-73{
+  height: 73;
 }
 
 .task-container{

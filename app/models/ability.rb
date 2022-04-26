@@ -70,6 +70,8 @@ class Ability
         can :manage, StudentTeam, user: user
 
         can :manage, StudentChat, user: user
+      
+        can :create, StudentTask
 
         # Can read any task created by a team member
         can [:show_student_task, :comment, :like_task], StudentTask do |st|

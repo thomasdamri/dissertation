@@ -1,20 +1,24 @@
 .col.py-2
   .task-options-container
+    .row
+      .col-auto
+        =link_to fa_icon("chevron-left", text: 'Go Back'), swap_to_tasks_path(student_team_id), remote: true, class: "nav-link"
+      .col.float-right
+        .row.float-right
+          -if can? :destroy, student_task
+            .col-auto.pr-0
+              =link_to fa_icon("trash", text: 'Delete', class: "link-danger"), student_task_path(student_task), method: :delete, data: { confirm: "Are you sure?"}, class: "nav-link link-danger"
+
+          .col-auto.pl-1
+            -# # - if student_task.student_team.user.id == current_user.id && student_task.task_complete_date == nil
+            - if can? :complete, student_task
+              = link_to fa_icon("check", text: 'Complete'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#completeTaskModal'
+            - elsif student_task.task_complete_date != nil
+              Task Complete
+
     .row.justify-content-between
       .col-auto
-        =link_to fa_icon("chevron-left", text: 'Go Back'), swap_to_tasks_path(student_team_id), remote: true
-
-      .col
-        .float-right
-          -# # - if student_task.student_team.user.id == current_user.id && student_task.task_complete_date == nil
-          - if can? :complete, student_task
-            = link_to fa_icon("check", text: 'Complete'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#completeTaskModal'
-          - elsif student_task.task_complete_date != nil
-            Task Complete
-
-    .row.justify-content-between
-      .col-auto
-        = student_task.get_linked_students()
+        %h6.font-weight-bold= student_task.get_linked_students()
       .col 
         .float-right
           = "Due Date: " + student_task.task_target_date.to_s
@@ -31,11 +35,11 @@
         .col 
           = "Completion Summary: " + student_task.task_completed_summary.to_s
     .row 
-      -if can? :destroy, student_task
-        .col 
-          =link_to "Delete", student_task_path(student_task), method: :delete, data: { confirm: "Are you sure?"}
+      -# -if can? :destroy, student_task
+      -#   .col 
+      -#     =link_to "Delete", student_task_path(student_task), method: :delete, data: { confirm: "Are you sure?"}
       .col#like_button.float-right
-        =link_to fa_icon("thumbs-up", text: student_task.student_task_likes.count), student_task_like_task_path(student_task), remote: true, method: :post, class: 'float-right'
+        =link_to fa_icon("thumbs-up", text: ((student_task.student_task_likes.count).to_s + " Commendations")), student_task_like_task_path(student_task), remote: true, method: :post, class: 'float-right'
   .task-options-container
     = simple_form_for student_task_comment, url: student_task_comment_path(student_task.id), remote: true do |f|
       .row 
@@ -45,7 +49,7 @@
         .col 
           = f.file_field :image
         .col
-          = f.button :submit, 'Comment', class: 'btn btn-primary float-right' 
+          = f.button :submit, 'Comment', class: 'btn btn-primary button-colour float-right' 
   .row.pt-2#comment_list
     = render partial: 'student_tasks/comments_list', locals: {comments: student_task.student_task_comments}  
 

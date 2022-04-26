@@ -11,7 +11,7 @@ class StudentReportsController < ApplicationController
     @student_report.report_objects.build
     @team_id = StudentTeam.find_by(id: params[:student_team_id]).team.id
     @item_list = []
-    @users = StudentTeam.where(student_teams:{team_id: @team_id})
+    @users = StudentTeam.where(student_teams:{team_id: @team_id}).where.not(id: params[:student_team_id])
     for u in @users do
       @item_list.push([u.user.real_display_name, u.id])
     end
@@ -34,9 +34,9 @@ class StudentReportsController < ApplicationController
           end
         end
       end
-      render 'report_creation_success'
+      redirect_to student_team_dashboard_path(params[:student_team_id])
     else
-      render 'report_creation_failure'
+      redirect_to student_team_dashboard_path(params[:student_team_id]), flash: {error: @student_report.errors.full_messages.join(', ')}
     end
   end
 
@@ -86,6 +86,7 @@ class StudentReportsController < ApplicationController
     if @selected == 0 
       #@users = StudentTeam.where(student_teams:{team_id: @team_id}).select(:id)
       @users = StudentTeam.where(student_teams:{team_id: @team_id})
+      puts(@users.inspect)
       for u in @users do
         @item_list.push([u.user.real_display_name, u.id])
       end

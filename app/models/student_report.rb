@@ -6,6 +6,8 @@ class StudentReport < ApplicationRecord
 
   accepts_nested_attributes_for :report_objects, allow_destroy: true
 
+  validates :report_reason, length: { in: 5..1000}
+
   def gets_collection(type, student_team_id)
     student = StudentTeam.find_by(id: student_team_id)
     team_id = student.teams.id

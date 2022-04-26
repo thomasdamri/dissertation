@@ -40,12 +40,10 @@ class StudentTasksController < ApplicationController
     @student_task.student_team_id = params[:student_team_id]
     @student_task.task_difficulty = StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty])
     @student_task.task_start_date = DateTime.now
-    
     if @student_task.save
-      redirect_to student_team_dashboard_path(@student_task.student_team_id), notice: 'Task was successfully created'
+      redirect_to student_team_dashboard_path(@student_task.student_team_id)
     else
-      #Need to add something to notify of error
-      redirect_to student_team_dashboard_path(@student_task.student_team_id), notice: 'Task creation failed'
+      redirect_to student_team_dashboard_path(@student_task.student_team_id), flash: {error: @student_task.errors.full_messages.join(', ')}
     end
   end
 
@@ -53,20 +51,11 @@ class StudentTasksController < ApplicationController
   def update
     authorize! :update, @student_task
     @student_task = StudentTask.find_by(id:params[:id])
-    puts(student_task_edit_params[:student_task][:student_task_edit][:edit_reason])
-    # edit_reason = student_task_edit_params[:student_task_edits][:edit_reason]
     @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
-    #@student_task.student_task_edits.build
-    # @task_edit = @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
-    # @student_task.task_target_date = student_task_params[:task_target_date]
-    # @student_task.task_objective = student_task_params[:task_objective]
-    # @student_task.task_difficulty = StudentTask.difficulty_string_to_int(student_task_params[:task_difficulty])
+
     if(@student_task.update(student_task_edit_params))
-      # @task_edit.edit_reason = student_task_params[:student_task_edit_attributes][:edit_reason]
-      # @task_edit.save
       redirect_to student_task_path(@student_task), notice: 'Task was updated created'
     else
-      #Need to add something to notify of error
       redirect_to student_task_path(@student_task), notice: 'Task update failed'
     end
   end

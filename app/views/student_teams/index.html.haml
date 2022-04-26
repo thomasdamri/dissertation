@@ -4,8 +4,10 @@
 - content_for :title, "[Student] Team Homepage"
 
 .col.mt-0#main-team-home-page-container
-  -# .row.col-auto.task-options-container 
-  -#   = link_to fa_icon("flag", text: 'Report'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#reportModal'
+  - if flash[:error]
+    .row.justify-content-center 
+      .col-8.error-container.text-center
+        %h6.font-weight-bold= flash[:error]
   -if @outgoing_assessments > 0
     .row.justify-content-center 
       .col-8.task-options-container
@@ -17,7 +19,7 @@
           = link_to fa_icon("flag", text: 'Report'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#reportModal'
     .col-4.pr-4
       = render partial: 'main_home_panel', locals: {new_task: @task, student_team_id: @student_team.id, select_options: @select_options, tasks: @tasks, pagy: @pagy, tasks_count: @tasks_count}
-    .col-4
+    .col-4.pl-4
       .row.task-options-container#swap-meeting-assessment
         = render partial: "student_teams/swap_chat_and_assessment", locals: {student_team_id: @student_team.id, selected: 0}
       #right-panel-swap

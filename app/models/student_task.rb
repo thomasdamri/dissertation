@@ -7,7 +7,7 @@ class StudentTask < ApplicationRecord
 
   accepts_nested_attributes_for :student_task_edits, allow_destroy: true
 
-  validates :task_objective, length: { in: 10..300}
+  validates :task_objective, length: { in: 5..300}
 
   #Takes int input and returns the string version(because its stored as int in the db)
   def self.difficulty_int_to_string(integer_input)
