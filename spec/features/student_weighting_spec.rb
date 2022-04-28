@@ -10,8 +10,8 @@ describe "Changing individual student's weightings " do
     # Make assessment close tomorrow to prevent looking at results early
     a = create :assessment, uni_module: mod, date_closed: Date.today + 1
 
-    c = create :weighted_criteria, assessment: a
-    c2 = create :criteria, assessment: a, title: 'Something else'
+    c = create :weighted_question, assessment: a
+    c2 = create :question, assessment: a, title: 'Something else'
 
     u1 = create :user, staff: false, username: 'zzz12ac', email: 'something@gmail.com', display_name: "A Smith"
     u2 = create :user, staff: false, username: 'zzz12ad', email: 'something2@gmail.com', display_name: "B Smith"
@@ -27,12 +27,12 @@ describe "Changing individual student's weightings " do
     create :student_team, user: u3, team: t
     create :student_team, user: u4, team: t
 
-    create :assessment_result_empty, author: u1, target: u1, criteria: c, value: '7'
-    create :assessment_result_empty, author: u1, target: u2, criteria: c, value: '8'
-    create :assessment_result_empty, author: u1, target: u3, criteria: c, value: '9'
-    create :assessment_result_empty, author: u1, target: u4, criteria: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u1, question: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u2, question: c, value: '8'
+    create :assessment_result_empty, author: u1, target: u3, question: c, value: '9'
+    create :assessment_result_empty, author: u1, target: u4, question: c, value: '7'
 
-    create :assessment_result_empty, author: u1, target: nil, criteria: c2, value: 'Some text'
+    create :assessment_result_empty, author: u1, target: nil, question: c2, value: 'Some text'
 
     a.generate_weightings(t)
   end

@@ -32,7 +32,7 @@ RSpec.describe User, type: :model do
     t2 = build(:team, uni_module: u)
     expect(t2).to_not be_valid
 
-    t2.number = 2
+    t2.team_number = 2
     expect(t2).to be_valid
 
   end

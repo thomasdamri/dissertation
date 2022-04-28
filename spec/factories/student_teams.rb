@@ -7,7 +7,13 @@
 #  team_id :bigint
 #
 FactoryBot.define do
-  factory :student_team do
+
+  factory :student_team_random, class: StudentTeam do
+
     
+  end
+
+  factory :student_team, class: StudentTeam do
+
   end
 end

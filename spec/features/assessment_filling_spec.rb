@@ -8,8 +8,8 @@ describe 'Filling in an assessment' do
     mod = create :uni_module
     create :staff_module, user: staff, uni_module: mod
     a = create :assessment, uni_module: mod
-    create :criteria, assessment: a, title: 'Test 1', response_type: 1, min_value: 1, max_value: 10
-    create :criteria, assessment: a, title: 'Test 2', response_type: 1, single: false, min_value: 1, max_value: 10
+    create :question, assessment: a, title: 'Test 1', response_type: 1, min_value: 1, max_value: 10
+    create :question, assessment: a, title: 'Test 2', response_type: 1, single: false, min_value: 1, max_value: 10
 
     t = create :team, uni_module: mod
 
@@ -99,8 +99,8 @@ describe 'Filling in an assessment' do
     t = Team.first
     a = Assessment.first
 
-    c1 = a.criteria.where(single: true).first
-    c2 = a.criteria.where(single: false).first
+    c1 = a.question.where(single: true).first
+    c2 = a.question.where(single: false).first
 
     user_ids = t.users.pluck(:id)
 
@@ -183,7 +183,7 @@ describe 'Filling in an assessment' do
     expect(ability).to_not be_able_to(:process_assess, a)
   end
 
-  specify 'I can fill in an assessment with criteria of multiple data types' do
+  specify 'I can fill in an assessment with question of multiple data types' do
     t = Team.first
     mod = UniModule.first
 
@@ -192,10 +192,10 @@ describe 'Filling in an assessment' do
     login_as student, scope: :user
 
     a = create :assessment, uni_module: mod, name: "All data types test"
-    create :criteria, assessment: a, title: 'Test 1', response_type: 0
-    create :criteria, assessment: a, title: 'Test 2', response_type: 1, min_value: 1, max_value: 10
-    create :criteria, assessment: a, title: 'Test 3', response_type: 2, min_value: 1.1, max_value: 10.1
-    create :criteria, assessment: a, title: 'Test 4', response_type: 3, min_value: "No", max_value: "Yes"
+    create :question, assessment: a, title: 'Test 1', response_type: 0
+    create :question, assessment: a, title: 'Test 2', response_type: 1, min_value: 1, max_value: 10
+    create :question, assessment: a, title: 'Test 3', response_type: 2, min_value: 1.1, max_value: 10.1
+    create :question, assessment: a, title: 'Test 4', response_type: 3, min_value: "No", max_value: "Yes"
 
     visit "/teams/#{t.id}"
 
@@ -210,16 +210,16 @@ describe 'Filling in an assessment' do
       click_link "Fill In"
     }
 
-    a.criteria.each do |crit|
+    a.question.each do |crit|
       div = page.first('div.crit-fillin', text: crit.title)
       within(div){
-        if crit.response_type == Criteria.string_type
+        if crit.response_type == Question.string_type
           fill_in "response_#{crit.id}", with: "String response"
-        elsif crit.response_type == Criteria.int_type
+        elsif crit.response_type == Question.int_type
           fill_in "response_#{crit.id}", with: "1"
-        elsif crit.response_type == Criteria.float_type
+        elsif crit.response_type == Question.float_type
           fill_in "response_#{crit.id}", with: "4.5"
-        elsif crit.response_type == Criteria.bool_type
+        elsif crit.response_type == Question.bool_type
           choose "No"
         end
       }
@@ -248,7 +248,7 @@ describe 'Filling in an assessment' do
     login_as student, scope: :user
 
     a = create :assessment, uni_module: mod, name: "All data types test"
-    c = create :criteria, assessment: a, title: 'Test 1', response_type: 0
+    c = create :question, assessment: a, title: 'Test 1', response_type: 0
 
     val1 = "a" * (AssessmentResult.max_value_length + 1)
     val2 = "a" * AssessmentResult.max_value_length
@@ -275,8 +275,8 @@ describe "Assessment mock view" do
     mod = create :uni_module
     create :staff_module, user: staff, uni_module: mod
     a = create :assessment, uni_module: mod
-    create :criteria, assessment: a, title: 'Test 1', response_type: 1, min_value: 1, max_value: 10
-    create :criteria, assessment: a, title: 'Test 2', response_type: 1, single: false, min_value: 1, max_value: 10
+    create :question, assessment: a, title: 'Test 1', response_type: 1, min_value: 1, max_value: 10
+    create :question, assessment: a, title: 'Test 2', response_type: 1, single: false, min_value: 1, max_value: 10
 
     t = create :team, uni_module: mod
 
@@ -302,7 +302,7 @@ describe "Assessment mock view" do
     visit "/assessment/#{a.id}"
     click_link "Show Student View"
 
-    a.criteria.each do |crit|
+    a.question.each do |crit|
       expect(page).to have_content crit.title
     end
   end

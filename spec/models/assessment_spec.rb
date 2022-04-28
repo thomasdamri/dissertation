@@ -51,18 +51,18 @@ RSpec.describe Assessment, type: :model do
     expect(a).to be_valid
   end
 
-  it 'deletes all dependent criteria on deletion' do
+  it 'deletes all dependent question on deletion' do
     u = create :uni_module
     a = create :assessment, uni_module: u
 
-    c1 = create :criteria, assessment: a
-    c2 = create :criteria, assessment: a, title: 'Something else'
+    c1 = create :question, assessment: a
+    c2 = create :question, assessment: a, title: 'Something else'
 
-    expect(Criteria.count).to eq(2)
+    expect(Question.count).to eq(2)
 
     a.destroy
 
-    expect(Criteria.count).to eq(0)
+    expect(Question.count).to eq(0)
 
   end
 
@@ -101,17 +101,17 @@ RSpec.describe Assessment, type: :model do
       u1 = create :user
       u2 = create :user, username: 'zzz12ab', email: 'somethingelse@gmail.com'
       t = Team.first
-      create :student_team, user: u1, team: t
-      create :student_team, user: u2, team: t
+      st1 = create :student_team, user: u1, team: t
+      st2 = create :student_team, user: u2, team: t
 
       a = Assessment.first
 
-      c = create :criteria, assessment: a
+      c = create :question, assessment: a
+      create :assessment_result_string ,author: st1, target: st2, question: c
+      # create! :assessment_result_empty, author: st1, target: st2, question: c, value: 'Text'
 
-      create :assessment_result_empty, author: u1, target: u2, criteria: c, value: 'Text'
-
-      expect(a.completed_by?(u1)).to eq true
-      expect(a.completed_by?(u2)).to eq false
+      expect(a.completed_by?(st1)).to eq true
+      expect(a.completed_by?(st2)).to eq false
 
     end
 
@@ -128,31 +128,32 @@ RSpec.describe Assessment, type: :model do
       a = Assessment.first
       t = Team.first
 
-      c = create :criteria, assessment: a
+      c = create :question, assessment: a
 
       u1 = create :user
       u2 = create :user, username: 'zzz12ab', email: 'somethingelse@gmail.com'
       u3 = create :user, username: 'zzz12ac', email: 'somethingagain@gmail.com'
 
-      create :student_team, user: u1, team: t
-      create :student_team, user: u2, team: t
-      create :student_team, user: u3, team: t
+      st1 = create :student_team, user: u1, team: t
+      st2 =create :student_team, user: u2, team: t
+      st3 =create :student_team, user: u3, team: t
+
 
       expect(a.num_completed(t)).to eq 0
 
-      create :assessment_result_empty, author: u1, target: u2, criteria: c, value: 'Text'
+      create :assessment_result_empty, author: st1, target: st2, question: c, value: 'Text'
 
       expect(a.num_completed(t)).to eq 1
 
       # Creating another result with the same author to check it counts users, not just results
-      create :assessment_result_empty, author: u1, target: u3, criteria: c, value: 'Text'
+      create :assessment_result_empty, author: st1, target: st3, question: c, value: 'Text'
 
       expect(a.num_completed(t)).to eq 1
 
-      create :assessment_result_empty, author: u2, target: u2, criteria: c, value: 'Text'
+      create :assessment_result_empty, author: st2, target: st2, question: c, value: 'Text'
       expect(a.num_completed(t)).to eq 2
 
-      create :assessment_result_empty, author: u3, target: u2, criteria: c, value: 'Text'
+      create :assessment_result_empty, author: st3, target: st2, question: c, value: 'Text'
       expect(a.num_completed(t)).to eq 3
     end
 
@@ -183,79 +184,79 @@ RSpec.describe Assessment, type: :model do
       a = create :assessment, uni_module: u
       t = create :team, uni_module: u
 
-      c1 = create :weighted_criteria, assessment: a, title: 'A'
-      c2 = create :weighted_criteria, assessment: a, title: 'B'
-      c3 = create :weighted_criteria, assessment: a, title: 'C'
+      c1 = create :weighted_question, assessment: a, title: 'A'
+      c2 = create :weighted_question, assessment: a, title: 'B'
+      c3 = create :weighted_question, assessment: a, title: 'C'
 
       u1 = create :student
       u2 = create(:student, username: 'zzy12dp', email: 'dperry2@sheffield.ac.uk')
       u3 = create(:student, username: 'zzx12dp', email: 'dperry3@sheffield.ac.uk')
       u4 = create(:student, username: 'zzw12dp', email: 'dperry4@sheffield.ac.uk')
 
-      create :student_team, user: u1, team: t
-      create :student_team, user: u2, team: t
-      create :student_team, user: u3, team: t
-      create :student_team, user: u4, team: t
+      st1 = create :student_team, user: u1, team: t
+      st2 = create :student_team, user: u2, team: t
+      st3 = create :student_team, user: u3, team: t
+      st4 = create :student_team, user: u4, team: t
 
       # Create the assessment results
 
       # Each user rates themselves 10/10
-      t.users.each do |user|
-        a.criteria.each do |crit|
-          create :assessment_result_empty, criteria: crit, author: user, target: user, value: 10
+      t.student_teams.each do |st|
+        a.questions.each do |crit|
+          create :assessment_result_empty, question: crit, author: st, target: st, value: 10
         end
       end
 
       # C1
-      create :assessment_result_empty, criteria: c1, author: u1, target: u2, value: 8
-      create :assessment_result_empty, criteria: c1, author: u1, target: u3, value: 2
-      create :assessment_result_empty, criteria: c1, author: u1, target: u4, value: 5
+      create :assessment_result_empty, question: c1, author: st1, target: st2, value: 8
+      create :assessment_result_empty, question: c1, author: st1, target: st3, value: 2
+      create :assessment_result_empty, question: c1, author: st1, target: st4, value: 5
 
-      create :assessment_result_empty, criteria: c1, author: u2, target: u1, value: 10
-      create :assessment_result_empty, criteria: c1, author: u2, target: u3, value: 1
-      create :assessment_result_empty, criteria: c1, author: u2, target: u4, value: 6
+      create :assessment_result_empty, question: c1, author: st2, target: st1, value: 10
+      create :assessment_result_empty, question: c1, author: st2, target: st3, value: 1
+      create :assessment_result_empty, question: c1, author: st2, target: st4, value: 6
 
-      create :assessment_result_empty, criteria: c1, author: u3, target: u1, value: 10
-      create :assessment_result_empty, criteria: c1, author: u3, target: u2, value: 8
-      create :assessment_result_empty, criteria: c1, author: u3, target: u4, value: 5
+      create :assessment_result_empty, question: c1, author: st3, target: st1, value: 10
+      create :assessment_result_empty, question: c1, author: st3, target: st2, value: 8
+      create :assessment_result_empty, question: c1, author: st3, target: st4, value: 5
 
-      create :assessment_result_empty, criteria: c1, author: u4, target: u1, value: 10
-      create :assessment_result_empty, criteria: c1, author: u4, target: u2, value: 7
-      create :assessment_result_empty, criteria: c1, author: u4, target: u3, value: 3
+      create :assessment_result_empty, question: c1, author: st4, target: st1, value: 10
+      create :assessment_result_empty, question: c1, author: st4, target: st2, value: 7
+      create :assessment_result_empty, question: c1, author: st4, target: st3, value: 3
 
       # C2
-      create :assessment_result_empty, criteria: c2, author: u1, target: u2, value: 9
-      create :assessment_result_empty, criteria: c2, author: u1, target: u3, value: 3
-      create :assessment_result_empty, criteria: c2, author: u1, target: u4, value: 6
+      create :assessment_result_empty, question: c2, author: st1, target: st2, value: 9
+      create :assessment_result_empty, question: c2, author: st1, target: st3, value: 3
+      create :assessment_result_empty, question: c2, author: st1, target: st4, value: 6
 
-      create :assessment_result_empty, criteria: c2, author: u2, target: u1, value: 10
-      create :assessment_result_empty, criteria: c2, author: u2, target: u3, value: 2
-      create :assessment_result_empty, criteria: c2, author: u2, target: u4, value: 7
+      create :assessment_result_empty, question: c2, author: st2, target: st1, value: 10
+      create :assessment_result_empty, question: c2, author: st2, target: st3, value: 2
+      create :assessment_result_empty, question: c2, author: st2, target: st4, value: 7
 
-      create :assessment_result_empty, criteria: c2, author: u3, target: u1, value: 8
-      create :assessment_result_empty, criteria: c2, author: u3, target: u2, value: 9
-      create :assessment_result_empty, criteria: c2, author: u3, target: u4, value: 5
+      create :assessment_result_empty, question: c2, author: st3, target: st1, value: 8
+      create :assessment_result_empty, question: c2, author: st3, target: st2, value: 9
+      create :assessment_result_empty, question: c2, author: st3, target: st4, value: 5
 
-      create :assessment_result_empty, criteria: c2, author: u4, target: u1, value: 7
-      create :assessment_result_empty, criteria: c2, author: u4, target: u2, value: 8
-      create :assessment_result_empty, criteria: c2, author: u4, target: u3, value: 4
+      create :assessment_result_empty, question: c2, author: st4, target: st1, value: 7
+      create :assessment_result_empty, question: c2, author: st4, target: st2, value: 8
+      create :assessment_result_empty, question: c2, author: st4, target: st3, value: 4
 
       # C3
-      create :assessment_result_empty, criteria: c3, author: u1, target: u2, value: 7
-      create :assessment_result_empty, criteria: c3, author: u1, target: u3, value: 4
-      create :assessment_result_empty, criteria: c3, author: u1, target: u4, value: 7
+      create :assessment_result_empty, question: c3, author: st1, target: st2, value: 7
+      create :assessment_result_empty, question: c3, author: st1, target: st3, value: 4
+      create :assessment_result_empty, question: c3, author: st1, target: st4, value: 7
 
-      create :assessment_result_empty, criteria: c3, author: u2, target: u1, value: 9
-      create :assessment_result_empty, criteria: c3, author: u2, target: u3, value: 3
-      create :assessment_result_empty, criteria: c3, author: u2, target: u4, value: 8
+      create :assessment_result_empty, question: c3, author: st2, target: st1, value: 9
+      create :assessment_result_empty, question: c3, author: st2, target: st3, value: 3
+      create :assessment_result_empty, question: c3, author: st2, target: st4, value: 8
 
-      create :assessment_result_empty, criteria: c3, author: u3, target: u1, value: 9
-      create :assessment_result_empty, criteria: c3, author: u3, target: u2, value: 10
-      create :assessment_result_empty, criteria: c3, author: u3, target: u4, value: 6
+      create :assessment_result_empty, question: c3, author: st3, target: st1, value: 9
+      create :assessment_result_empty, question: c3, author: st3, target: st2, value: 10
+      create :assessment_result_empty, question: c3, author: st3, target: st4, value: 6
 
-      create :assessment_result_empty, criteria: c3, author: u4, target: u1, value: 10
-      create :assessment_result_empty, criteria: c3, author: u4, target: u2, value: 8
-      create :assessment_result_empty, criteria: c3, author: u4, target: u3, value: 5
+      create :assessment_result_empty, question: c3, author: st4, target: st1, value: 10
+      create :assessment_result_empty, question: c3, author: st4, target: st2, value: 8
+      create :assessment_result_empty, question: c3, author: st4, target: st3, value: 5
 
     end
 
@@ -270,8 +271,8 @@ RSpec.describe Assessment, type: :model do
 
       a.generate_weightings(t)
 
-      t.users.each do |user|
-        sw = StudentWeighting.where(user: user, assessment: a).first
+      t.student_teams.each do |st|
+        sw = StudentWeighting.where(student_team: st, assessment: a).first
         expect(sw.weighting).to eq 1
       end
 
@@ -289,17 +290,22 @@ RSpec.describe Assessment, type: :model do
       u3 = User.where(username: 'zzx12dp').first
       u4 = User.where(username: 'zzw12dp').first
 
+      st1 = StudentTeam.where(user: u1).first
+      st2 = StudentTeam.where(user: u2).first
+      st3 = StudentTeam.where(user: u3).first
+      st4 = StudentTeam.where(user: u4).first
+
       # I got these expected weightings by doing the algorithm by hand
-      sw = StudentWeighting.where(user: u1, assessment: a).first
+      sw = StudentWeighting.where(student_team: st1, assessment: a).first
       expect(sw.weighting.round(2)).to eq 1.27
 
-      sw = StudentWeighting.where(user: u2, assessment: a).first
+      sw = StudentWeighting.where(student_team: st2, assessment: a).first
       expect(sw.weighting.round(2)).to eq 1.17
 
-      sw = StudentWeighting.where(user: u3, assessment: a).first
+      sw = StudentWeighting.where(student_team: st3, assessment: a).first
       expect(sw.weighting.round(2)).to eq 0.61
 
-      sw = StudentWeighting.where(user: u4, assessment: a).first
+      sw = StudentWeighting.where(student_team: st4, assessment: a).first
       expect(sw.weighting.round(2)).to eq 0.95
 
       # Set last sw to be manually set
@@ -313,15 +319,15 @@ RSpec.describe Assessment, type: :model do
 
     end
 
-    it 'generates weightings correctly when criteria have different weightings' do
+    it 'generates weightings correctly when question have different weightings' do
       a = Assessment.first
       t = Team.first
 
-      # Load in all criteria and users from the database
-      crits = a.criteria.all
+      # Load in all question and users from the database
+      crits = a.questions.all
       c1 = crits[0]
 
-      # Give the first criteria twice the weight of the others
+      # Give the first question twice the weight of the others
       c1.weighting = 2
       c1.save
 
@@ -330,19 +336,24 @@ RSpec.describe Assessment, type: :model do
       u3 = User.where(username: 'zzx12dp').first
       u4 = User.where(username: 'zzw12dp').first
 
+      st1 = StudentTeam.where(user: u1).first
+      st2 = StudentTeam.where(user: u2).first
+      st3 = StudentTeam.where(user: u3).first
+      st4 = StudentTeam.where(user: u4).first
+
       a.generate_weightings(t)
 
       # I got these expected weightings by doing the algorithm by hand
-      sw = StudentWeighting.where(user: u1, assessment: a).first
+      sw = StudentWeighting.where(student_team: st1, assessment: a).first
       expect(sw.weighting.round(2)).to eq 1.30
 
-      sw = StudentWeighting.where(user: u2, assessment: a).first
+      sw = StudentWeighting.where(student_team: st2, assessment: a).first
       expect(sw.weighting.round(2)).to eq 1.16
 
-      sw = StudentWeighting.where(user: u3, assessment: a).first
+      sw = StudentWeighting.where(student_team: st3, assessment: a).first
       expect(sw.weighting.round(2)).to eq 0.59
 
-      sw = StudentWeighting.where(user: u4, assessment: a).first
+      sw = StudentWeighting.where(student_team: st4, assessment: a).first
       expect(sw.weighting.round(2)).to eq 0.94
 
     end
@@ -351,8 +362,8 @@ RSpec.describe Assessment, type: :model do
       a = Assessment.first
       t = Team.first
 
-      # Load in all criteria and users from the database
-      crits = a.criteria.all
+      # Load in all question and users from the database
+      crits = a.questions.all
       c1 = crits[0]
 
       u1 = User.where(username: 'zzz12dp').first
@@ -360,24 +371,29 @@ RSpec.describe Assessment, type: :model do
       u3 = User.where(username: 'zzx12dp').first
       u4 = User.where(username: 'zzw12dp').first
 
+      st1 = StudentTeam.where(user: u1).first
+      st2 = StudentTeam.where(user: u2).first
+      st3 = StudentTeam.where(user: u3).first
+      st4 = StudentTeam.where(user: u4).first
+
       # Destroy all of user 3's authored results - they did not fill the form in
-      a.assessment_results.where(author_id: u3.id).each do |res|
+      a.assessment_results.where(author: st3).each do |res|
         res.destroy
       end
 
       a.generate_weightings(t)
 
       # I got these expected weightings by doing the algorithm by hand
-      sw = StudentWeighting.where(user: u1, assessment: a).first
+      sw = StudentWeighting.where(student_team: st1, assessment: a).first
       expect(sw.weighting.round(2)).to eq 1.33
 
-      sw = StudentWeighting.where(user: u2, assessment: a).first
+      sw = StudentWeighting.where(student_team: st2, assessment: a).first
       expect(sw.weighting.round(2)).to eq 1.19
 
-      sw = StudentWeighting.where(user: u3, assessment: a).first
+      sw = StudentWeighting.where(student_team: st3, assessment: a).first
       expect(sw.weighting.round(2)).to eq 0.42
 
-      sw = StudentWeighting.where(user: u4, assessment: a).first
+      sw = StudentWeighting.where(student_team: st4, assessment: a).first
       expect(sw.weighting.round(2)).to eq 1.06
     end
 

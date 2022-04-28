@@ -10,8 +10,8 @@ describe 'Viewing and modifying assessment results' do
     # Make assessment close tomorrow to prevent looking at results early
     a = create :assessment, uni_module: mod, date_closed: Date.today + 1
 
-    c = create :weighted_criteria, assessment: a
-    c2 = create :criteria, assessment: a, title: 'Something else'
+    c = create :weighted_question, assessment: a
+    c2 = create :question, assessment: a, title: 'Something else'
 
     u1 = create :user, staff: false, username: 'zzz12ac', email: 'something@gmail.com'
     u2 = create :user, staff: false, username: 'zzz12ad', email: 'something2@gmail.com'
@@ -27,12 +27,12 @@ describe 'Viewing and modifying assessment results' do
     create :student_team, user: u3, team: t
     create :student_team, user: u4, team: t
 
-    create :assessment_result_empty, author: u1, target: u1, criteria: c, value: '7'
-    create :assessment_result_empty, author: u1, target: u2, criteria: c, value: '8'
-    create :assessment_result_empty, author: u1, target: u3, criteria: c, value: '9'
-    create :assessment_result_empty, author: u1, target: u4, criteria: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u1, question: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u2, question: c, value: '8'
+    create :assessment_result_empty, author: u1, target: u3, question: c, value: '9'
+    create :assessment_result_empty, author: u1, target: u4, question: c, value: '7'
 
-    create :assessment_result_empty, author: u1, target: nil, criteria: c2, value: 'Some text'
+    create :assessment_result_empty, author: u1, target: nil, question: c2, value: 'Some text'
 
     a.generate_weightings(t)
   end
@@ -199,16 +199,16 @@ describe 'Viewing and modifying assessment results' do
       click_link 'View Individual Responses'
     }
 
-    a.criteria.each do |crit|
+    a.question.each do |crit|
       within(:css, "#indResponseTable_#{crit.id}"){
-        # If criteria is single, just do one search, as there is only one response
+        # If question is single, just do one search, as there is only one response
         if crit.single
-          ar = AssessmentResult.where(criteria: crit).first
+          ar = AssessmentResult.where(question: crit).first
           expect(page).to have_content ar.value
         else
-          # If criteria is not single, search for the response targeting each user
+          # If question is not single, search for the response targeting each user
           t.users.each do |u|
-            ar = AssessmentResult.where(target: u, criteria: crit).first
+            ar = AssessmentResult.where(target: u, question: crit).first
             expect(page).to have_content ar.value
           end
         end
@@ -246,7 +246,7 @@ describe "Downloading results" do
 
     a = create :assessment, uni_module: mod
 
-    c = create :weighted_criteria, assessment: a
+    c = create :weighted_question, assessment: a
 
     u1 = create :user, staff: false, username: 'zzz12ac', email: 'something@gmail.com'
     u2 = create :user, staff: false, username: 'zzz12ad', email: 'something2@gmail.com'
@@ -260,10 +260,10 @@ describe "Downloading results" do
     create :student_team, user: u3, team: t
     create :student_team, user: u4, team: t
 
-    create :assessment_result_empty, author: u1, target: u1, criteria: c, value: '7'
-    create :assessment_result_empty, author: u1, target: u1, criteria: c, value: '8'
-    create :assessment_result_empty, author: u1, target: u1, criteria: c, value: '9'
-    create :assessment_result_empty, author: u1, target: u1, criteria: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u1, question: c, value: '7'
+    create :assessment_result_empty, author: u1, target: u1, question: c, value: '8'
+    create :assessment_result_empty, author: u1, target: u1, question: c, value: '9'
+    create :assessment_result_empty, author: u1, target: u1, question: c, value: '7'
 
     a.generate_weightings(t)
 

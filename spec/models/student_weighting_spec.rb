@@ -18,8 +18,10 @@ RSpec.describe StudentWeighting, type: :model do
   it 'is valid with valid attributes' do
     u1 = create :user
     u = create :uni_module
+    t = create :team , uni_module: u
+    st = create :student_team, user: u1, team: t
     a = create :assessment, uni_module: u
-    sw = build(:student_weighting, user: u1, assessment: a)
+    sw = build(:student_weighting, student_team: st, assessment: a)
     expect(sw).to be_valid
   end
 
@@ -31,8 +33,10 @@ RSpec.describe StudentWeighting, type: :model do
   it 'requires a reason when the weighting is manually set' do
     u1 = create :user
     u = create :uni_module
+    t = create :team , uni_module: u
+    st = create :student_team, user: u1, team: t
     a = create :assessment, uni_module: u
-    sw = build :student_weighting, user: u1, assessment: a
+    sw = build :student_weighting, student_team: st, assessment: a
 
     sw.reason = nil
     sw.manual_set = true
@@ -46,8 +50,10 @@ RSpec.describe StudentWeighting, type: :model do
     it 'only updates weightings when manual_set is false' do
       u1 = create :user
       u = create :uni_module
+      t = create :team , uni_module: u
+      st = create :student_team, user: u1, team: t
       a = create :assessment, uni_module: u
-      sw = create(:student_weighting, user: u1, assessment: a)
+      sw = create(:student_weighting, student_team: st, assessment: a)
 
       # By default, weighting is 1 and results_at_last_check is 0
       sw.manual_set = true
@@ -66,8 +72,10 @@ RSpec.describe StudentWeighting, type: :model do
     it 'updates the weighting to a set the values of weighting, and reason' do
       u1 = create :user
       u = create :uni_module
+      t = create :team , uni_module: u
+      st = create :student_team, user: u1, team: t
       a = create :assessment, uni_module: u
-      sw = create(:student_weighting, user: u1, assessment: a)
+      sw = create(:student_weighting, student_team: st, assessment: a)
 
       sw.manual_update(1.5, "Something")
       expect(sw.weighting).to eq 1.5
