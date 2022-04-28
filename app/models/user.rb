@@ -45,7 +45,7 @@ class User < ApplicationRecord
 
   # Must have a username and email. Staff and admin booleans cannot be nil
   validates :username, presence: true, uniqueness: true
-  #validates :email, presence: true, uniqueness: true, case_sensitive: true
+  validates :email, presence: true, uniqueness: true
   validates :staff, inclusion: {in: [true, false]}
   validates :admin, inclusion: {in: [true, false]}
 

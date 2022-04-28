@@ -18,7 +18,7 @@ class Assessment < ApplicationRecord
 
   # Destroy all dependent question when removing object
   has_many :questions, dependent: :destroy
-  has_many :assessment_results, through: :question
+  has_many :assessment_results, through: :questions
   belongs_to :uni_module
   has_many :student_weightings, dependent: :destroy
   has_many :team_grades, dependent: :destroy
