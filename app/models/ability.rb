@@ -39,8 +39,7 @@ class Ability
         can :manage, Team do |team|
           team.uni_module.staff_modules.pluck(:user_id).include? user.id
         end
-        # Staff cannot make work logs
-        cannot [:new_worklog, :process_worklog], Team
+
 
         # Staff can manage their assessments if they are part of the module
         can :manage, Assessment do |assess|
@@ -60,10 +59,6 @@ class Ability
           sw.assessment.uni_module.staff_modules.pluck(:user_id).include? user.id
         end
 
-        # Can only interact with work logs if they are on a module the user is part of
-        can [:view_disputes, :override_form, :process_override, :process_uphold], Worklog do |wl|
-          wl.uni_module.staff_modules.pluck(:user_id).include? user.id
-        end
 
       else
         # # Students can view their own home page

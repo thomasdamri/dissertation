@@ -10,10 +10,10 @@
       = f.input :code, label: 'Module Code'
     .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Unique name for the module"}
       = f.input :name, label: 'Module Name'
-    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Set this to any day in the first week where students need to start filling in worklogs"}
-      = f.input :start_date, start_year: Date.today.year, label: "First worklog week"
-    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Set this to any day in the final week that students need to fill in worklogs"}
-      = f.input :end_date, start_year: Date.today.year, label: "Final worklog week"
+    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Set this to any day in the first week where students need to start"}
+      = f.input :start_date, start_year: Date.today.year, label: "First Week"
+    .tt{"data-toggle": "tooltip", "data-placement": "top", "title": "Set this to any day in the final week that students need to finish"}
+      = f.input :end_date, start_year: Date.today.year, label: "Final Week"
 
     %h2 Staff Members
     %p Add additional staff members who are associated with the module.

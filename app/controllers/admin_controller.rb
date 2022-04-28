@@ -34,32 +34,7 @@ class AdminController < ApplicationController
     @teams = Team.order(:uni_module_id, :team_number).paginate(page: params[:page])
   end
 
-  def worklogs
-    @uni_module = UniModule.find(params['mod_id'])
-    @worklogs = []
-    logs = Worklog.where(uni_module: @uni_module)
-    # Manually order worklogs by team, then by fill date
-    @uni_module.teams.each do |team|
-      team_logs = logs.where(author: team.users).order(:fill_date)
-      @worklogs.concat team_logs
-    end
-  end
 
-=begin
-  # Path for making the current user a staff member
-  def make_staff
-    current_user.staff = true
-    current_user.save
-    redirect_to '/'
-  end
-
-  # Path for making the current user a student
-  def make_student
-    current_user.staff = false
-    current_user.save
-    redirect_to '/'
-  end
-=end
 
   # Path for adding a new student manually (not through a CEIS TSV file)
   def add_new_student

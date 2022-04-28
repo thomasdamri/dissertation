@@ -38,10 +38,7 @@ class User < ApplicationRecord
   has_many :uni_modules, through: :staff_modules
   has_many :student_task_comments, dependent: :destroy
 
-  # Each user will write many worklogs
-  has_many :worklogs, foreign_key: 'author_id', class_name: 'Worklog'
-  # Each user will respond to many worklogs
-  has_many :worklog_responses
+
 
   # Must have a username and email. Staff and admin booleans cannot be nil
   validates :username, presence: true, uniqueness: true
@@ -68,14 +65,6 @@ class User < ApplicationRecord
     "mailto:" + email
   end
 
-  # Returns true if the user has already filled in the worklog for this module this week
-  def has_filled_in_log?(uni_module)
-    last_mon = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
-    if Worklog.where(uni_module: uni_module, author: self, fill_date: last_mon).first.nil?
-      false
-    else
-      true
-    end
-  end
+
 
 end

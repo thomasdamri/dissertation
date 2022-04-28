@@ -7,20 +7,5 @@
     %th Author
     %th Content
 
-  - @worklogs.each do |wl|
-    - team_num = wl.author.teams.where(uni_module: @uni_module).first.number
-    %tr
-      %td= "Team #{team_num}"
-      %td= wl.fill_date.strftime("%d/%m/%Y")
-      %td= wl.author.real_display_name
-      - if wl.override.nil?
-        %td= wl.content
-      - else
-        %td
-          %strong Override:
-          = wl.override
-          %br
-          %strong Old version:
-          = wl.content
 
 =  link_to "Back to module list", admin_modules_path, class: 'btn btn-secondary'

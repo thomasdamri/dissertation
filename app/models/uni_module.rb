@@ -20,8 +20,7 @@ class UniModule < ApplicationRecord
   # Allows modules to add as many staff members as possible, and remove them as needed
   accepts_nested_attributes_for :staff_modules, reject_if: :all_blank, allow_destroy: true
 
-  # Many students will submit many worklogs for this module
-  has_many :worklogs, dependent: :destroy
+
 
   has_many :student_teams, through: :teams
 
@@ -53,15 +52,8 @@ class UniModule < ApplicationRecord
     end
   end
 
-  # Returns true if the team specified has worklogs for the week specified
-  def has_worklogs?(team, week)
 
-  end
 
-  # Returns true if the user given has filled in a worklog for the current week
-  def has_filled_in_log?(user, date)
-    Worklog.where(author: user, uni_module: self, fill_date: date).first.nil? ? false : true
-  end
 
   def get_week_range()
     start_date = self.start_date
