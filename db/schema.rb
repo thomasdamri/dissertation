@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_04_17_183900) do
+ActiveRecord::Schema.define(version: 2022_04_28_191830) do
 
   create_table "active_storage_attachments", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
     t.string "name", null: false
@@ -236,9 +236,9 @@ ActiveRecord::Schema.define(version: 2022_04_17_183900) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "assessment_results", "questions", on_delete: :cascade
+  add_foreign_key "assessment_results", "student_teams", column: "author_id"
+  add_foreign_key "assessment_results", "student_teams", column: "target_id"
   add_foreign_key "assessment_results", "student_weightings", column: "student_weightings_id", on_delete: :cascade
-  add_foreign_key "assessment_results", "users", column: "author_id"
-  add_foreign_key "assessment_results", "users", column: "target_id"
   add_foreign_key "assessments", "uni_modules", on_delete: :cascade
   add_foreign_key "questions", "assessments", on_delete: :cascade
   add_foreign_key "report_objects", "student_reports", on_delete: :cascade
