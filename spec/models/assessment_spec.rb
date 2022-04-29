@@ -399,4 +399,86 @@ RSpec.describe Assessment, type: :model do
 
   end
 
+  describe '#get_individual_grade' do
+    before(:each) do
+      u = create :uni_module
+      a = create :assessment, uni_module: u
+      q = create :weighted_question, assessment: a, title: 'C'
+      t = create :team, uni_module: u
+      u1 = create :user
+      u2 = create(:student, username: 'test1', email: 'test1@sheffield.ac.uk')
+      st1 = create :student_team, user: u1, team: t
+      st2 = create :student_team, user: u2, team: t
+    end
+
+    it 'grades not uploaded yet' do
+      u1 = User.where(username: 'zzz12dp').first
+      u2 = User.where(username: 'test1').first
+      t = Team.first
+
+      a = Assessment.first
+
+      create :assessment_result_int ,author: u1.student_teams.first, target: u2.student_teams.first, question: a.questions.first
+
+      a.generate_weightings(t)
+      expect(a.get_individual_grade(u1.student_teams.first)).to eq "ERROR"
+    end
+
+    it 'student has no weighting' do
+      u1 = User.where(username: 'zzz12dp').first
+      u2 = User.where(username: 'test1').first
+      t = Team.first
+
+      a = Assessment.first
+
+      create :assessment_result_int ,author: u1.student_teams.first, target: u2.student_teams.first, question: a.questions.first
+
+      create :team_grade, team: t, assessment: a
+      expect(a.get_individual_grade(u1.student_teams.first)).to eq "ERROR"
+    end
+
+    it 'student has weighiting and grade uploaded' do
+      u1 = User.where(username: 'zzz12dp').first
+      u2 = User.where(username: 'test1').first
+      t = Team.first
+      a = Assessment.first
+
+      create :assessment_result_int ,author: u1.student_teams.first, target: u2.student_teams.first, question: a.questions.first
+      create :assessment_result_int ,author: u1.student_teams.first, target: u1.student_teams.first, question: a.questions.first
+      create :team_grade, team: t, assessment: a
+      a.generate_weightings(t)
+
+      expect(a.get_individual_grade(u1.student_teams.first)).to eq 70.0
+    end
+
+  end
+
+  
+  describe '#whatAreAssessments' do
+    it 'returns string correctly' do
+      string = Assessment.whatAreAssessments()
+      expect(string.first).to eq 'P'
+      expect(string.last).to eq '.'
+    end
+
+  end
+
+  describe '#whatAreWeightings' do
+    it 'returns string correctly' do
+      string = Assessment.whatAreWeightings()
+      expect(string.first).to eq 'W'
+      expect(string.last).to eq '.'
+    end
+
+  end
+
+  describe '#howToAnswerQuestions' do
+    it 'returns string correctly' do
+      string = Assessment.howToAnswerQuestions()
+      expect(string.first).to eq 'W'
+      expect(string.last).to eq '.'
+    end
+
+  end
+
 end

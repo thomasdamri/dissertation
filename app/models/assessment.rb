@@ -71,18 +71,16 @@ class Assessment < ApplicationRecord
     student_team = StudentTeam.find_by(id: student_team_id)
 
     team_grade = student_team.team.team_grades.where(assessment_id: self.id).first
-    team_grade = team_grade.nil? ? "NULL" : team_grade.grade
+    if(team_grade.nil?)
+      return "ERROR"
+    end
 
     # Try to find user's individual weighting
     weight = student_team.student_weightings.where(assessment_id: self.id).first
-    ind_weight = weight.nil? ? "NULL" : weight.weighting
-
-    # Only calculate an individual grade if both team grade and indiv. weighting exist
-    ind_grade = "ERROR"
-    unless team_grade.nil? or weight.nil?
-      ind_grade = team_grade * ind_weight
+    if(weight.nil?)
+      return "ERROR"
     end
-    return ind_grade
+    return (team_grade.grade * weight.weighting)
   end
 
   # Returns true if the current date is between the opening and closing date
@@ -198,20 +196,20 @@ class Assessment < ApplicationRecord
   def self.whatAreAssessments()
     output = "Peer Assessments provide a structured way for students to critique and provide feedback to each other..\n"
     output += "These questions range from yes/no types, text responses and number responses, like rating something  between 0-5.\n"
-    output += "Your module leaders have the option to make these questions hold a weighting.\n"
+    output += "Your module leaders have the option to make these questions hold a weighting."
     return output
   end
 
   def self.whatAreWeightings()
     output = "Weightings are useful, as they attempt to fairly redistribute grades throughout the team, depending on how everybody answered the peer assessments.\n"
     output += "This is helpful, as sometimes not everybody will end up contributing fairly\n"
-    output += "So with assessments which will generate a weighting for yourself and your team mates, your grades should more accurately relate to your inputs.\n"
+    output += "So with assessments which will generate a weighting for yourself and your team mates, your grades should more accurately relate to your inputs."
     return output
   end
 
   def self.howToAnswerQuestions()
     output = "When you answer the peer assessments, you may find yourself struggling to accurately rate members.\n"
-    output += "It is suggested that you use TeamPlayerPlus to study the team data and previous tasks, to allow yourself to give more accurate ratings.\n"
+    output += "It is suggested that you use TeamPlayerPlus to study the team data and previous tasks, to allow yourself to give more accurate ratings."
     return output
   end
 
