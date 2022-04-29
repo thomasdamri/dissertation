@@ -37,4 +37,92 @@ RSpec.describe User, type: :model do
 
   end
 
+  describe '#group_email_link' do
+    before(:each) do
+      u = create :uni_module
+      t = create :team, uni_module: u
+    end
+
+    it 'empty group' do
+      t = Team.first
+      t.group_email_link
+      expect(t.group_email_link).to eq ""
+    end
+
+    it 'single person group' do
+      t = Team.first
+      u1 = create(:student, username: 'test1', email: 'test1@sheffield.ac.uk')
+      st1 = create :student_team, user: u1, team: t
+      
+      t.group_email_link
+      expect(t.group_email_link).to eq "test1@sheffield.ac.uk"
+    end
+
+    it 'multi group' do
+      t = Team.first
+      u1 = create(:student, username: 'test1', email: 'test1@sheffield.ac.uk')
+      st1 = create :student_team, user: u1, team: t
+      u1 = create(:student, username: 'test2', email: 'test2@sheffield.ac.uk')
+      st1 = create :student_team, user: u1, team: t
+      
+      t.group_email_link
+      expect(t.group_email_link).to eq "test1@sheffield.ac.uk,test2@sheffield.ac.uk"
+    end
+  end
+
+  describe '#get_week_chats' do
+    before(:each) do
+      u = create :uni_module
+      t = create :team, uni_module: u
+      u1 = create(:student, username: 'test1', email: 'test1@sheffield.ac.uk')
+      st1 = create :student_team, user: u1, team: t
+      u2 = create(:student, username: 'test2', email: 'test2@sheffield.ac.uk')
+      st2 = create :student_team, user: u2, team: t
+    end
+
+    it 'get team chats week 0' do
+      t = Team.first
+      u1 = User.where(username: 'test1').first
+      u2 = User.where(username: 'test2').first
+      create :student_chat_one, student_team: u1.student_teams.first
+      create :student_chat_two, student_team: u2.student_teams.first
+
+      expect(t.get_week_chats(-1, DateTime.now).size).to eq 2
+    end
+
+    it 'get team chats week 1' do
+      t = Team.first
+      u1 = User.where(username: 'test1').first
+      u2 = User.where(username: 'test2').first
+      create :student_chat_one, student_team: u1.student_teams.first
+      create :student_chat_two, student_team: u2.student_teams.first
+
+      expect(t.get_week_chats(-1, (DateTime.now+(8.days))).size).to eq 0
+    end
+
+    it 'get team chats week 0 no messages' do
+      t = Team.first
+      expect(t.get_week_chats(-1, DateTime.now).size).to eq 0
+    end
+
+    it 'get student 1 chats week 0' do
+      t = Team.first
+      u1 = User.where(username: 'test1').first
+      u2 = User.where(username: 'test2').first
+      create :student_chat_one, student_team: u1.student_teams.first
+      create :student_chat_two, student_team: u2.student_teams.first
+
+      expect(t.get_week_chats(u1.student_teams.first.id, DateTime.now).size).to eq 1
+    end
+
+    it 'get student 1 chats week 0 no messages' do
+      t = Team.first
+      u1 = User.where(username: 'test1').first
+      u2 = User.where(username: 'test2').first
+      create :student_chat_two, student_team: u2.student_teams.first
+
+      expect(t.get_week_chats(u1.student_teams.first.id, DateTime.now).size).to eq 0
+    end
+  end
+
 end
