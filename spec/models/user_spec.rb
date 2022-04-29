@@ -80,19 +80,5 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe '#has_filled_in_log?' do
-    specify "It returns true if there is a worklog, and false if not" do
-      u = create :user
-      mod = create :uni_module
-      t = create :team, uni_module: mod
-      create :student_team, user: u, team: t
-      expect(u.has_filled_in_log?(mod)).to eq false
-
-      prev_monday = Date.today.monday? ? Date.today : Date.today.prev_occurring(:monday)
-      w = create :worklog, uni_module: mod, content: "Something", fill_date: prev_monday, author: u
-
-      expect(u.has_filled_in_log?(mod)).to eq true
-    end
-  end
 
 end

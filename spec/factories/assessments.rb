@@ -26,4 +26,12 @@ FactoryBot.define do
     date_closed {}
   end
 
+  factory :closed_assessment, class: Assessment do
+    name { 'Closed Assessment' }
+    date_opened { Date.today - 7 }
+    date_closed { Date.today - 5 }
+    show_results { false }
+  end
+
+
 end

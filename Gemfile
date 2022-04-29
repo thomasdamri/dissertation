@@ -83,6 +83,7 @@ gem 'pagy', '~> 5.10'
 
 gem "chartkick"
 gem "groupdate"
+gem 'simplecov', require: false, group: :test
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

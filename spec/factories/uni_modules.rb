@@ -18,9 +18,38 @@ FactoryBot.define do
     end_date { Date.today.next_occurring(:monday) + 49 }
   end
 
+  factory :start_and_finish_monday_uni_module, class: 'UniModule' do
+    name { 'Monday Module' }
+    code { 'TST1002' }
+    start_date { Date.today.prev_occurring(:monday) }
+    end_date { Date.today.next_occurring(:monday) }
+  end
+
+  factory :no_monday_uni_module, class: 'UniModule' do
+    name { 'No Monday Module' }
+    code { 'TST1003' }
+    start_date { Date.today.prev_occurring(:monday) -2 }
+    end_date { Date.today.next_occurring(:monday)+2 }
+  end
+
   factory :empty_uni_module, class: 'UniModule' do
     name {}
     code {}
   end
+
+  factory :on_week_2_uni_module, class: 'UniModule' do
+    name { 'Week 2 Module' }
+    code { 'TST1004' }
+    start_date { Date.today.prev_occurring(:monday) -12 }
+    end_date { Date.today.next_occurring(:monday)+5 }
+  end
+
+  factory :week_0_uni_module, class: 'UniModule' do
+    name { 'Week 2 Module' }
+    code { 'TST1004' }
+    start_date { Date.today.prev_occurring(:monday)}
+    end_date { Date.today.next_occurring(:monday)+5 }
+  end
+
 
 end
