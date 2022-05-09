@@ -1,3 +1,4 @@
+- # Staff form partial, used when resolving a report
 - if !student_report.complete
   = simple_form_for student_report, url: submit_report_resolution_path(student_report.id), remote: true do |f|
 

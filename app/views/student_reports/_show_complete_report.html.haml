@@ -1,6 +1,7 @@
-
+-# Partial used to show a complete report and its details
 .task-options-container
   -student_report = report_object.student_report
+  -# Select the correct reported object, depending on its type
   - if student_report.object_type ==0
     - object  = StudentTeam.find_by(id: report_object.report_object_id)
     - object_name = object.user.real_display_name

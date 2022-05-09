@@ -1,11 +1,9 @@
 class StudentTask < ApplicationRecord
   belongs_to :student_team
   has_one :user, through: :student_team
-  has_many :student_task_edits, :dependent => :destroy
   has_many :student_task_comments, :dependent => :destroy
   has_many :student_task_likes, :dependent => :destroy
 
-  accepts_nested_attributes_for :student_task_edits, allow_destroy: true
 
   validates :task_objective, length: { in: 5..300}
 
@@ -32,27 +30,6 @@ class StudentTask < ApplicationRecord
     end
   end
 
-  def return_difficulty()
-    case self.task_difficulty
-    when 0
-      return "Easy"
-    when 2
-      return "Hard"
-    else
-      return "Medium"
-    end
-  end
-
-  def self.difficulty_int_to_colour(integer_input)
-    case integer_input
-    when 0
-      return "green"
-    when 2
-      return "red"
-    else
-      return "yellow"
-    end
-  end
 
   def self.difficulty_int_to_style(integer_input)
     case integer_input
@@ -73,12 +50,16 @@ class StudentTask < ApplicationRecord
     return student_name
   end
 
+  # Given a task_id, will set the task to hidden
   def self.hide_task(task_id)
     task = StudentTask.find_by(id: task_id)
     task.hidden = true
     task.save
   end
 
+  # Method which filters individual student tasks
+  # which_student is the student_team_id of tasks you would like
+  # what_filter is the type of tasks you would like to return
   def self.selectTasks(which_student, what_filter)
     case what_filter
     when 1
@@ -102,6 +83,9 @@ class StudentTask < ApplicationRecord
     end
   end
 
+  # Method which filters team tasks
+  # which_student is the student_team_id of tasks you would like
+  # what_filter is the type of tasks you would like to return
   def self.selectTeamTasks(which_student, what_filter)
     case what_filter
     when 1
@@ -125,11 +109,13 @@ class StudentTask < ApplicationRecord
     end
   end
 
+  # Returns the comments which have images attached
   def getCommentsWithImages()
     comments = self.student_task_comments.joins(:image_attachment)
     return comments
   end
 
+  # Explainer Methods
   def self.whatAreTeamTasks()
     output = "Student Tasks are a way of documenting your progress throughout a project.\n"
     output += "Think of this as a shared team diary, where everybody contributes to documenting the progress of your project.\n"
@@ -143,7 +129,7 @@ class StudentTask < ApplicationRecord
     output += "When creating a task, consider the amount of time that you think will be spent on this task, as this value will give your peers a better indication of the task that you are working on.\n"
     output += "A medium task will be a little more lengthier, taking around 2-3 hours.\n"
     output += "Any task larger than this should be marked as hard, letting your team mates know how long you expect to spend on this challenge.\n"
-    output += "Ranking tasks based on difficulty will also come in handy, as you may be able to see which tasks students are finding difficult, allowing you to intervene and help out. "
+    output += "Ranking tasks based on difficulty will also come in handy, as you may be able to see which tasks students are finding difficult, allowing you to intervene and help out."
     return output
 
   end
@@ -159,7 +145,7 @@ class StudentTask < ApplicationRecord
   def self.taskCompletingExplained()
     output = "Once you have finished a task, you should mark it as complete.\n"
     output += "This allows you to summarize the task and work you have completed, as well as giving an accurate number of hours spent on it.\n"
-    output += "Be careful when logging hours, as if a student suspects you are inflating your time spent on tasks, you may be reported. \n"
+    output += "Be careful when logging hours, as if a student suspects you are inflating your time spent on tasks, you may be reported."
     return output
   end
 end

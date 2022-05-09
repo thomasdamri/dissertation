@@ -1,6 +1,10 @@
+- # Partial used to filter which data panels get shown
+-#  select_options needs to be passed through as a local, which is a list of student names, with their student_team_id as the dropdown value
 .row.justify-content-between.task-options-container
   .col-auto
     %h6.font-weight-bold="Currently Showing Data for: "
+  -# Wrapped into the javascript infographic controller (stimulus)
   .col{'data-controller': "infographic"} 
+    -# Form which uses StudentTeam object, when drowndown is changed, dropdownForm will submit
     = simple_form_for StudentTeam.new, url: team_data_path(params[:student_team_id]), remote: true, html: {"data-infographic-target": "dropdownForm"}, method: :get do |f|
       = f.select :user_id, selection_options, {}, { class: 'form-select form-control', data: { action: "change->infographic#change"}, "data-report-target": "graphSelect", include_blank: false }

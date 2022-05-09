@@ -28,10 +28,12 @@ class StudentTeam < ApplicationRecord
   # A user can only be added to a team once
   validates :user, uniqueness: {scope: :team}
 
+  # Given a student_team_id, will return the students name
   def self.getName(student_team_id)
     return StudentTeam.find_by(id: student_team_id).user.real_display_name
   end
 
+  # Creates table data, of unique task count, between the date range given
   def uniqueStudentTaskCount(range)
     table_data = {}
     table_data["graph_type"] = 0
@@ -42,6 +44,7 @@ class StudentTeam < ApplicationRecord
     return table_data
   end
 
+  # Creates table data, of unique completed task count, between the date range given
   def studentCompleteTaskWeek(range)
     table_data = {}
     table_data["graph_type"] = 0
@@ -52,10 +55,10 @@ class StudentTeam < ApplicationRecord
     return table_data
   end
 
+  # Creates table data, of a students time logged per week
   def studentWeeklyTeamHours(range)
     data = {}
     data[user.real_display_name] = 
-    puts(data.inspect)
     table_data = {}
     table_data["graph_type"] = 0
     table_data["graph_title"] = "Hours Logged per Week"
@@ -65,11 +68,13 @@ class StudentTeam < ApplicationRecord
     return table_data
   end
 
+  # Creates table data, of easy medium and hard tasks created by a student
   def easyMediumHardStudentComparison()
     data = {}
     data["Easy"] = 0
     data["Medium"] = 0
     data["Hard"] = 0
+    # Loop through tasks, counting the difficulties
     student_tasks.each do |st|
       if st.task_difficulty==0
         data["Easy"] += 1
@@ -88,7 +93,8 @@ class StudentTeam < ApplicationRecord
     return table_data
   end
 
-  #Use with line graph
+  # Creates table data for tasks created by each individual team member
+  # range is the date range to collect the data
   def teamTaskCountComparison(range)
 
     data = team.student_teams.map { | team_member|{
@@ -105,10 +111,13 @@ class StudentTeam < ApplicationRecord
     return table_data
   end
 
+  # Creates table data for tasks created by each individual team member
+  # range is the date range to collect the data
   def getTaskCountPerStudent()
     graph_title = "Total Tasks Posted"
     data_hash = team.student_tasks.group(:student_team_id).count
     data = {}
+    # Reformat the data structure, to display users name as the key
     team.student_teams.each do |member|
       name = member.user.real_display_name
       if (data_hash.key?(member.id))

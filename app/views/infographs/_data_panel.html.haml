@@ -1,9 +1,11 @@
+- # Partial used to display a chart, needs a table_data object to be passed as local
 .task-options-container.selectable-container
   .row.border-top
     .col.align-self-center.text-center.bold
       = table_data["graph_title"]
   .row 
     .col
+      -# Check to see which graph type it is
       - if table_data["graph_type"] == 0 #line graph
         = line_chart table_data["data"], xtitle: table_data["xtitle"], ytitle: table_data["ytitle"], discrete: true
 
@@ -16,6 +18,7 @@
       - elsif table_data["graph_type"] == 3 #column chart
         = column_chart table_data["data"], colors: ["green", "yellow", "red"]
 
+  -# If there are statements to display
   - if table_data["statements"] != nil 
     .row
       .col.align-self-center.text-center

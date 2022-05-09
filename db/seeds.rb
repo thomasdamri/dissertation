@@ -4,7 +4,7 @@ u = User.create(email: 'p.mcminn@sheffield.ac.uk', staff: true, admin: true)
 u.get_info_from_ldap
 u.save
 
-u1 = User.create(username: 'aca19td', email: 'tdamri1@sheffield.ac.uk', staff: true, admin: true)
+u1 = User.create(username: 'aca19td', email: 'tdamri1@sheffield.ac.uk', staff: false, admin: false)
 u1.get_info_from_ldap
 u1.save
 

@@ -17,6 +17,8 @@ class AssessmentResult < ApplicationRecord
   end
 
   belongs_to :question
+
+  # Assessment result can belong to an author and a target
   belongs_to :author, class_name: 'StudentTeam', foreign_key: 'author_id'
   belongs_to :target, class_name: 'StudentTeam', foreign_key: 'target_id', optional: true
 

@@ -1,1 +1,1 @@
-$("#{@like_id }").html("#{escape_javascript( link_to fa_icon("thumbs-up", text: @student_task.student_task_likes.count), student_task_like_task_path(@task_id ), remote: true, method: :post)}");
+$("#like_button").html("#{escape_javascript( link_to fa_icon("thumbs-up", text: @student_task.student_task_likes.count.to_s + ' Commendations'), student_task_like_task_path(@task_id ), remote: true, method: :post, class: "float-right")}");

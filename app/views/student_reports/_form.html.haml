@@ -1,3 +1,5 @@
+- # Partial form used to create a report
+-# Form is a modal
 .modal.fade#reportModal
   .modal-dialog
     = simple_form_for @student_report, url: create_report_path(params[:student_team_id]), defaults: {input_html: {class: 'form-control'}} do |f|
@@ -7,7 +9,8 @@
           %h5.modal-title New Report
           %button.close{type: :button, data: {dismiss: :modal}}
             %span &times;
-
+        -#  Wrapped up into a javascript data controller
+        -#  Functionality detects when object type changes, so to repopulate report_objects dropdown
         %div.modal-body{ 'data-controller': "report"}
           .mb-3
             = f.label :object_type, "Reporting a:", {class: 'form-label'}
@@ -19,7 +22,6 @@
               = reportee.select :report_object_id, @item_list, {}, { multiple: true, class: 'form-select form-control select_two', "data-report-target": "formCollection"}
 
           .mb-3
-            -# = f.label :report_reason, "Detail why you are reporting, giving specific reasons for each item:", {class: 'form-label'}
             = f.text_area :report_reason, class: 'form-control', rows: '6', placeholder: "Please enter report details:", required: true
         .modal-footer 
           = f.button :submit, 'Submit Report', class: 'btn btn-primary' 

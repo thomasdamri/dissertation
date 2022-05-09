@@ -1,3 +1,4 @@
+- # Partial used to show a grade report object
 #putModalHere
 .task-options-container
   .row.mb-1.justify-content-center
@@ -27,6 +28,7 @@
           .col 
             = link_to "View Responses", get_ind_responses_path(report_object, team), remote: true, class: 'btn btn-info'
         .row.mt-1.mb-1
+          -# Display the table of grades
           %table.table.table-bordered.table-hover.table-striped#indGradeTable
             %tr
               %th Student Name
@@ -54,6 +56,7 @@
                       %br
                       %strong Reason:
                       = ind_weight.reason
+- # If report is complete, show the complete summary                      
 -if @chosen_object.student_report.complete
   = render partial: "show_complete_report", locals: {report_object: @chosen_object}
 

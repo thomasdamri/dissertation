@@ -18,11 +18,14 @@ class Assessment < ApplicationRecord
 
   # Destroy all dependent question when removing object
   has_many :questions, dependent: :destroy
+  # Have access to all assessment results 
   has_many :assessment_results, through: :questions
+  # Assessment belongs to uni module
   belongs_to :uni_module
   has_many :student_weightings, dependent: :destroy
   has_many :team_grades, dependent: :destroy
 
+  # Questions can be nested, cannot be blank
   accepts_nested_attributes_for :questions, reject_if: :all_blank, allow_destroy: true
 
   # Name of the assessment must not be the same as another assessment for the same module
@@ -67,6 +70,7 @@ class Assessment < ApplicationRecord
     comp
   end
 
+  # Returns the individuals grade
   def get_individual_grade(student_team_id)
     student_team = StudentTeam.find_by(id: student_team_id)
 
@@ -97,7 +101,6 @@ class Assessment < ApplicationRecord
 
     # If there are no results for assessed question, give everyone the same weighting of 1 and return
     if AssessmentResult.where(question: assessed_crits).count == 0
-      puts("EVERY ONE SAME RATING")
       team.student_teams.each do |student_team|
         sw = StudentWeighting.find_or_initialize_by(student_team_id: student_team.id, assessment_id: id)
         sw.update_weighting 1, 0
@@ -113,10 +116,7 @@ class Assessment < ApplicationRecord
       # Initialise the hash with each student's id number
       student_weights[student_team.id] = 0
     end
-    puts("Initial hash")
-    puts(student_weights.inspect)
 
-    puts("Loop through markers, summing up number of people who answered the assessed question and adding the assessed question to a list if user is author")
     team.student_teams.each do |student_team_marker|
       author_results = []
       self.questions.each do |q|
@@ -127,22 +127,15 @@ class Assessment < ApplicationRecord
           end
         end
       end
-      puts("NUM RESULTS")
-      puts(num_results)
-      puts("Questions authored by user")
-      puts(author_results.inspect)
+
       # Sum up the marks the student gave out in assessed question
-      puts("SUmming up marks given")
       marks_given = 0
       author_results.each do |res|
         marks_given += res.question.weighting * res.value.to_f
       end
-      puts("MARKS GIVEN")
-      puts(marks_given)
 
       # Avoid division by 0 if the user has not filled in the form
       unless marks_given == 0
-        puts("MARKS GIVEN ARE NOT 0 BY THIS USER")
         # For each markee, work out the proportion of marks given out by the marker to them
         team.student_teams.each do |student_team_markee|
           # Sum the total number of marks across each question given to each user
@@ -152,31 +145,20 @@ class Assessment < ApplicationRecord
               given_to_markee += res.question.weighting * res.value.to_f
             end
           end
-          puts("GIVEN TO MARKEE")
-          puts(given_to_markee)
           student_weights[student_team_markee.id] += given_to_markee / marks_given
-          
         end
-        puts("STUDENT WEIGHTS AFTER THIS STAGE")
-        puts(student_weights)
       end
 
     end
 
     # Check for how many students filled in the assessment so far
     num_complete = num_completed(team)
-    puts("NUMBER COMPLETED BY THE TEAM ARE")
-    puts(num_complete)
     unless num_complete == team.users.count
       # If some students have not filled out the assessment, increase everyone's marks to accommodate this
       mult_factor = team.users.count.to_f / num_complete.to_f
-      puts("MULTI FACTOR BECAUSE NOT EVERYONE HAS COMPLETED")
-      puts(mult_factor)
       team.student_teams.each do |student_team|
         student_weights[student_team.id] = student_weights[student_team.id] * mult_factor
       end
-      puts("WEIGHTS AFTER MULTI FACTOR")
-      puts(student_weights)
     end
 
     
@@ -193,6 +175,7 @@ class Assessment < ApplicationRecord
 
   end
 
+  # Explainer methods, used when user enquires for help
   def self.whatAreAssessments()
     output = "Peer Assessments provide a structured way for students to critique and provide feedback to each other..\n"
     output += "These questions range from yes/no types, text responses and number responses, like rating something  between 0-5.\n"

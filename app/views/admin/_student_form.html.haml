@@ -1,4 +1,4 @@
--# frozen_string_literal: true
+- # Partial which allows user to edit their personal details
 = simple_form_for(@user, url: 'new_student_process') do |f|
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?

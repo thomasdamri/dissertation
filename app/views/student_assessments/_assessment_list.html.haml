@@ -1,4 +1,6 @@
-.col
+- # Partial used to display a list of assessments, for the student team page
+-# Must be passed through assessment list as local
+.col#assessment_list
   - if assessments.count > 0
     - assessments.each do |a|
       = link_to fillin_assessment_path(a, student_team: student_team), class: 'student_task_box', remote: true do
@@ -15,6 +17,7 @@
                     Closing on: 
                   .col
                     = a.date_closed.to_date
+              -#  Check to see which options are correct
               - if a.has_team_grades?
                 .col-auto.pull-right
                   %h5= ("Grade: "+ a.get_individual_grade(student_team).to_s)

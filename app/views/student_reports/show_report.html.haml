@@ -1,16 +1,16 @@
+-# View to show a student report
 .container.mt-4
   = render partial: 'reporter_details', locals: {student_report: @student_report, reporter: @reporter}
+  -# If report is complete, show the reporter response
   -if @student_report.complete
     = render partial: "show_reporter_response", locals: {student_report: @student_report}
-
+  -# Display the correct object type partial
   - if @student_report.object_type == 0
     = render partial: 'user_report_object', locals: {report_objects: @report_objects, pagy_report: @pagy_report, student_report: @student_report}
   - elsif @student_report.object_type == 1
     = render partial: 'grade_report_object', locals: {report_objects: @report_objects, pagy_report: @pagy_report, student_report: @student_report}
   - else 
     = render partial: 'task_report_object', locals: {report_objects: @report_objects, pagy_report: @pagy_report, student_report: @student_report}
-
-
   - if @student_report.object_type != 2
     .task-options-container
       .row.col.text-center 

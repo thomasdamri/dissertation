@@ -10,8 +10,7 @@
               =link_to fa_icon("trash", text: 'Delete', class: "link-danger"), student_task_path(student_task), method: :delete, data: { confirm: "Are you sure?"}, class: "nav-link link-danger"
 
           .col-auto.pl-1
-            -# # - if student_task.student_team.user.id == current_user.id && student_task.task_complete_date == nil
-            - if can? :complete, student_task
+            - if student_task.task_complete_date == nil && (can? :complete, student_task)
               = link_to fa_icon("check", text: 'Complete'), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#completeTaskModal'
             - elsif student_task.task_complete_date != nil
               Task Complete
@@ -38,7 +37,7 @@
       -# -if can? :destroy, student_task
       -#   .col 
       -#     =link_to "Delete", student_task_path(student_task), method: :delete, data: { confirm: "Are you sure?"}
-      .col#like_button.float-right
+      .col.float-right#like_button
         =link_to fa_icon("thumbs-up", text: ((student_task.student_task_likes.count).to_s + " Commendations")), student_task_like_task_path(student_task), remote: true, method: :post, class: 'float-right'
   .task-options-container
     = simple_form_for student_task_comment, url: student_task_comment_path(student_task.id), remote: true do |f|

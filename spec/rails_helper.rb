@@ -11,6 +11,10 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'support/factory_bot'
+# require 'capybara/apparition'
+require 'selenium-webdriver'
+require 'capybara/webkit'
+# Capybara.javascript_driver = :apparition
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -70,4 +74,22 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   # Include this for login_as method
   config.include Warden::Test::Helpers
+end
+# Capybara.register_driver :headless_chromium do |app|
+#   options = Selenium::WebDriver::Chrome::Options.new
+#   # options.add_argument("--headless")
+#   # options.add_argument("--no-sandbox")
+#   # options.add_argument("--disable-dev-shm-usage")
+#   # options.add_argument("--window-size=1280,900")
+#   Capybara::Selenium::Driver.new(app, browser: :chrome, capabilities: options)
+# end
+Capybara.javascript_driver = :webkit
+# Capybara.register_driver :selenium do |app|
+#   Capybara::Selenium::Driver.new(app, :browser => :chrome)
+# end
+if ENV['HEADLESS']
+  require 'headless'
+  headless = Headless.new
+  headless.start
+  at_exit { headless.stop }
 end

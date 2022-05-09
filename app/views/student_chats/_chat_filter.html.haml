@@ -1,6 +1,8 @@
+- # Partial used to filter the chat panel
 .col.task-options-container{'data-controller': "infographic"}  
   = simple_form_for StudentTeam.new, url: filter_chat_path(params[:student_team_id]), remote: true, html: {"data-infographic-target": "messagesFilterForm"}, method: :get do |f|
     .row
+      -#  Choose to filter either user or week option
       .col-6.form-group
         %h5.font-weight-bold= f.label :user_id, "Messages By:"
         = f.select :user_id, select_options, {}, { class: 'form-select form-control', data: { action: "change->infographic#change_messages"}, include_blank: false }

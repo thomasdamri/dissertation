@@ -1,3 +1,4 @@
+- # Partial used to display reporter details
 .task-options-container
   .row
     .col
@@ -22,11 +23,12 @@
       %h6="Report Description:"
     .col
       = student_report.report_reason
-
+  - # If report isn't complete, allow user to complete the report
   - if !student_report.complete 
     .row 
       .col 
         = link_to fa_icon("check", text: "Complete Report"), complete_report_form_path(student_report.id)
+  -# Else, display which staff member resolved the report
   - else 
     .row 
       .col

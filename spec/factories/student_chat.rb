@@ -10,6 +10,11 @@ FactoryBot.define do
     posted {DateTime.now}
   end
 
+  factory :invalid_chat, class: StudentChat do
+    chat_message {""}
+    posted {DateTime.now}
+  end
+
 
 
 end

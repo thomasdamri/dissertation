@@ -1,4 +1,4 @@
--# frozen_string_literal: true
+- # Form which allows editing of usuer object
 = simple_form_for(@user, url: 'new_staff_process') do |f|
   = f.error_notification
   = f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present?

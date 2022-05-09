@@ -17,7 +17,7 @@ gem 'airbrake', github: 'epigenesys/airbrake', branch: 'airbrake-v4'
 gem 'rubycas-client', gitlab: 'gems/rubycas-client'
 gem 'epi_js'
 
-gem 'cocoon'
+# gem 'cocoon'
 
 gem 'select2-rails'
 
@@ -83,7 +83,7 @@ gem 'pagy', '~> 5.10'
 
 gem "chartkick"
 gem "groupdate"
-gem 'simplecov', require: false, group: :test
+
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -109,12 +109,17 @@ end
 
 group :test do
   # Adds support for Capybara system testing and selenium driver
-  gem 'capybara', '>= 2.15'
+  # gem 'capybara'
   gem 'selenium-webdriver'
-  # Easy installation and use of web drivers to run system tests with browsers
-  gem 'webdrivers'
+  gem "capybara-webkit"
+  # # Easy installation and use of web drivers to run system tests with browsers
+  # gem 'webdrivers'
   # Coverage checker
   gem 'simplecov', require: false
+  # gem 'apparition'
+  gem "chromedriver-helper", "~> 1.2.0"
+  # gem 'chromedriver-helper'
+  gem 'headless'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

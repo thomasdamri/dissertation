@@ -1,3 +1,4 @@
+-# Form used by staff when completing a student report
 .container.mt-4
 
   = simple_form_for @student_report , url: complete_report_path(@student_report.id) do |f|
@@ -13,7 +14,9 @@
       = f.label :reporter_response, "Please describe the actions you are taking on this report:"
       = f.input :reporter_response, required: true, as: :text, hint: "This reponse will be emailed to the reporter, so please be detailed, describing actions you will be taking for each individual reported object.", label: false
 
+    -# Loop through reported objects
     = f.simple_fields_for :report_objects do |ro|
+      -# Javascript data controller (stimulus), detect when dropdowns change, deciding to active or deactive specific fields
       .task-options-container{ 'data-controller': "report"}
         - if @student_report.object_type ==0
           - report_object  = StudentTeam.find_by(id: ro.object.report_object_id)

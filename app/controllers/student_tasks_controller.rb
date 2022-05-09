@@ -25,15 +25,6 @@ class StudentTasksController < ApplicationController
 
   end
 
-  # GET /uni_modules/1/edit
-  def edit
-    authorize! :edit, @student_task
-    @title = "Editing Task"
-    @student_task = StudentTask.find(params[:id])
-    @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
-    # render layout: false
-  end
-
   # POST /uni_modules
   def create
     @student_task = StudentTask.new(student_task_params)
@@ -44,19 +35,6 @@ class StudentTasksController < ApplicationController
       redirect_to student_team_dashboard_path(@student_task.student_team_id)
     else
       redirect_to student_team_dashboard_path(@student_task.student_team_id), flash: {error: @student_task.errors.full_messages.join(', ')}
-    end
-  end
-
-  # PATCH/PUT /uni_modules/1
-  def update
-    authorize! :update, @student_task
-    @student_task = StudentTask.find_by(id:params[:id])
-    @student_task.student_task_edits.build(previous_target_date: @student_task.task_target_date)
-
-    if(@student_task.update(student_task_edit_params))
-      redirect_to student_task_path(@student_task), notice: 'Task was updated created'
-    else
-      redirect_to student_task_path(@student_task), notice: 'Task update failed'
     end
   end
 
@@ -99,7 +77,6 @@ class StudentTasksController < ApplicationController
     @student_task = StudentTask.find_by(params[:student_task_id])
     @task_id = params[:student_task_id]
     @like_id = ("#like-button"+ params[:student_task_id].to_s)
-    puts(@like_id)
     if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:student_task_id]).exists?)
       @like = StudentTaskLike.find_by(user_id: current_user.id ,student_task_id: params[:student_task_id])
       @like.destroy
@@ -108,6 +85,7 @@ class StudentTasksController < ApplicationController
       @like = StudentTaskLike.create(user_id: current_user.id, student_task_id: params[:student_task_id])
       @like_outcome = "UNLIKE"
     end
+    @student_task = StudentTask.find_by(params[:student_task_id])
     respond_to do |format|
       format.js
     end
@@ -153,9 +131,7 @@ class StudentTasksController < ApplicationController
       params.require(:student_task).permit(:task_objective, :task_difficulty, :task_target_date, :student_team_id)
     end
 
-    def student_task_edit_params
-      params.require(:student_task).permit(:task_objective, :task_difficulty, :task_target_date, :student_team_id, student_task_edits_attributes: [:id, :edit_reason, :_destroy])
-    end
+
 
     #Only allow a list of trusted parameters through.
     def comment_params
