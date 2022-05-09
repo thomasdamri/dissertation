@@ -1,3 +1,4 @@
+-# Main task panel partial, displays form, filter and feed
 - if StudentTeam.find(student_team_id).isInTeam?(current_user)
   .row
     = render partial: 'student_tasks/form', locals: {student_team_id: student_team_id}

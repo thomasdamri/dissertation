@@ -1,3 +1,4 @@
+-# Popup modal used to complete a task
 .modal.fade#completeTaskModal
   .modal-dialog
     = simple_form_for student_task, url: student_task_complete_task_path(student_task.id), remote: true, defaults: {input_html: {class: 'form-control'}} do |f|
@@ -10,7 +11,6 @@
 
         %div.modal-body
           .mb-3
-            -# = f.label :task_completed_summary, "Task Notes:", class: 'form-label'
             = f.text_area :task_completed_summary, placeholder: "Please summarise task... ", class: 'form-control', rows: '6'
           .mb-3
             = f.label :hours, "Hours Spent on Task:", class: 'form-label'

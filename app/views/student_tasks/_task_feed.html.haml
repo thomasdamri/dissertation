@@ -1,5 +1,6 @@
 .col.px-1
   - if tasks.count > 0
+    -# If there are more than 10 tasks, display the pagination nav
     - if tasks_count > 10
       -# .row
       -#   .col.task-options-container.text-center 

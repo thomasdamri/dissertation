@@ -1,3 +1,4 @@
+-# partial used to display a task in the task feed
 %div.task-container.selectable-container.shadow{:style => StudentTask.difficulty_int_to_style(task_local.task_difficulty)}
   = link_to show_student_task_path(task_local, params[:student_team_id]), class: 'student_task_box', remote: true do
     .row.justify-content-between
@@ -16,6 +17,7 @@
       .col-4#thumbs_up_comment
         =link_to fa_icon("comment", text: task_local.student_task_comments.count)
 
+    -# Sets an id, so that the carousel knows which one is getting clicked
     - carouselId = ("carousel-" + task_local.id.to_s)
     - comments_with_images = task_local.getCommentsWithImages().reverse()
     - first_image = comments_with_images.first

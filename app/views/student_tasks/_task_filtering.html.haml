@@ -1,3 +1,4 @@
+-# Partial used to filter the task feed, can select user or different filters
 .col.task-options-container{'data-controller': "infographic"}  
   = simple_form_for StudentTeam.new, url: get_task_list_path(params[:student_team_id]), remote: true, html: {"data-infographic-target": "taskListForm"}, method: :get do |f|
     .row

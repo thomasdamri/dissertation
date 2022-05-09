@@ -1,3 +1,4 @@
+-# Partial to display comment list
 .col
   - if comments.count > 0
     - comments.order(posted_on: :desc).each do |c|
@@ -8,6 +9,7 @@
         .row
           .col 
             = c.comment
+        -# If the image has a comment, display it
         - if c.image.attached?
           .row 
             .col.img-fluid
