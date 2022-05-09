@@ -1,3 +1,4 @@
+-# Menu partial used to swap between assessments tab and meeting notes tab
 -if selected == 0
   .col-1
     = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#meetingHelpModal'
@@ -19,7 +20,7 @@
   .col-1
     = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#assessmentHelpModal'
 
-
+-# Help modals
 .modal.fade#meetingHelpModal
   .modal-dialog
     .modal-content

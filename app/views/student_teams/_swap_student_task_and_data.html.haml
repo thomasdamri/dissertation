@@ -1,3 +1,4 @@
+-# Menu partial used to swap between team tasks tab and team data tab
 -if selected == 0
   .col-1
     = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#studentTaskHelpModal'
@@ -19,7 +20,7 @@
   .col-1
     = link_to fa_icon("question"), team_path(1) , class: "nav-link" , "data-toggle": 'modal', "data-target": '#studentDataHelpModal'
 
-
+-# Help modals
 .modal.fade#studentTaskHelpModal
   .modal-dialog
     .modal-content

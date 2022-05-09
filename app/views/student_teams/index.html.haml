@@ -1,13 +1,13 @@
--# 
-  Index View for task 
-  Allows admin to view all tasks and create new ones
+-# Main student team home page view
 - content_for :title, "[Student] Team Homepage"
 
 .col.mt-0#main-team-home-page-container
+  -# Check to see if any error messages to display
   - if flash[:error]
     .row.justify-content-center 
       .col-8.error-container.text-center
         %h6.font-weight-bold= flash[:error]
+  -# Check to see if any outgoing assessments to be completed
   -if @outgoing_assessments > 0
     .row.justify-content-center 
       .col-8.task-options-container
