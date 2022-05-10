@@ -3,7 +3,7 @@ class StudentChatsController < ApplicationController
   before_action :set_team
   authorize_resource
 
-
+  # Creates and posts the new chat
   def post_chat
     authorize! :manage, @student_team
     @chat = StudentChat.new(chat_params)
@@ -12,10 +12,12 @@ class StudentChatsController < ApplicationController
     @chat.save 
   end
 
+  # Filters the chats being shown, returning the new set of chats
   def filter_chat
     authorize! :manage, @student_team
     selected = params[:student_team][:user_id].to_i
     filter = params[:student_team][:team_id].to_date
+    # Get the new filtered messages
     @messages = @student_team.team.get_week_chats(selected, filter)
     current_range = filter..(filter + 7.day)
     if(current_range === Date.today)

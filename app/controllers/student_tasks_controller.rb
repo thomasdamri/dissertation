@@ -4,7 +4,7 @@ class StudentTasksController < ApplicationController
   before_action :set_task, only: [:edit, :update, :complete]
   authorize_resource
 
-  # GET /uni_modules/1
+
   def show_student_task
     @student_task = StudentTask.find_by(id: params[:task_id])
     @student_task_comment = StudentTaskComment.new
@@ -18,14 +18,12 @@ class StudentTasksController < ApplicationController
 
   end
 
-  # GET /uni_modules/new
+
   def new
     @title = "Creating Task"
     @student_task = StudentTask.new
-
   end
 
-  # POST /uni_modules
   def create
     @student_task = StudentTask.new(student_task_params)
     @student_task.student_team_id = params[:student_team_id]
@@ -38,7 +36,7 @@ class StudentTasksController < ApplicationController
     end
   end
 
-  # DELETE /uni_modules/1
+
   def destroy
     @student_task = StudentTask.find(params[:id])
     student_team_id = @student_task.student_team_id
@@ -46,7 +44,7 @@ class StudentTasksController < ApplicationController
     redirect_to student_team_dashboard_path(student_team_id), notice: 'Task deleted'
   end
 
-  # DELETE /uni_modules/1
+
   def comment
     @comment = StudentTaskComment.new(comment_params)
     @comment.user_id = current_user.id
@@ -72,7 +70,6 @@ class StudentTasksController < ApplicationController
 
   end
 
-  # DELETE /uni_modules/1
   def like_task
     @student_task = StudentTask.find_by(params[:student_task_id])
     @task_id = params[:student_task_id]
@@ -107,7 +104,6 @@ class StudentTasksController < ApplicationController
     if(@student_task.update(complete_params))
       @student_task.task_complete_date = DateTime.now
       @student_task.save
-      puts("Success!!!")
       render 'task_complete_success'
     else
       puts(@student_task.errors.full_messages)

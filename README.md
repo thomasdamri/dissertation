@@ -1,5 +1,8 @@
 # TeamPlayerPlus
-TeamPlayerPlus is an online peer assessment system to allow students to rate their teammates in group projects. From their ratings, invidiual weightings are generated which can then be applied to grades. The algorithm used to generate the individual weightings is identical to the [one used in WebPA](http://webpaproject.com/webpa_wiki/index.php/The_Scoring_Algorithm). TeamPlayerPlus also allows students to create weekly work logs, which other students and staff can use to check how much work has been done by each team member.
+TeamPlayerPlus is an online application built to provide students with an group environment, specialized in curating fair teamwork.
+Students can create tasks, contribute to meetings, and analyze project statistics.
+Once a project is finished, students are assigned online peer assessments, used to determine an individialised rating.
+From their ratings, individual weightings are generated which can then be applied to grades. The algorithm used to generate the individual weightings is identical to the [one used in WebPA](http://webpaproject.com/webpa_wiki/index.php/The_Scoring_Algorithm). 
 
 ## Installation Instructions (Development Environment)
 - Clone this repo to a new folder
@@ -21,23 +24,3 @@ TeamPlayerPlus is an online peer assessment system to allow students to rate the
 
 ### Attributions
 This project used Material Design Icons from Google, licensed under the Apache License Version 2.
-
-###
-Used this to install stimulus
-https://betterprogramming.pub/how-to-add-stimulus-js-to-a-rails-6-application-4201837785f9
-
-Need @rails/request.js
-yarn add @rails/request.js
-
-yarn add @nathanvda/cocoon
-
-yarn add select2
-
-https://chartkick.com/#rails-6-webpacker
-yarn add chartkick chart.js
-
-sudo apt install imagemagick libvips
-
-For groupdate gem, you need to install TIME ZONE SUPPORT for the mysql server
-Run with 'mysql_tzinfo_to_sql /usr/share/zoneinfo | mysql -u root mysql'
-If done correctly, 'SELECT CONVERT_TZ(NOW(), '+00:00', 'Pacific/Honolulu');' will return you the correct time, not NULL

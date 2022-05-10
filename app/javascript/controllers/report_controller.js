@@ -7,6 +7,7 @@ export default class extends Controller {
   connect() {
     console.log("hello from StimulusJS")
   }
+  // Method used in the create report form, gets the new report type list
   change(event) {
     let selected = this.reportingSelectTarget.value
     let target = this.formCollectionTarget.id
@@ -23,8 +24,8 @@ export default class extends Controller {
     }
   }
 
+  // Method used in the report form, to detect which text boxes to disable/enable
   change_action_take(event){
-    console.log("changing action")
     let takeActionBooleanValue = this.takeActionBooleanTarget.value
     let emailReporteeBooleanElement = this.emailReporteeBooleanTarget
     let actionTakenInputBoxElement = this.reporteeResponseTarget
@@ -45,6 +46,7 @@ export default class extends Controller {
     }
   }
 
+  // Method used in the report form, to detect which text boxes to disable/enable
   change_email_reportee(event){
     let emailReporteeBooleanValue = this.emailReporteeBooleanTarget.value
     let actionTakenInputBoxElement = this.reporteeResponseTarget

@@ -40,16 +40,15 @@ class StudentReportsController < ApplicationController
     end
   end
 
-  # GET /uni_modules/new
+  # Route used to show report details
   def show_report
     @title = "Viewing Report"
     @student_report = StudentReport.find(params[:report_id])
     @reporter = @student_report.user
     @pagy_report, @report_objects = pagy(@student_report.report_objects, items: 1)
+    # If report is of task type
     if @student_report.object_type == 2
-      # @student_task = StudentTask.find_by(id: @student_report)
       @student_task_comment = StudentTaskComment.new
-      # @student_team_id = params[:student_team_id]
       if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:task_id]).exists?)
         @like_outcome = "UNLIKE"
       else
@@ -82,11 +81,8 @@ class StudentReportsController < ApplicationController
     @student = StudentTeam.find_by(id: 2)
     @team_id = @student.team.id
     @item_list = []
-    puts(@selected == 2)
     if @selected == 0 
-      #@users = StudentTeam.where(student_teams:{team_id: @team_id}).select(:id)
       @users = StudentTeam.where(student_teams:{team_id: @team_id})
-      puts(@users.inspect)
       for u in @users do
         @item_list.push([u.user.real_display_name, u.id])
       end
@@ -104,7 +100,7 @@ class StudentReportsController < ApplicationController
   end
 
 
-
+  # Method called when report resolution form is submitted
   def report_resolution
     @student_report = StudentReport.find_by(id: params[:id])
     if(@student_report.report_object==0)
@@ -112,6 +108,7 @@ class StudentReportsController < ApplicationController
         @student_report.complete = true
         @student_report.save
       end
+    # If report is a task report, hide the task
     elsif(@student_report.report_object==2)
       if(@student_report.update(task_report_resolution_params))
         StudentTask.hide_task(@student_report.report_object_id)

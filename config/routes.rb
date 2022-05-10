@@ -89,60 +89,44 @@ Rails.application.routes.draw do
   post 'worklogs/process_override/:id', to: 'worklogs#process_override', as: 'process_override'
   post 'worklogs/process_uphold/:id', to: 'worklogs#process_uphold', as: 'process_uphold'
 
-
+  # Student Team Routes
   get 'student_teams/:student_team_id', to: 'student_teams#index', as: 'student_team_dashboard'
   post 'student_teams/:student_team_id/student_tasks_new',  to: 'student_tasks#create', as: 'student_task_create'
-
   get 'student_teams/:student_team_id/new_report', to: 'student_reports#new', as: 'new_report'
   post 'student_teams/:student_team_id/create', to: 'student_reports#create', as: 'create_report'
-
-  get 'fetch_student_task', to: 'student_tasks#select'
-
-  delete 'delete_comment/:id', to: 'student_tasks#delete_comment', as: 'delete_comment'
-
-  get 'return_student_task_list/:student_team_id', to: 'student_tasks#return_task_list', as: 'return_task_list'
-
-  patch 'submit_report_resolution/:id', to: 'student_reports#report_resolution', as: 'submit_report_resolution'
-
   get 'student_teams/:student_team_id/team_data_index', to: 'student_teams#team_data_index', as: 'team_data_index'
   get 'student_teams/:student_team_id/team_data', to: 'student_teams#team_data', as: 'team_data'
   get 'student_teams/:student_team_id/individual_data', to: 'student_teams#individual_data', as: 'individual_data'
-
   get 'student_teams/:student_team_id/swap_to_assessments', to: 'student_teams#swap_to_assessments', as: 'swap_to_assessments'
   get 'student_teams/:student_team_id/swap_to_meetings', to: 'student_teams#swap_to_meetings', as: 'swap_to_meetings'
   get 'student_teams/:student_team_id/swap_to_tasks', to: 'student_teams#swap_to_tasks', as: 'swap_to_tasks'
-
-  post 'student_teams/:student_team_id/post_chat', to: 'student_chats#post_chat', as: 'post_chat'
-
-  # get 'student_teams/:student_team_id/get_user', to: 'student_teams#individual_data', as: 'individual_data'
-
   get 'get_user_tasks/:student_team_id', to: 'student_teams#get_task_list', as: 'get_task_list'
-
-  get 'filter_chat/:student_team_id', to: 'student_chats#filter_chat', as: 'filter_chat'
-
   get 'student_teams/:student_team_id/get_assessment/:assessment_id', to: 'student_teams#get_assessment', as: 'get_assessment'
-
   get 'swap_task_data/:student_team_id/:selection', to: "student_teams#swap_task_data", as: 'swap_task_data'
 
+  #Student Chat Routes
+  post 'student_teams/:student_team_id/post_chat', to: 'student_chats#post_chat', as: 'post_chat'
+  get 'filter_chat/:student_team_id', to: 'student_chats#filter_chat', as: 'filter_chat'
+
+  # Student Task Routes
+  get 'fetch_student_task', to: 'student_tasks#select'
+  delete 'delete_comment/:id', to: 'student_tasks#delete_comment', as: 'delete_comment'
+  get 'return_student_task_list/:student_team_id', to: 'student_tasks#return_task_list', as: 'return_task_list'
   get 'show_student_task/:task_id/:student_team_id', to: "student_tasks#show_student_task", as: 'show_student_task'
-
-  get 'show_report/:report_id/:student_team_id', to: "student_reports#show_report", as: 'show_report'
-  get 'show_complete_report/:report_id', to: "student_reports#show_complete_report", as: "show_complete_report"
-  get 'complete_report_form/:report_id', to: 'student_reports#complete_report_form', as: 'complete_report_form'
-  patch 'complete_report/:report_id', to: 'student_reports#complete_report', as: 'complete_report'
-
-  resources :student_reports do
-    post 'report_response', to: 'student_reports#report_response'
-    get 'get_list', on: :collection
-
-  end
-
   resources :student_tasks do
     patch 'complete_task', to: 'student_tasks#complete'
     post 'comment', to: 'student_tasks#comment'
     post 'like_task', to: 'student_tasks#like_task'
   end
 
-
-
+  # Student Report Routes
+  patch 'submit_report_resolution/:id', to: 'student_reports#report_resolution', as: 'submit_report_resolution'
+  get 'show_report/:report_id/:student_team_id', to: "student_reports#show_report", as: 'show_report'
+  get 'show_complete_report/:report_id', to: "student_reports#show_complete_report", as: "show_complete_report"
+  get 'complete_report_form/:report_id', to: 'student_reports#complete_report_form', as: 'complete_report_form'
+  patch 'complete_report/:report_id', to: 'student_reports#complete_report', as: 'complete_report'
+  resources :student_reports do
+    post 'report_response', to: 'student_reports#report_response'
+    get 'get_list', on: :collection
+  end
 end
