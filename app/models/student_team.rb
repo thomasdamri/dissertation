@@ -169,6 +169,7 @@ class StudentTeam < ApplicationRecord
     return statement
   end
 
+  # Creates a list of statements, regarding param data
   def self.getSmallestValueHash(data_hash)
     #Create list of students with the most posts
     min_students = []
@@ -188,6 +189,7 @@ class StudentTeam < ApplicationRecord
     return statement
   end
 
+  # Creates a list of statements, regarding mean of the input hash
   def self.getAverageTasksPosted(data_hash)
     total = 0
     data_hash.each { |k, v| total+=v}
@@ -196,6 +198,7 @@ class StudentTeam < ApplicationRecord
     return statement
   end
 
+  # Creates table data comparing each students weekly team hours
   def getWeeklyTeamHours(range)
     data = team.student_teams.map { | team_member|{
       name: team_member.user.real_display_name, data: team_member.student_tasks.where.not(task_complete_date: nil).group_by_week(:task_complete_date, range: range).sum("hours")
@@ -211,6 +214,8 @@ class StudentTeam < ApplicationRecord
     return table_data
   end
 
+  # Creates an array of students a team. 
+  # takes students id, as well as team_id
   def self.createTeamArray(student_team_id, team_id)
     select_options = [["Team", -1], ["Myself", student_team_id]]
     users = StudentTeam.where(student_teams:{team_id: team_id})
@@ -222,6 +227,7 @@ class StudentTeam < ApplicationRecord
     return select_options
   end
 
+  # Creates graph data for total hours logged per team member
   def getTotalHoursLoggedTeam()
     data = {}
     team.student_teams.each do |member|
@@ -237,6 +243,7 @@ class StudentTeam < ApplicationRecord
     return table_data
   end
 
+  # Creates table data for each students weekly meeting contributions
   def getMeetingContributionsPerWeek(range)
     data = team.student_teams.map { | team_member|{
       name: team_member.user.real_display_name, data: team_member.student_chats.group_by_week(:posted, range: range).count
@@ -251,6 +258,7 @@ class StudentTeam < ApplicationRecord
     return table_data
   end
 
+  # Creates a student graph, showing each students percentage of tasks completed on time
   def percentageOfTasksCompleteOnTimeTeam()
     data = {}
     team.student_teams.each do |member|
@@ -266,7 +274,7 @@ class StudentTeam < ApplicationRecord
       if(total_tasks==0)
         on_time_ratio = 0
       else 
-
+        # Calculate finished on time ratio
         on_time_ratio = (tasks_finished_on_time /total_tasks.to_f) * 100
       end
       data[name] = on_time_ratio
@@ -280,6 +288,7 @@ class StudentTeam < ApplicationRecord
     return table_data
   end
 
+  # Creates table data, comparing students tasks completed per week
   def tasksCompletePerWeekTeam(range)
     data = team.student_teams.map { | team_member|{
       name: team_member.user.real_display_name, data: team_member.student_tasks.group_by_week(:task_complete_date, range: range).count
@@ -296,6 +305,7 @@ class StudentTeam < ApplicationRecord
 
   end
 
+  # Checks if a user is in the team
   def isInTeam?(user)
     return team.student_teams.pluck(:user_id).include? user.id
   end
@@ -316,6 +326,7 @@ class StudentTeam < ApplicationRecord
     return output
   end
 
+  # Method which converts hash keys from dates to numbered weeks
   def self.replaceKeysWithWeekNumber(data)
     new_data = []
     data.each do |person_hash, index|
@@ -325,6 +336,7 @@ class StudentTeam < ApplicationRecord
     return new_data
   end
 
+  # Returns a list of graded assessments
   def get_assessments_with_grades()
     assessments = self.team.uni_module.assessments
     graded_list = []

@@ -4,7 +4,7 @@ class StudentReportsController < ApplicationController
   authorize_resource
 
 
-  # GET /uni_modules/new
+  # GETS data needed for a new report
   def new
     @title = "Creating Report"
     @student_report = StudentReport.new
@@ -18,14 +18,17 @@ class StudentReportsController < ApplicationController
     render layout: false
   end
 
+  # POSTS the new report to the database
   def create
     @student_report = StudentReport.new
+    # Load params to the new object
     @student_report.report_reason = student_report_params[:report_reason]
     @student_report.object_type = student_report_params[:object_type]
     @student_report.report_date = DateTime.now
     @student_report.student_team_id = params[:student_team_id]
     if @student_report.save
       @latest_id = StudentReport.order(:id).last.id
+      # Create the new report items
       if params[:student_report][:report_objects_attributes] != nil 
         params[:student_report][:report_objects_attributes].each_value do |value|
           value[:report_object_id].drop(1).each do |v| 
@@ -40,7 +43,7 @@ class StudentReportsController < ApplicationController
     end
   end
 
-  # Route used to show report details
+  # GET Route used to show report details
   def show_report
     @title = "Viewing Report"
     @student_report = StudentReport.find(params[:report_id])
@@ -49,12 +52,14 @@ class StudentReportsController < ApplicationController
     # If report is of task type
     if @student_report.object_type == 2
       @student_task_comment = StudentTaskComment.new
+      # Check to see if task has been liked by the current user
       if (StudentTaskLike.where(user_id: current_user.id ,student_task_id: params[:task_id]).exists?)
         @like_outcome = "UNLIKE"
       else
         @like_outcome = "LIKE"
       end
     else 
+      # Load all of the needed data
       @student_team = @student_report.student_team
       @outgoing_assessments = @student_team.team.uni_module.getUncompletedOutgoingAssessmentCount(@student_team)
       @task = StudentTask.new
@@ -73,21 +78,23 @@ class StudentReportsController < ApplicationController
     end
   end
 
+  # GET Receives the correct list, depending on the selected report type
   def get_list
     @target = params[:target]
     @selected = params[:selected].to_i
-
-    #Need it so correct student is used
     @student = StudentTeam.find_by(id: 2)
     @team_id = @student.team.id
     @item_list = []
+    # If report is type user
     if @selected == 0 
       @users = StudentTeam.where(student_teams:{team_id: @team_id})
       for u in @users do
         @item_list.push([u.user.real_display_name, u.id])
       end
+    # Else if report is type grade
     elsif @selected == 1 
       @item_list = @student.get_assessments_with_grades()
+    # Else report is type task
     else
       @tasks = StudentTask.joins(:student_team).where("student_teams.team_id = ?", @team_id).select(:task_objective, :id)
       for t in @tasks do
@@ -100,7 +107,7 @@ class StudentReportsController < ApplicationController
   end
 
 
-  # Method called when report resolution form is submitted
+  # PATCH Method called when report resolution form is submitted
   def report_resolution
     @student_report = StudentReport.find_by(id: params[:id])
     if(@student_report.report_object==0)
@@ -129,18 +136,17 @@ class StudentReportsController < ApplicationController
     @student_report = StudentReport.find(params[:report_id])
   end
 
+  # POST method, sets the report as complete
   def complete_report
     @student_report = StudentReport.find(params[:report_id])
     @uni_module = @student_report.student_team.team.uni_module
     if @student_report.update(task_report_resolution_params)
-      puts(@student_report.inspect)
       #Email Reporter
       reporter = @student_report.student_team.user
       StudentMailer.reporter_response(user: reporter, reporter_response: @student_report.reporter_response)
 
       #Email Reportees
       params[:student_report][:report_objects_attributes].each_value do |report_object| 
-        puts(ReportObject.find(report_object[:id]).inspect)
         # Email reportees
         if(report_object[:action_taken] && report_object[:emailed_reportee])
           report = ReportObject.find(report_object[:id])
@@ -154,6 +160,7 @@ class StudentReportsController < ApplicationController
             task.hidden = true
             task.save
           end
+          # Email the reported user
           StudentMailer.reportee_response(user: reportee , reportee_response: report.reportee_response)
         end
       end

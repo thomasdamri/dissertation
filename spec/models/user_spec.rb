@@ -135,40 +135,6 @@ RSpec.describe User, type: :model do
       expect(ability).to be_able_to([:manage], sw)
       expect(ability2).to_not be_able_to([:manage], sw)
     end
-
-    specify "checking student user abilities " do 
-      student = create :user, username: 'test1', email: 'test1@gmail.com'
-      u = create :uni_module
-      t = create :team, uni_module: u
-      student_team1 = create :student_team, user: student, team: t
-      ability = Ability.new(student)
-      student2 = create :user, username: 'test2', email: 'test2@gmail.com'
-      student_team2 = create :student_team, user: student2, team: t
-      ability2 = Ability.new(student2)
-    
-      # non_team_student = create :user, username: 'test3', email: 'test3@gmail.com'
-      # ability3 = Ability.new(non_team_student)
-    
-    
-      #Check to see if students can manage their own team profile
-      expect(ability).to be_able_to(:manage, student_team1)
-      expect(ability2).to_not be_able_to(:manage, student_team1)
-    
-      # #Students can only manage their own chats
-      # chat = create :student_chat_one, student_team: student_team_1
-      # expect(ability).to be_able_to(:manage, chat)
-      # expect(ability2).to_not be_able_to(:manage, chat)
-    
-      # #Anyone can create a student task
-      # expect(ability).to be_able_to(:create, StudentTask)
-      # expect(ability2).to be_able_to(:create, StudentTask)
-    
-      # #Anyone apart of the team have a few task abilities for team members tasks
-      # student_task = create :student_task_one, student_team: student_team1
-      # expect(ability).to be_able_to([show_student_task, :comment, :like_task], student_task)
-      # expect(ability2).to be_able_to([:show_student_task, :comment, :like_task], student_task)
-      # expect(ability3).to_not be_able_to([show_student_task, :comment, :like_task], chat)
-    end
   end 
 
 
